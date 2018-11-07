@@ -17,6 +17,9 @@ $APTGETINSTALL gnupg2 dirmngr --install-recommends
 gpg2 --recv A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89
 gpg2 --export A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89 | sudo apt-key add -
 
+echo "Installing apt https transport"
+$APTGETINSTALL apt-transport-https
+
 echo "Put sources into /etc/apt/sources.list.d"
 sudo tee -a /etc/apt/sources.list.d/tor.list << END
 deb https://deb.torproject.org/torproject.org bionic main
