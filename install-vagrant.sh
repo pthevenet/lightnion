@@ -21,10 +21,15 @@ echo "Installing apt https transport"
 $APTGETINSTALL apt-transport-https
 
 echo "Put sources into /etc/apt/sources.list.d"
-sudo tee -a /etc/apt/sources.list.d/tor.list << END
-deb https://deb.torproject.org/torproject.org bionic main
-deb-src https://deb.torproject.org/torproject.org bionic main
-END
+flavor='bionic'
+if grep -q Debian /etc/issue; then
+    flavor='stretch'
+fi
+
+sudo tee -a /etc/apt/sources.list.d/tor.list <<-__END__
+deb https://deb.torproject.org/torproject.org $flavor main
+deb-src https://deb.torproject.org/torproject.org $flavor main
+__END__
 
 
 $APTGET update
