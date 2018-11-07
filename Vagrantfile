@@ -5,8 +5,8 @@ Vagrant.configure("2") do |config|
   config.vm.define :torMachine do |torMachine|
     torMachine.vm.box = "debian/stretch64"
     torMachine.vm.hostname = "torMachine"
-    torMachine.vm.network "forwarded_port", guest: 4990, host: 4990 
-    torMachine.vm.network "forwarded_port", guest: 8765, host: 8765
+    torMachine.vm.network "private_network", ip: "172.9.5.30"
+    torMachine.vm.synced_folder ".", "/vagrant", type: "nfs", nfs_version: "3"
 
     torMachine.vm.provision "shell", path: "install-vagrant.sh"
     torMachine.vm.provider "libvirt" do |libvirt|
