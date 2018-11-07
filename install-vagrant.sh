@@ -91,5 +91,13 @@ else
 	echo "Chutney is already installed"
 fi
 
-echo "Installing TOR client"
-$APTGETINSTALL tor openjdk-11-jre
+echo "Installing Tor client"
+$APTGETINSTALL tor
+
+echo "Installing build dependencies"
+
+if [ "$flavor" = "bionic" ]; then
+    $APTGETINSTALL openjdk-11-jre
+else
+    $APTGETINSTALL openjdk-8-jre
+fi
