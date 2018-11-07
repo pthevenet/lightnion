@@ -13,7 +13,7 @@ echo "Updating the packages"
 $APTGET update
 
 echo "Installing gnupg2"
-$APTGETINSTALL gnupg2
+$APTGETINSTALL gnupg2 dirmngr --install-recommends
 gpg2 --recv A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89
 gpg2 --export A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89 | sudo apt-key add -
 
