@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -eE
 
 echo "Install-vagrant.sh starts running"
 
