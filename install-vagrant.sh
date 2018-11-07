@@ -72,13 +72,16 @@ else
 fi
 
 cd /vagrant
+
 virtualenv --python=python3 venv
 source venv/bin/activate
+
+echo "Installing dependencies"
 $VPIPINSTALL -r requirements.txt -r requirements-proxy.txt
 $VPIPINSTALL pytest
 
 if ! [ -d "chutney" ]; then
-	echo "Installing chutney"	
+	echo "Installing chutney"
 	cd /home/vagrant
 	git clone https://github.com/torproject/chutney.git
 	cp /vagrant/tools/chutney/small-chut chutney
