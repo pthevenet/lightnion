@@ -61,16 +61,28 @@ path.obeyMinimalConstraints = function (router) {
  * @param {Array} candidates the list of candidates
  */
 path.weightedRandomChoice = function (candidates) {
-    let total = candidates.reduce((acc, r) => acc + path.descriptorsMap[r['identity']]['bandwidth']['avg'], 0)
+     let total = 0
+    
+    for(let candidate of candidates){
+        let des =path.descriptorsMap[candidate['identity']]
+        if(des !== undefined){
+            total += des['bandwidth']['avg']
+        }
+    }
+    
     let r = Math.random() * total
     let upto = 0
 
     for (let router of candidates) {
         let des = path.descriptorsMap[router['identity']]
-        let bandwidth = des['bandwidth']['avg']
 
-        if (upto + bandwidth >= r) return des
-        else upto += bandwidth
+        if(des !== undefined){
+            let bandwidth = des['bandwidth']['avg']
+
+            if (upto + bandwidth >= r) return des
+            else upto += bandwidth
+        }
+        
     }
 
     throw "No candidate has been chosen"
@@ -153,6 +165,10 @@ path.chooseGoodGuard = function () {
 path.isGoodGuard = function (router) {
     let flags = router['flags']
     let des = path.descriptorsMap[router.identity]
+    
+    if(des === undefined){
+        return false
+    }
 
     if(des["router"]["identity"] === path.exit["router"]["identity"]){
         return false
@@ -182,6 +198,10 @@ path.chooseGoodMiddle = function () {
  */
 path.isGoodMiddle = function (router) {
     let des = path.descriptorsMap[router.identity]
+    
+    if(des === undefined){
+        return false
+    }
 
     if(des["router"]["identity"] === path.exit["router"]["identity"] ||des["router"]["identity"] === path.guard["router"]["identity"]){
         return false
