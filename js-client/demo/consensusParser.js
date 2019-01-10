@@ -13,7 +13,7 @@ class ConsensusParser {
         this.lines = rawText.split('\n')
         this.words = this.lines[0].split(' ')
         this.consensus = {}
-        this.validFlags = ['Authority', 'BadExit', 'Exit', 'Fast', 'Guard', 'HSDir', 'Named', 'Stable', 'Running', 'Unnamed', 'Valid', 'V2Dir', 'NoEdConsensus']
+        this.validFlags = ['Authority', 'BadExit', 'Exit', 'Fast', 'Guard', 'HSDir', 'NoEdConsensus', 'Stable', 'StaleDesc', 'Running', 'Valid', 'V2Dir']
         this.index = 0
         this.totalLines = this.lines.length
     }
