@@ -2,21 +2,26 @@
 
 NUM_PROCESS=1
 
-abort() {
-    echo "Abort!"
+clean() {
     echo "Kill processes..." >&2
     pkill -P $$
     sleep 3
     pkill -9 -P $$
-    exit 0
+    kill -9 $(ps aux | grep lightnion\\.proxy | awk '{print $2}')
+}
+
+abort() {
+    echo "Abort!" >&2
+    clean
+    exit 1
 }
 
 trap abort INT TERM
 
+# Q&D test to see if chutney is running.
 if ! nc -w 0 localhost 9008 < /dev/null >/dev/null 2>&1
 then
     echo 'No chutney process running.'
-    echo 'Exit!'
     exit 1
 fi
 
@@ -30,17 +35,14 @@ python -m lightnion.proxy -vvv --purge-cache --static ./js-client/demo/: ./js-cl
 
 sleep 10
 
-for i in $(seq 1 $NUM_PROCESS)
+for i in $(seq $NUM_PROCESS)
 do
-	chromium --headless --disable-gpu --disable-software-rasterizer --hide-scrollbars --remote-debugging-port=9222 http://localhost:4990/loop.html &
+    chromium --headless --disable-gpu --disable-software-rasterizer --hide-scrollbars --remote-debugging-port=9222 http://localhost:4990/loop.html &
 done
 
 echo "Press any key to quit..." >&2
 
 read
 
-echo "Kill processes..." >&2
-
-pkill -P $$
-sleep 3
-pkill -9 -P $$
+clean
+exit 0
