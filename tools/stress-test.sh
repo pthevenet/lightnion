@@ -7,6 +7,7 @@ clean() {
     pkill -P $$
     sleep 3
     pkill -9 -P $$
+    # This flask process start a child process not terminated with the above command.
     kill -9 $(ps aux | grep lightnion\\.proxy | awk '{print $2}')
 }
 
@@ -18,20 +19,31 @@ abort() {
 
 trap abort INT TERM
 
-# Q&D test to see if chutney is running.
-if ! nc -w 0 localhost 9008 < /dev/null >/dev/null 2>&1
+if [[ -z "$VIRTUAL_ENV" ]]
 then
-    echo 'No chutney process running.'
+    echo 'Please set correct Python path before running this script.' >&2
+    echo 'i.e.: source ../venv/bin/activate && ./stress-test.sh' >&2
     exit 1
 fi
 
-python3 tools/loop.py &
+# Q&D test to see if chutney is running.
+if ! nc -w 0 localhost 9008 < /dev/null >/dev/null 2>&1
+then
+    echo 'No chutney process running.' >&2
+    echo 'Please start chutney before starting this script.' >&2
+    exit 1
+fi
+
+python3 loop.py &
 
 sleep 2
 
-. venv/bin/activate
+CWD="$PWD"
+cd ..
 
 python -m lightnion.proxy -vvv --purge-cache --static ./js-client/demo/: ./js-client/evaluation/: &
+
+cd "$CWD"
 
 sleep 10
 
