@@ -136,9 +136,9 @@ class clerk(threading.Thread):
         # TODO: guard dependance to be removed
         data = base64.b64decode(data)
 
-        if self.guard.isalive():
+        if not self.guard.isalive():
             self.guard.reset()
-        if self.guard.isfresh():
+        if not self.guard.isfresh():
             self.guard.refresh()
 
         # fast channel:
@@ -358,8 +358,6 @@ def get_consensus():
 def get_guard():
     try:
         guard = flask.jsonify(app.clerk.guard.perform())
-        logging.debug('GET /guard')
-        logging.debug('guard:\n%s' % guard.data.decode('utf-8'))
         return guard, 200
     except lnn.proxy.jobs.expired:
         flask.abort(503)
@@ -369,13 +367,10 @@ def create_channel():
     if not flask.request.json or not 'ntor' in flask.request.json:
         flask.abort(400)
     data = flask.request.json['ntor']
-    logging.debug('POST /channel (ntor, auth) -> data')
-    logging.debug('ntor:\n%s' % data)
 
     auth = None
     if 'auth' in flask.request.json:
         auth = flask.request.json['auth']
-        logging.debug('auth:\n%s' % auth)
         if app.clerk.auth is None:
             flask.abort(400)
 
@@ -386,7 +381,6 @@ def create_channel():
             data = app.clerk.auth.perform(auth, data)
 
         data = flask.jsonify(data)
-        logging.debug('data send:\%s' % data.data.decode('utf-8'))
         return data, 201 # Created
     except lnn.proxy.jobs.expired:
         flask.abort(503)
