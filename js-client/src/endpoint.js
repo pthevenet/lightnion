@@ -149,7 +149,21 @@ lnn.endpoint = function(host, port)
          * @readonly
          * @default null
          */
-        consensus: null}
+        consensus: null,
+
+
+        /*perform http get/post request*/
+        
+        http_request: function(url, method, data, data_type, success, error) 
+        {   
+            if (error === undefined)
+                error = function() { }
+            if (success === undefined)
+                success = function() { }
+
+           lnn.send_req(endpoint,url, method, data, data_type, success,error)
+        }
+    }
 
     return endpoint
 }
