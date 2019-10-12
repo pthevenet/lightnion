@@ -1,0 +1,23 @@
+.iframe-container {
+    overflow: hidden;
+    padding-top: 56.25%;
+    position: relative;
+}
+
+.iframe-container object {
+    border: solid;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    width: 90%;
+    left: 5%;
+    right: 5%;
+}
+
+.user-input {
+    text-align: center;
+}
+
+h1 {
+    text-align: center;
+}

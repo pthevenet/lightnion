@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Lightnion Provider</title>
+    <link rel="stylesheet" href="style.css">
+
+    <!-- lightnion client -->
+    <script src='lightnion.bundle.js'></script>
+
+
+    <!-- TLS/HTTP library -->
+    <script src="jquery.min.js"></script>
+    <script src="forge.all.js"></script>
+
+    <script src="params.js"></script>
+    <script src="https.js"></script>
+
+</head>
+
+<body>
+
+    <script>
+
+        // load http redirection service worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function () {
+                navigator.serviceWorker.register('sw.js').then(function (registration) {
+                    console.log('Service worker registered with scope: ', registration.scope);
+                }, function (err) {
+                    console.log('ServiceWorker registration failed: ', err);
+                });
+            });
+        } else {
+            // TODO: empty page
+            alert("unsupported browser or https required")
+        }
+    </script>
+
+    <script>
+
+        function go() {
+            let urlString = document.getElementById("url-input").value;
+            let url;
+            try {
+                url = new URL(urlString);
+            } catch {
+                // FIXME
+                url = new URL("http://" + urlString);
+            }
+            https.fetch(url).then(resp => {
+                console.log("got response");
+                document.getElementById('lframe').innerHTML = resp.body;
+            })
+        }
+
+    </script>
+
+
+    <h1>Lightnion Provider</h1>
+
+    <div class="user-input">
+        <form action="/">
+            <input type="submit" value="Go" />
+        </form>
+    </div>
+
+
+    <!-- <div class="user-input">
+        <input type="text" name="url" id="url-input" value="news.ycombinator.com" />
+        <button type="submit" onclick="go()">Go</button>
+    </div>
+
+
+    <br />
+
+    <div class="iframe-container">
+        <object id="lframe">
+        </object>
+    </div> -->
+
+</body>
+
+</html>
