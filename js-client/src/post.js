@@ -1,47 +1,6 @@
 lnn.post = {}
 lnn.post.create = function(endpoint, success, error)
 {
-    var rq = new XMLHttpRequest()
-    rq.onreadystatechange = function()
-    {
-        if (rq.readyState == 4 && rq.status == 201)
-        {
-            var info = JSON.parse(rq.responseText)
-            if (endpoint.auth != null)
-            {
-                info = lnn.ntor.auth(endpoint, info["auth"], info["data"])
-            }
-            endpoint.id = info["id"]
-            endpoint.url = endpoint.urls.channels + "/" + info["id"]
-            endpoint.path = info["path"]
-
-            if (endpoint.fast)
-            {
-                endpoint.guard = info["guard"]
-                endpoint.material.identity = lnn.dec.base64(
-                    info["guard"].router.identity + "=")
-                endpoint.material.onionkey = lnn.dec.base64(
-                    info["guard"]["ntor-onion-key"])
-            }
-
-            var material = lnn.ntor.shake(endpoint, info["ntor"])
-            if (material == null)
-                throw "Invalid guard handshake."
-
-            material = lnn.ntor.slice(material)
-            endpoint.material = material
-
-            endpoint.forward = lnn.onion.forward(endpoint)
-            endpoint.backward = lnn.onion.backward(endpoint)
-            if (success !== undefined)
-                success(endpoint)
-        }
-        else if (rq.readyState == 4 && error !== undefined)
-        {
-            error(endpoint, rq.status)
-        }
-    }
-
     var payload = null
     if (endpoint.fast)
         payload = lnn.ntor.fast(endpoint)
@@ -55,9 +14,49 @@ lnn.post.create = function(endpoint, success, error)
     }
     payload = JSON.stringify(payload)
 
-    rq.open("POST", endpoint.urls.channels, true)
-    rq.setRequestHeader("Content-type", "application/json")
-    rq.send(payload)
+    fetch(endpoint.urls.channels, {
+        method: 'POST',
+        headers: new Headers({'content-type': 'application/json'}),
+        body: payload
+    }).then(response => {
+        if (response.status == 201) {
+            response.json().then(data => {
+
+                var info = data
+                if (endpoint.auth != null)
+                {
+                    info = lnn.ntor.auth(endpoint, info["auth"], info["data"])
+                }
+                endpoint.id = info["id"]
+                endpoint.url = endpoint.urls.channels + "/" + info["id"]
+                endpoint.path = info["path"]
+
+                if (endpoint.fast)
+                {
+                    endpoint.guard = info["guard"]
+                    endpoint.material.identity = lnn.dec.base64(
+                        info["guard"].router.identity + "=")
+                    endpoint.material.onionkey = lnn.dec.base64(
+                        info["guard"]["ntor-onion-key"])
+                }
+    
+                var material = lnn.ntor.shake(endpoint, info["ntor"])
+                if (material == null)
+                    throw "Invalid guard handshake."
+    
+                material = lnn.ntor.slice(material)
+                endpoint.material = material
+    
+                endpoint.forward = lnn.onion.forward(endpoint)
+                endpoint.backward = lnn.onion.backward(endpoint)
+                if (success !== undefined)
+                    success(endpoint)
+    
+            })
+        } else if (error !== undefined) {
+            error(endpoint, response.status)
+        }
+    })
 }
 
 
@@ -65,48 +64,6 @@ lnn.post.circuit_info = function(endpoint, success, error, select_path, tcp_port
 {
     if(select_path === undefined) {
         select_path = false
-    }
-
-    var rq = new XMLHttpRequest()
-    rq.onreadystatechange = function()
-    {
-        if (rq.readyState == 4 && rq.status == 201)
-        {
-            var info = JSON.parse(rq.responseText)
-            if (endpoint.auth != null)
-            {
-                info = lnn.ntor.auth(endpoint, info["auth"], info["data"])
-            }
-
-            endpoint.id = info["id"]
-            endpoint.url = endpoint.urls.channels + "/" + info["id"]
-            
-
-            if (endpoint.fast)
-            {
-                endpoint.guard = info["guard"]
-            }
-
-            if(!select_path)
-                endpoint.path = info["path"]
-            else {
-                endpoint.consensus = lnn.consensusParser.parse(endpoint.consensus_raw)
-                endpoint.descriptors = lnn.parser.descriptors.parse(endpoint.descriptors_raw)
-                lnn.parser.descriptors.validate(endpoint.descriptors,endpoint.consensus)
-
-
-                endpoint.path = lnn.path.select_end_path(endpoint.consensus, endpoint.descriptors, endpoint.guard, true, tcp_ports)
-                console.log(endpoint.guard)
-                console.log(endpoint.path)
-            }
-
-            if (success !== undefined)
-                success(endpoint, info)
-        }
-        else if (rq.readyState == 4 && error !== undefined)
-        {
-            error(endpoint, rq.status)
-        }
     }
 
     var payload = {}
@@ -124,9 +81,48 @@ lnn.post.circuit_info = function(endpoint, success, error, select_path, tcp_port
     payload["select_path"] = select_path.toString()
     payload = JSON.stringify(payload)
 
-    rq.open("POST", endpoint.urls.channels, true)
-    rq.setRequestHeader("Content-type", "application/json")
-    rq.send(payload)
+    fetch(endpoint.urls.channels, {
+        method: 'POST',
+        headers: new Headers({'content-type': 'application/json'}),
+        body: payload
+    }).then(response => {
+        if (response.status == 201) {
+            response.json().then(data => {
+                var info = data
+                if (endpoint.auth != null)
+                {
+                    info = lnn.ntor.auth(endpoint, info["auth"], info["data"])
+                }
+
+                endpoint.id = info["id"]
+                endpoint.url = endpoint.urls.channels + "/" + info["id"]
+                
+
+                if (endpoint.fast)
+                {
+                    endpoint.guard = info["guard"]
+                }
+
+                if(!select_path)
+                    endpoint.path = info["path"]
+                else {
+                    endpoint.consensus = lnn.consensusParser.parse(endpoint.consensus_raw)
+                    endpoint.descriptors = lnn.parser.descriptors.parse(endpoint.descriptors_raw)
+                    lnn.parser.descriptors.validate(endpoint.descriptors,endpoint.consensus)
+
+
+                    endpoint.path = lnn.path.select_end_path(endpoint.consensus, endpoint.descriptors, endpoint.guard, true, tcp_ports)
+                    console.log(endpoint.guard)
+                    console.log(endpoint.path)
+                }
+
+                if (success !== undefined)
+                    success(endpoint, info)
+            })
+        } else if (error !== undefined) {
+            error(endpoint, response.status)
+        }
+    })
 }
 
 lnn.post.handshake = function(endpoint, info, success, error)
@@ -174,51 +170,49 @@ lnn.post.handshake = function(endpoint, info, success, error)
 
 lnn.post.channel = function(endpoint, success, error)
 {
-    var rq = new XMLHttpRequest()
-    rq.onreadystatechange = function()
-    {
-        if (rq.readyState == 4 && rq.status == 201)
-        {
-            var cells = JSON.parse(rq.responseText)["cells"]
-            if (cells === undefined)
-            {
-                if (endpoint.io.error !== undefined)
-                    endpoint.io.error(endpoint)
-                return
-            }
+    endpoint.io.pending = endpoint.io.outcoming.length
 
-            var pending = endpoint.io.pending
-            if (pending > 0 && endpoint.io.success !== undefined)
-                endpoint.io.success(endpoint)
-
-            if (cells.length > 0)
-            {
-                endpoint.io.incoming = endpoint.io.incoming.concat(cells)
-                if (endpoint.io.handler !== undefined)
-                    endpoint.io.handler(endpoint)
-            }
-
-            endpoint.io.outcoming = endpoint.io.outcoming.slice(pending)
-            endpoint.io.pending = 0
-
-            if (success !== undefined)
-                success(endpoint)
-        }
-        else if (rq.readyState == 4)
-        {
+    fetch(endpoint.url, {
+        method: 'POST',
+        headers: new Headers({'content-type': 'application/json'}),
+        body: JSON.stringify({cells: endpoint.io.outcoming})
+    }).then(response => {
+        if (response.status == 201) {
+            response.json().then(data => {
+                var cells = data["cells"]
+                if (cells === undefined)
+                {
+                    if (endpoint.io.error !== undefined)
+                        endpoint.io.error(endpoint)
+                    return
+                }
+    
+                var pending = endpoint.io.pending
+                if (pending > 0 && endpoint.io.success !== undefined)
+                    endpoint.io.success(endpoint)
+    
+                if (cells.length > 0)
+                {
+                    endpoint.io.incoming = endpoint.io.incoming.concat(cells)
+                    if (endpoint.io.handler !== undefined)
+                        endpoint.io.handler(endpoint)
+                }
+    
+                endpoint.io.outcoming = endpoint.io.outcoming.slice(pending)
+                endpoint.io.pending = 0
+    
+                if (success !== undefined)
+                    success(endpoint)
+            })
+        } else {
             if (endpoint.io.error !== undefined)
                 endpoint.io.error(endpoint)
 
             if (error !== undefined)
                 error(endpoint, rq.status)
         }
-    }
+    })
 
-    endpoint.io.pending = endpoint.io.outcoming.length
-
-    rq.open("POST", endpoint.url, true)
-    rq.setRequestHeader("Content-type", "application/json")
-    rq.send(JSON.stringify({cells: endpoint.io.outcoming}))
 }
 
 lnn.post.extend = function(endpoint, descriptor, success, error)
@@ -274,21 +268,15 @@ lnn.post.extend = function(endpoint, descriptor, success, error)
 
 lnn.post.close = function(endpoint, success, error)
 {
-    var rq = new XMLHttpRequest()
-    rq.onreadystatechange = function()
-    {
-        if (rq.readyState == 4 && rq.status == 202)
-        {
+    fetch(endpoint.url, {
+        method: 'DELETE'
+    }).then(response => {
+        if (response.status == 202) {
             if (success !== undefined)
                 success("Circuit closed")
-        }
-        else if (rq.readyState == 4 && error !== undefined)
-        {
+        } else if (error !== undefined) {
             error("Error in closing circuit")
         }
-    }
-
-    rq.open("DELETE", endpoint.url, true)
-    rq.send()
+    })
 }
 
