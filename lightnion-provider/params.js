@@ -10,6 +10,10 @@ params.lightnionPaths = [
     "/params.js",
     "/style.css",
     "/sw.js",
+    "/ws.js",
+    "/ws_style.css",
+    "/ws.html",
+    "/wsHook.js"
 ]
 
 params.host = "news.ycombinator.com"

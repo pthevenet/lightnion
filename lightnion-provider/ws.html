@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Websocket Redirection</title>
+    <link rel="stylesheet" href="ws_style.css">
+</head>
+
+<body onload="focus()">
+
+    <h1>Websocket Redirection</h1>
+
+    <ul id="messages"></ul>
+    <form id="echo-form" action="javascript:void(0);">
+        <input id="echo-input" autocomplete="off" />
+        <button type="button" id="echo-button" onclick="sendMessage()">Send</button>
+    </form>
+
+    <script src='wsHook.js'></script>
+    <script src="ws.js"></script>
+    
+</body>
+
+</html>
