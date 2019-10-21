@@ -5,11 +5,25 @@
     <meta charset="utf-8">
     <title>Websocket Redirection</title>
     <link rel="stylesheet" href="ws_style.css">
+
+    <!-- lightnion client -->
+    <script src='lightnion.bundle.js'></script>
+
+
+    <!-- TLS/HTTP library -->
+    <script src="jquery.min.js"></script>
+    <script src="forge.all.js"></script>
+
 </head>
 
 <body onload="focus()">
 
     <h1>Websocket Redirection</h1>
+
+    <script src='wsHook.js'></script>
+    <script src="websockets/lws.js"></script>
+    <script src="websockets/ltcp.js"></script>
+    <script src="websockets/ws.js"></script>
 
     <ul id="messages"></ul>
     <form id="echo-form" action="javascript:void(0);">
@@ -17,9 +31,9 @@
         <button type="button" id="echo-button" onclick="sendMessage()">Send</button>
     </form>
 
-    <script src='wsHook.js'></script>
-    <script src="ws.js"></script>
-    
+    <script src="ws_script.js"></script>
+
+
 </body>
 
 </html>

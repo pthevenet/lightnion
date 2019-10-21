@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Websocket Redirection</title>
+    <link rel="stylesheet" href="../ws_style.css">
+
+    <!-- lightnion client -->
+    <script src='../lightnion.bundle.js'></script>
+    <script src='../lightnion-helpers.js'></script>
+
+    <script src="parsing.js"></script>
+    <script src="packets.js"></script>
+
+    <!-- TLS/HTTP library -->
+    <script src="../jquery.min.js"></script>
+    <script src="../forge.all.js"></script>
+
+</head>
+
+<body onload="focus()">
+    <script src="custom-websocket.js"></script>
+    <script src="lws.js"></script>
+
+    <h1>Websocket Custom</h1>
+
+    <script>
+        // redefine websocket
+        _WebSocket = WebSocket;
+        WebSocket = LWS;
+        let url = new URL("ws://demos.kaazing.com/echo");
+        let ws = new WebSocket(url, []);
+    </script>
+
+</body>
+
+</html>
