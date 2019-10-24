@@ -5,7 +5,7 @@
  */
 class LWS extends CustomWebSocket {
 
-    constructor(url, protocols) {
+    constructor(url, protocols, lightnionHost = "192.168.122.180", lightnionPort = 4990) {
         // TODO: 
         //  - secure websockets
 
@@ -13,8 +13,6 @@ class LWS extends CustomWebSocket {
         if (!port) {
             port = url.protocol == "ws:" ? "80" : "443";
         }
-        const lightnionHost = "localhost";
-        const lightnionPort = 4990;
 
         super(url, protocols);
 

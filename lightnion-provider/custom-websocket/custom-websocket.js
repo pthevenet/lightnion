@@ -19,7 +19,7 @@ class CustomWebSocket {
      * @param socket should have an 'onmessage' callback method, and a 'send' method
      */
     constructor(url, protocols) {
-        this.url = url;
+        this.url = new URL(url);
         this.protocols = []
         if (Array.isArray(protocols)) {
             this.protocols = protocols;
@@ -118,7 +118,7 @@ class CustomWebSocket {
         let origin = new URL(window.location.href);
         // parse url
         try {
-            var [_, _, _, secure] = parseURL(url);
+            var [_, _, _, secure] = parseURL(this.url);
         } catch (err) {
             throw SyntaxError(`could not parse url: ${err}`);
         }
