@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>ShareDB Counter</title>
+
+<!-- lightnion client -->
+<script src='../lightnion.bundle.js'></script>
+<script src='../lightnion-helpers.js'></script>
+
+<script src="parsing.js"></script>
+<script src="packets.js"></script>
+
+<!-- TLS/HTTP library -->
+<script src="../jquery.min.js"></script>
+<script src="../forge.all.js"></script>
+
+<script src="custom-websocket.js"></script>
+<script src="lws.js"></script>
+
+<script>
+  _WebSocket = WebSocket;
+  WebSocket = LWS; I
+</script>
+
+
+<div style="font-family: Helvetica Neue, Helvetica, Arial, sans-serif; font-size: 36px;">
+  You clicked <span id="num-clicks"></span> times.
+  <button style="font-size: 36px;" onclick="increment()">+1</button>
+</div>
+
+<script src="bundle.js"></script>
