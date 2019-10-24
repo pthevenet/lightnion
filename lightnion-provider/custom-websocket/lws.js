@@ -40,7 +40,7 @@ class LWS extends CustomWebSocket {
 
             this.onopen = () => {
                 console.log("OPENED !");
-                this.send(lnn.dec.utf8("HELLO"));
+                // this.send(lnn.dec.utf8("HELLO"));
             }
         });
 
