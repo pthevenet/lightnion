@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Mocha Tests</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://unpkg.com/mocha/mocha.css" />
+</head>
+
+<body>
+    <div id="mocha"></div>
+
+    <script src="https://unpkg.com/chai/chai.js"></script>
+    <script src="https://unpkg.com/mocha/mocha.js"></script>
+    <script>
+        var assert = chai.assert;
+    </script>
+
+    <!-- dependencies -->
+    <script type="module" src="../../jquery.min.js"></script>
+    <script type="module" src="../../forge.all.js"></script> -->
+    <script type="module" src='../../lightnion-helpers.js'></script>
+    <script  src='../../lightnion.bundle.js'></script>
+
+    <script class="mocha-init">
+        mocha.setup('bdd');
+    </script>
+
+
+    <!-- library imports -->
+    <!-- <script src="../lws.js"></script>
+    <script src="../custom-websocket.js"></script> -->
+
+    <!-- import tests -->
+    <script type="module" src="test.parsing.js"></script>
+    <script type="module" src="test.wspackets.js"></script>
+
+    <!-- run tests -->
+    <script type="module" class="mocha-exec">
+        mocha.checkLeaks();
+        mocha.run();
+    </script>
+
+</body>
+
+</html>
