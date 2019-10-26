@@ -5,33 +5,30 @@
     <meta charset="utf-8">
     <title>Websocket Redirection</title>
     <link rel="stylesheet" href="../ws_style.css">
-
-    <!-- lightnion client -->
-    <script src='../lightnion.bundle.js'></script>
-    <script src='../lightnion-helpers.js'></script>
-
-    <script src="parsing.js"></script>
-    <script src="packets.js"></script>
-
     <!-- TLS/HTTP library -->
     <script src="../jquery.min.js"></script>
     <script src="../forge.all.js"></script>
 
+    <script>
+        window._WebSocket = WebSocket;
+    </script>
+    <!-- lightnion client -->
+    <script src='../lightnion.bundle.js'></script>
+
+    <script type="module">
+        import LWS from "../custom-websocket/lws.js"
+        console.log("overriding websockets");
+        // redefining websockets
+        window._WebSocket = WebSocket;
+        WebSocket = LWS;
+
+        // problem: lightnion.bundle.js must use websocket
+    </script>
+
 </head>
 
 <body onload="focus()">
-    <script src="custom-websocket.js"></script>
-    <script src="lws.js"></script>
-
     <h1>Websocket Redirection</h1>
-
-    <script>
-        // redefine websocket
-        _WebSocket = WebSocket;
-        WebSocket = LWS;
-        // let url = new URL("ws://demos.kaazing.com/echo");
-        // let ws = new WebSocket(url, []);
-    </script>
 
     <ul id="messages"></ul>
     <form id="echo-form" action="javascript:void(0);">
@@ -40,19 +37,14 @@
     </form>
 
     <script>
-    
-        // create websocket as normal
-        let url = new URL("ws://demos.kaazing.com/echo");
-        let ws = new WebSocket(url);
-
         // send message in input through websocket
         function sendMessage() {
             let msg = document.getElementById("echo-input").value;
             document.getElementById("echo-input").value = "";
             appendMessage(msg);
-            ws.send(msg);
+            window.ws.send(lnn.dec.utf8(msg));
         }
-        
+
         // add a message to the frontend
         function appendMessage(msg) {
             var ul = document.getElementById("messages");
@@ -60,11 +52,21 @@
             li.appendChild(document.createTextNode(msg));
             ul.appendChild(li);
         }
+    </script>
+    <script defer type="module">
 
-        ws.onmessage = function (smth) {
-            onMessage(smth);
+        // create websocket as normal
+        let url = new URL("ws://demos.kaazing.com/echo");
+        let ws = new WebSocket(url);
+
+        ws.onMessage = (data) => {
+            let text = lnn.enc.utf8(data);
+            console.log("REKRKERE")
+            appendMessage(text);
         }
-        
+
+        window.ws = ws;
+
     </script>
 
 </body>

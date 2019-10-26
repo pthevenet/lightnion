@@ -1,3 +1,64 @@
+// Parsing function helpers
+import * as http from "./http/http.js"
+
+/**
+ * Parse the TODO of a HTTP request.
+ * @param {string} line the request line
+ */
+export function parseHTTPRequestLine(line) {
+    // Request-Line = Method SP Request-URI SP HTTP-Version CRLF
+    if (!line) {
+        throw `could not parse request line from ${line}`;
+    }
+
+    let parsed = {};
+    let elements = line.split(" ")
+
+    if (elements.length < 3) {
+        throw `could not parse request line from ${line}: should be of the form 'Method Request-URI HTTP-Version CRLF'`;
+    }
+
+    parsed["method"] = elements[0];
+    if (!Object.values(http.methods).includes(parsed["method"])) {
+        throw `could not parse request line from ${line}: method is not recognized'`;
+    }
+
+    // FIXME: validate?
+    parsed["request-uri"] = elements[1];
+
+    // FIXME validate?
+    parsed["version"] = elements[2];
+
+    return parsed;
+}
+
+/**
+ * Parse the status line of a HTTP response.
+ * @param {string} line the status-line  
+ */
+export function parseHTTPStatusLine(line) {
+    // Status-Line = HTTP-Version SP Status-Code SP Reason-Phrase CRLF
+    if (!line) {
+        throw `could not parse status line from ${line}`;
+    }
+    let parsed = {};
+    let elements = line.split(" ")
+
+    if (elements.length < 2) {
+        throw `could not parse status line from ${line}: should be of the form 'HTTP-Version Status-Code Reason CRLF'`;
+    }
+
+    parsed["version"] = elements[0];
+    parsed["status-code"] = parseInt(elements[1]);
+    parsed["reason"] = elements.slice(2).join(" ");
+
+    if (isNan(parsed["status-code"])) {
+        throw `could not parse status line from ${line}: status-code is not an integer`
+    }
+
+    return parsed;
+}
+
 
 
 /**
@@ -6,9 +67,9 @@
  * @param {string} headers HTTP headers
  * @returns a dictionnary of key-values in the header, 
  *  if multiple header key is present, values will be comma separated
- *  the header field names and values are set to lower-case
+ *  the header field names and values are set to lower-case, except for case-sensitive values
  */
-function parseHTTPHeaders(headers) {
+export function parseHTTPHeaders(headers) {
     let parsed = {};
 
     if (!headers) { return parsed; }
@@ -19,7 +80,7 @@ function parseHTTPHeaders(headers) {
             let i = line.indexOf(':');
             let key = line.substr(0, i).trim().toLowerCase();
             let val;
-            if (key != "sec-websocket-accept") {
+            if (key != "sec-websocket-accept" && key != "sec-websocket-key") {
                 val = line.substr(i + 1).trim().toLowerCase();
             } else {
                 val = line.substr(i + 1).trim();
@@ -41,7 +102,7 @@ function parseHTTPHeaders(headers) {
  * @returns [host, port, ressourceName, secure]
  * @throws error when url is incorrect for a websocket connection
  */
-function parseURL(url) {
+export function parseURL(url) {
     // 1. if the url string is not an absolute URL, then fail this algorithm
     var absoluteURLChecker = new RegExp('^(?:[a-z]+:)?//', 'i');
     if (!absoluteURLChecker.test(url.href)) {
@@ -69,7 +130,7 @@ function parseURL(url) {
 
     // 6. let host be the value of the <host> component of url,
     //    converted to ASCII lowercase.
-    const host = url.host.toLowerCase();
+    const host = url.hostname.toLowerCase();
 
     // 7. If url has a <port> component, then let port be that component's value;
     //    otherwise, there is no explicit port.

@@ -2,14 +2,11 @@
  * Packet crafting for WebSockets.
  */
 
-
-let wspackets = {};
-
 /**
  * Construct the HTTP packet send by the client during the WebSocket handshake.
  * @returns the HTTP client handshake packet as a string, with the Uint8Array SecWebSocketKey used in it
  */
-wspackets.clientHandshake = (host, port, ressourceName, protocols = []) => {
+export function clientHandshake(host, port, resourceName, protocols = []) {
     // TODO: support for subprotocols
     // no Sec-WebSocket-Protocol, Sec-WebSocket-Extensions
 
@@ -19,7 +16,7 @@ wspackets.clientHandshake = (host, port, ressourceName, protocols = []) => {
 
     // creat the http packet
     const pkt = [
-        ["GET", `${ressourceName}`, "HTTP/1.1"],
+        ["GET", `${resourceName}`, "HTTP/1.1"],
         ["Host:", `${host}:${port}`],
         ["Connection:", "Upgrade"],
         ["Upgrade:", "websocket"],
@@ -34,7 +31,7 @@ wspackets.clientHandshake = (host, port, ressourceName, protocols = []) => {
 /**
  * The GUID used for the Sec-WebSocket verification.
  */
-wspackets.guid = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11"
+export let guid = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11"
 
 
 /**
@@ -44,14 +41,14 @@ wspackets.guid = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11"
  * 
  * @returns boolean true if the received value is expected
  */
-wspackets.verifySecWebSocketAccept = (key, resp) => {
+export function verifySecWebSocketAccept(key, resp) {
 
     const fromHexString = hexString =>
         new Uint8Array(hexString.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
 
     const keyb64 = lnn.enc.base64(key);
     let hashed = forge.md.sha1.create();
-    hashed.update(keyb64 + wspackets.guid);
+    hashed.update(keyb64 + guid);
     const hashedBytes = fromHexString(hashed.digest().toHex());
     const expected = lnn.enc.base64(hashedBytes);
     return resp === expected;
@@ -65,7 +62,7 @@ wspackets.verifySecWebSocketAccept = (key, resp) => {
  * @param {string} flags the first 4 bits of the packet, FIN/RSV1/RSV2/RSV3 in bitstring format
  * @param {int} opcode the integer opcode 
  */
-wspackets.encapsulate = (payload, flags = "0000", opcode = 1) => {
+export function encapsulate(payload, flags = "0000", opcode = 1) {
     // TODO:
     // - fragmentation
     // - optimizations
@@ -89,8 +86,11 @@ wspackets.encapsulate = (payload, flags = "0000", opcode = 1) => {
     }
 
     let mask = '1';
-    let maskingKey = nacl.randomBytes(4);
+    // let maskingKey = nacl.randomBytes(4);
+    let maskingKey = new Uint8Array(4);
     let maskedPayload = maskWithKey(payload, maskingKey);
+    console.log(payload)
+    console.log(maskedPayload)
 
     function bitstringToUint8Array(bitstring) {
         let len = Math.ceil(bitstring.length / 8);
@@ -115,8 +115,8 @@ wspackets.encapsulate = (payload, flags = "0000", opcode = 1) => {
  * @returns dictionnary of fields and fields values of the encapsulated packet, or undefined if packet is invalid
  *      keys are a subset of ['FIN', 'RSV1', 'RSV2', 'RSV3', 'opcode', 'MASK', 'Payload Len', 'Masking-key', 'Payload Data']
  */
-wspackets.parse = (frame) => {
-    parsed = {};
+export function parse(frame) {
+    let parsed = {};
     let restLen = frame.byteLength;
     if (restLen < 2) {
         // bogus frame
@@ -182,7 +182,8 @@ wspackets.parse = (frame) => {
     return parsed;
 }
 
-wspackets.opcodes = {}
-wspackets.opcodes.close = 8;
-wspackets.opcodes.ping = 9;
-wspackets.opcodes.pong = 10;
+export let opcodes = {
+    close: 8,
+    ping: 9,
+    pong: 10,
+}

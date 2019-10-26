@@ -1,5 +1,5 @@
 // LTCP represents a lightnion tunelled tcp socket
-class LTCP {
+export class LTCP {
     constructor(host) {
         this.connected = false;
         this.onmessage = (msg) => { };
@@ -14,7 +14,7 @@ class LTCP {
 // Connect to Lightnion Proxy
 // return a promise that resolve on connection success, and reject in case of failure
 // in case of success, return the lightnion endpoint
-function lnnOpen(lnnHost, lnnPort) {
+export function lnnOpen(lnnHost, lnnPort) {
     console.log("called lnnOpen")
     return new Promise((resolve, reject) => {
         lnn.open(lnnHost, lnnPort, function (endpoint) {
@@ -31,7 +31,7 @@ function lnnOpen(lnnHost, lnnPort) {
 // Connect to TCP endpoint
 // return a promise that resolve on connection success, and reject in case of failure
 // in case of succes, return a TCP object
-function ltcpOpen(lnnEndpoint, host, port) {
+export function ltcpOpen(lnnEndpoint, host, port) {
 
     return new Promise((resolve, reject) => {
 
@@ -49,14 +49,13 @@ function ltcpOpen(lnnEndpoint, host, port) {
                     tcp.connected = false;
             }
         }
-
         lnn.stream.tcp(lnnEndpoint, host, port, handler)
     })
 }
 
 
 // Perform the websocket handshake
-function lwsOpen(ltcp, path) {
+export function lwsOpen(ltcp, path) {
 
     return new Promise((resolve, reject) => {
 

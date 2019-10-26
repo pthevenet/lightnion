@@ -1,3 +1,5 @@
+import { parseHTTPHeaders, parseURL } from "./parsing.js";
+import * as wspackets from "./packets.js";
 
 /**
  * CustomWebSocket is a WebSocket aimed to replace standard WebSocket with user-defined behavior.
@@ -5,12 +7,12 @@
 
 // TODO: verify https://www.w3.org/TR/websockets/#the-websocket-interface
 
-class CustomWebSocket {
+export default class CustomWebSocket {
     // TODO: refactor public/private fiels
-    onclose;
-    onerror;
-    onmessage;
-    onopen;
+    // onclose;
+    // onerror;
+    // onmessage;
+    // onopen;
 
     /**
      * 
@@ -139,7 +141,7 @@ class CustomWebSocket {
         this.socket = socket;
         // parse url
         try {
-            var [host, port, ressourceName, secure] = parseURL(url);
+            var [host, port, ressourceName, secure] = parseURL(this.url);
         } catch (err) {
             throw SyntaxError(`could not parse url: ${err}`);
         }
@@ -315,7 +317,6 @@ class CustomWebSocket {
                     resolve();
                 }
             }
-
             this.socket.send(lnn.dec.utf8(clientHS));
         })
 

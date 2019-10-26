@@ -66,214 +66,4620 @@ c+=d+'"'+b+'":';d=",";switch(typeof a[b]){case "number":case "boolean":c+=a[b];b
 null!=d[3]?b[d[2]]=parseInt(d[3],10):null!=d[4]?b[d[2]]=d[2].match(/^(ct|adata|salt|iv)$/)?sjcl.codec.base64.toBits(d[4]):unescape(d[4]):null!=d[5]&&(b[d[2]]="true"===d[5])}return b},_add:function(a,b,c){void 0===a&&(a={});if(void 0===b)return a;for(var d in b)if(b.hasOwnProperty(d)){if(c&&void 0!==a[d]&&a[d]!==b[d])throw new sjcl.exception.invalid("required parameter overridden");a[d]=b[d]}return a},_subtract:function(a,b){var c={},d;for(d in a)a.hasOwnProperty(d)&&a[d]!==b[d]&&(c[d]=a[d]);return c},
 _filter:function(a,b){var c={},d;for(d=0;d<b.length;d++)void 0!==a[b[d]]&&(c[b[d]]=a[b[d]]);return c}};sjcl.encrypt=sjcl.json.encrypt;sjcl.decrypt=sjcl.json.decrypt;sjcl.misc._pbkdf2Cache={};sjcl.misc.cachedPbkdf2=function(a,b){var c=sjcl.misc._pbkdf2Cache,d;b=b||{};d=b.iter||1E3;c=c[a]=c[a]||{};d=c[d]=c[d]||{firstSalt:b.salt&&b.salt.length?b.salt.slice(0):sjcl.random.randomWords(2,0)};c=void 0===b.salt?d.firstSalt:b.salt;d[c]=d[c]||sjcl.misc.pbkdf2(a,c,b.iter);return{key:d[c].slice(0),salt:c.slice(0)}};
 "undefined"!==typeof module&&module.exports&&(module.exports=sjcl);"function"===typeof define&&define([],function(){return sjcl});
-"use strict";var $jscomp={scope:{},getGlobal:function(a){return"undefined"!=typeof window&&window===a?a:"undefined"!=typeof global?global:a}};$jscomp.global=$jscomp.getGlobal(this);$jscomp.initSymbol=function(){$jscomp.global.Symbol||($jscomp.global.Symbol=$jscomp.Symbol);$jscomp.initSymbol=function(){}};$jscomp.symbolCounter_=0;$jscomp.Symbol=function(a){return"jscomp_symbol_"+a+$jscomp.symbolCounter_++};
-$jscomp.initSymbolIterator=function(){$jscomp.initSymbol();$jscomp.global.Symbol.iterator||($jscomp.global.Symbol.iterator=$jscomp.global.Symbol("iterator"));$jscomp.initSymbolIterator=function(){}};
-$jscomp.makeIterator=function(a){$jscomp.initSymbolIterator();if(a[$jscomp.global.Symbol.iterator])return a[$jscomp.global.Symbol.iterator]();if(!(a instanceof Array||"string"==typeof a||a instanceof String))throw new TypeError(a+" is not iterable");var c=0;return{next:function(){return c==a.length?{done:!0}:{done:!1,value:a[c++]}}}};$jscomp.arrayFromIterator=function(a){for(var c,b=[];!(c=a.next()).done;)b.push(c.value);return b};
-$jscomp.arrayFromIterable=function(a){return a instanceof Array?a:$jscomp.arrayFromIterator($jscomp.makeIterator(a))};$jscomp.arrayFromArguments=function(a){for(var c=[],b=0;b<a.length;b++)c.push(a[b]);return c};
-$jscomp.inherits=function(a,c){function b(){}b.prototype=c.prototype;a.prototype=new b;a.prototype.constructor=a;for(var d in c)if($jscomp.global.Object.defineProperties){var e=$jscomp.global.Object.getOwnPropertyDescriptor(c,d);void 0!==e&&$jscomp.global.Object.defineProperty(a,d,e)}else a[d]=c[d]};
-var bigInt=function(a){function c(a,b,d,e){if("undefined"===typeof a)return c[0];if("undefined"!==typeof b){if(10!==+b||d){var g;g=d||"0123456789abcdefghijklmnopqrstuvwxyz";a=String(a);e||(a=a.toLowerCase(),g=g.toLowerCase());var f=a.length,h=Math.abs(b);d={};for(e=0;e<g.length;e++)d[g[e]]=e;for(e=0;e<f;e++)if(g=a[e],"-"!==g&&g in d&&d[g]>=h&&("1"!==g||1!==h))throw Error(g+" is not a valid digit in base "+b+".");b=m(b);f=[];for(e=(h="-"===a[0])?1:0;e<a.length;e++)if(g=a[e],g in d)f.push(m(d[g]));
-else if("<"===g){g=e;do e++;while(">"!==a[e]&&e<a.length);f.push(m(a.slice(g+1,e)))}else throw Error(g+" is not a valid character");b=U(f,b,h)}else b=m(a);return b}return m(a)}function b(a,b){this.value=a;this.sign=b;this.isSmall=!1}function d(a){this.value=a;this.sign=0>a;this.isSmall=!0}function e(a){this.value=a}function f(a){return-9007199254740992<a&&9007199254740992>a}function h(a){return 1E7>a?[a]:1E14>a?[a%1E7,Math.floor(a/1E7)]:[a%1E7,Math.floor(a/1E7)%1E7,Math.floor(a/1E14)]}function g(a){l(a);
-var b=a.length;if(4>b&&0>F(a,P))switch(b){case 0:return 0;case 1:return a[0];case 2:return a[0]+1E7*a[1];default:return a[0]+1E7*(a[1]+1E7*a[2])}return a}function l(a){for(var b=a.length;0===a[--b];);a.length=b+1}function k(a){for(var b=Array(a),c=-1;++c<a;)b[c]=0;return b}function n(a){return 0<a?Math.floor(a):Math.ceil(a)}function q(a,b){var c=a.length,d=b.length,e=Array(c),g=0,f,h;for(h=0;h<d;h++)f=a[h]+b[h]+g,g=1E7<=f?1:0,e[h]=f-1E7*g;for(;h<c;)f=a[h]+g,g=1E7===f?1:0,e[h++]=f-1E7*g;0<g&&e.push(g);
-return e}function A(a,b){return a.length>=b.length?q(a,b):q(b,a)}function u(a,b){var c=a.length,d=Array(c),e,g;for(g=0;g<c;g++)e=a[g]-1E7+b,b=Math.floor(e/1E7),d[g]=e-1E7*b,b+=1;for(;0<b;)d[g++]=b%1E7,b=Math.floor(b/1E7);return d}function x(a,b){var c=a.length,d=b.length,e=Array(c),g=0,f,h;for(f=0;f<d;f++)h=a[f]-g-b[f],0>h?(h+=1E7,g=1):g=0,e[f]=h;for(f=d;f<c;f++){h=a[f]-g;if(0>h)h+=1E7;else{e[f++]=h;break}e[f]=h}for(;f<c;f++)e[f]=a[f];l(e);return e}function D(a,c,e){var f=a.length,h=Array(f);c=-c;
-var l,k;for(l=0;l<f;l++)k=a[l]+c,c=Math.floor(k/1E7),k%=1E7,h[l]=0>k?k+1E7:k;h=g(h);return"number"===typeof h?(e&&(h=-h),new d(h)):new b(h,e)}function Q(a,b){var c=a.length,d=b.length,e=k(c+d),g,f,h,m;for(h=0;h<c;++h){m=a[h];for(var n=0;n<d;++n)g=b[n],g=m*g+e[h+n],f=Math.floor(g/1E7),e[h+n]=g-1E7*f,e[h+n+1]+=f}l(e);return e}function J(a,b){var c=a.length,d=Array(c),e=0,g,h;for(h=0;h<c;h++)g=a[h]*b+e,e=Math.floor(g/1E7),d[h]=g-1E7*e;for(;0<e;)d[h++]=e%1E7,e=Math.floor(e/1E7);return d}function V(a,
-b){for(var c=[];0<b--;)c.push(0);return c.concat(a)}function M(a,b){var c=Math.max(a.length,b.length);if(30>=c)return Q(a,b);var c=Math.ceil(c/2),d=a.slice(c),e=a.slice(0,c),g=b.slice(c),h=b.slice(0,c),f=M(e,h),k=M(d,g),d=M(A(e,d),A(h,g)),c=A(A(f,V(x(x(d,f),k),c)),V(k,2*c));l(c);return c}function W(a,c,d){return 1E7>a?new b(J(c,a),d):new b(Q(c,h(a)),d)}function X(a){var b=a.length,c=k(b+b),d,e,g,h;for(g=0;g<b;g++){h=a[g];e=0-h*h;for(var f=g;f<b;f++)d=a[f],d=2*h*d+c[g+f]+e,e=Math.floor(d/1E7),c[g+
-f]=d-1E7*e;c[g+b]=e}l(c);return c}function Y(a,b){var c=a.length,d=k(c),e,g;g=0;for(--c;0<=c;--c)g=1E7*g+a[c],e=n(g/b),g-=e*b,d[c]=e|0;return[d,g|0]}function G(a,fa){var f,y=m(fa);if(N)return[new e(a.value/y.value),new e(a.value%y.value)];var p=a.value;f=y.value;if(0===f)throw Error("Cannot divide by zero");if(a.isSmall)return y.isSmall?[new d(n(p/f)),new d(p%f)]:[c[0],a];if(y.isSmall){if(1===f)return[a,c[0]];if(-1==f)return[a.negate(),c[0]];f=Math.abs(f);if(1E7>f)return f=Y(p,f),p=g(f[0]),f=f[1],
-a.sign&&(f=-f),"number"===typeof p?(a.sign!==y.sign&&(p=-p),[new d(p),new d(f)]):[new b(p,a.sign!==y.sign),new d(f)];f=h(f)}var z=F(p,f);if(-1===z)return[c[0],a];if(0===z)return[c[a.sign===y.sign?1:-1],c[0]];if(200>=p.length+f.length){var r=f,q=p.length;f=r.length;var z=k(r.length),E=r[f-1],u=Math.ceil(1E7/(2*E)),p=J(p,u),r=J(r,u),t,v,B,w,A,D;p.length<=q&&p.push(0);r.push(0);E=r[f-1];for(t=q-f;0<=t;t--){q=9999999;p[t+f]!==E&&(q=Math.floor((1E7*p[t+f]+p[t+f-1])/E));B=v=0;A=r.length;for(w=0;w<A;w++)v+=
-q*r[w],D=Math.floor(v/1E7),B+=p[t+w]-(v-1E7*D),v=D,0>B?(p[t+w]=B+1E7,B=-1):(p[t+w]=B,B=0);for(;0!==B;){--q;for(w=v=0;w<A;w++)v+=p[t+w]-1E7+r[w],0>v?(p[t+w]=v+1E7,v=0):(p[t+w]=v,v=1);B+=v}z[t]=q}p=Y(p,u)[0];f=[g(z),g(p)]}else{z=p.length;E=f.length;u=[];for(r=[];z;)if(r.unshift(p[--z]),l(r),0>F(r,f))u.push(0);else{q=r.length;t=1E7*r[q-1]+r[q-2];v=1E7*f[E-1]+f[E-2];q>E&&(t=1E7*(t+1));q=Math.ceil(t/v);do{t=J(f,q);if(0>=F(t,r))break;q--}while(q);u.push(q);r=x(r,t)}u.reverse();f=[g(u),g(r)]}p=f[0];y=a.sign!==
-y.sign;f=f[1];z=a.sign;"number"===typeof p?(y&&(p=-p),p=new d(p)):p=new b(p,y);"number"===typeof f?(z&&(f=-f),f=new d(f)):f=new b(f,z);return[p,f]}function F(a,b){if(a.length!==b.length)return a.length>b.length?1:-1;for(var c=a.length-1;0<=c;c--)if(a[c]!==b[c])return a[c]>b[c]?1:-1;return 0}function Z(a){a=a.abs();if(a.isUnit())return!1;if(a.equals(2)||a.equals(3)||a.equals(5))return!0;if(a.isEven()||a.isDivisibleBy(3)||a.isDivisibleBy(5))return!1;if(a.lesser(49))return!0}function R(a,b){for(var c=
-a.prev(),d=c,e=0,f,g,h;d.isEven();)d=d.divide(2),e++;g=0;a:for(;g<b.length;g++)if(!a.lesser(b[g])&&(h=bigInt(b[g]).modPow(d,a),!h.isUnit()&&!h.equals(c))){for(f=e-1;0!=f;f--){h=h.square().mod(a);if(h.isUnit())break;if(h.equals(c))continue a}return!1}return!0}function S(a,b,c){b=m(b);var d=a.isNegative(),e=b.isNegative();a=d?a.not():a;var g=e?b.not():b,f=0,h=0,l=null,k=null;for(b=[];!a.isZero()||!g.isZero();)l=G(a,H),f=l[1].toJSNumber(),d&&(f=H-1-f),k=G(g,H),h=k[1].toJSNumber(),e&&(h=H-1-h),a=l[0],
-g=k[0],b.push(c(f,h));c=0!==c(d?1:0,e?1:0)?bigInt(-1):bigInt(0);for(d=b.length-1;0<=d;--d)c=c.multiply(H).add(bigInt(b[d]));return c}function O(a){a=a.value;a="number"===typeof a?a|1073741824:"bigint"===typeof a?a|BigInt(1073741824):a[0]+1E7*a[1]|1073758208;return a&-a}function aa(a,b){if(0>=b.compareTo(a)){var c=aa(a,b.square(b)),d=c.p,c=c.e,e=d.multiply(b);return 0>=e.compareTo(a)?{p:e,e:2*c+1}:{p:d,e:2*c}}return{p:bigInt(1),e:0}}function ba(a,b){a=m(a);b=m(b);return a.greater(b)?a:b}function T(a,
-b){a=m(a);b=m(b);return a.lesser(b)?a:b}function ca(a,b){a=m(a).abs();b=m(b).abs();if(a.equals(b))return a;if(a.isZero())return b;if(b.isZero())return a;for(var d=c[1],e;a.isEven()&&b.isEven();)e=T(O(a),O(b)),a=a.divide(e),b=b.divide(e),d=d.multiply(e);for(;a.isEven();)a=a.divide(O(a));do{for(;b.isEven();)b=b.divide(O(b));a.greater(b)&&(e=b,b=a,a=e);b=b.subtract(a)}while(!b.isZero());return d.isUnit()?a:a.multiply(d)}function U(a,b,d){var e=c[0],g=c[1],f;for(f=a.length-1;0<=f;f--)e=e.add(a[f].times(g)),
-g=g.times(b);return d?e.negate():e}function K(a,b){b=bigInt(b);if(b.isZero()){if(a.isZero())return{value:[0],isNegative:!1};throw Error("Cannot convert nonzero numbers to base 0.");}if(b.equals(-1)){if(a.isZero())return{value:[0],isNegative:!1};if(a.isNegative())return{value:[].concat.apply([],Array.apply(null,Array(-a.toJSNumber())).map(Array.prototype.valueOf,[1,0])),isNegative:!1};var c=Array.apply(null,Array(a.toJSNumber()-1)).map(Array.prototype.valueOf,[0,1]);c.unshift([1]);return{value:[].concat.apply([],
-c),isNegative:!1}}c=!1;a.isNegative()&&b.isPositive()&&(c=!0,a=a.abs());if(b.isUnit())return a.isZero()?{value:[0],isNegative:!1}:{value:Array.apply(null,Array(a.toJSNumber())).map(Number.prototype.valueOf,1),isNegative:c};for(var d=[],e=a,f;e.isNegative()||0<=e.compareAbs(b);)f=e.divmod(b),e=f.quotient,f=f.remainder,f.isNegative()&&(f=b.minus(f).abs(),e=e.next()),d.push(f.toJSNumber());d.push(e.toJSNumber());return{value:d.reverse(),isNegative:c}}function da(a,b,c){a=K(a,b);return(a.isNegative?"-":
-"")+a.value.map(function(a){var b=c,b=b||"0123456789abcdefghijklmnopqrstuvwxyz";a=a<b.length?b[a]:"<"+a+">";return a}).join("")}function ea(a){if(f(+a)){var c=+a;if(c===n(c))return N?new e(BigInt(c)):new d(c);throw Error("Invalid integer: "+a);}(c="-"===a[0])&&(a=a.slice(1));var g=a.split(/e/i);if(2<g.length)throw Error("Invalid integer: "+g.join("e"));if(2===g.length){a=g[1];"+"===a[0]&&(a=a.slice(1));a=+a;if(a!==n(a)||!f(a))throw Error("Invalid integer: "+a+" is not a valid exponent.");var g=g[0],
-h=g.indexOf(".");0<=h&&(a-=g.length-h-1,g=g.slice(0,h)+g.slice(h+1));if(0>a)throw Error("Cannot include negative exponent part for integers");a=g+=Array(a+1).join("0")}if(!/^([0-9][0-9]*)$/.test(a))throw Error("Invalid integer: "+a);if(N)return new e(BigInt(c?"-"+a:a));for(var g=[],h=a.length,k=h-7;0<h;)g.push(+a.slice(k,h)),k-=7,0>k&&(k=0),h-=7;l(g);return new b(g,c)}function m(a){if("number"===typeof a){if(N)a=new e(BigInt(a));else if(f(a)){if(a!==n(a))throw Error(a+" is not an integer.");a=new d(a)}else a=
-ea(a.toString());return a}return"string"===typeof a?ea(a):"bigint"===typeof a?new e(a):a}var P=h(9007199254740992),N="function"===typeof BigInt;b.prototype=Object.create(c.prototype);d.prototype=Object.create(c.prototype);e.prototype=Object.create(c.prototype);b.prototype.add=function(a){a=m(a);if(this.sign!==a.sign)return this.subtract(a.negate());var c=this.value,d=a.value;return a.isSmall?new b(u(c,Math.abs(d)),this.sign):new b(A(c,d),this.sign)};b.prototype.plus=b.prototype.add;d.prototype.add=
-function(a){a=m(a);var c=this.value;if(0>c!==a.sign)return this.subtract(a.negate());var e=a.value;if(a.isSmall){if(f(c+e))return new d(c+e);e=h(Math.abs(e))}return new b(u(e,Math.abs(c)),0>c)};d.prototype.plus=d.prototype.add;e.prototype.add=function(a){return new e(this.value+m(a).value)};e.prototype.plus=e.prototype.add;b.prototype.subtract=function(a){var c=m(a);if(this.sign!==c.sign)return this.add(c.negate());a=this.value;var e=c.value;if(c.isSmall)return D(a,Math.abs(e),this.sign);c=this.sign;
-0<=F(a,e)?a=x(a,e):(a=x(e,a),c=!c);a=g(a);"number"===typeof a?(c&&(a=-a),a=new d(a)):a=new b(a,c);return a};b.prototype.minus=b.prototype.subtract;d.prototype.subtract=function(a){a=m(a);var b=this.value;if(0>b!==a.sign)return this.add(a.negate());var c=a.value;return a.isSmall?new d(b-c):D(c,Math.abs(b),0<=b)};d.prototype.minus=d.prototype.subtract;e.prototype.subtract=function(a){return new e(this.value-m(a).value)};e.prototype.minus=e.prototype.subtract;b.prototype.negate=function(){return new b(this.value,
-!this.sign)};d.prototype.negate=function(){var a=this.sign,b=new d(-this.value);b.sign=!a;return b};e.prototype.negate=function(){return new e(-this.value)};b.prototype.abs=function(){return new b(this.value,!1)};d.prototype.abs=function(){return new d(Math.abs(this.value))};e.prototype.abs=function(){return new e(0<=this.value?this.value:-this.value)};b.prototype.multiply=function(a){var d=m(a);a=this.value;var e=d.value,g=this.sign!==d.sign;if(d.isSmall){if(0===e)return c[0];if(1===e)return this;
-if(-1===e)return this.negate();e=Math.abs(e);if(1E7>e)return new b(J(a,e),g);e=h(e)}var d=a.length,f=e.length;return 0<-.012*d-.012*f+1.5E-5*d*f?new b(M(a,e),g):new b(Q(a,e),g)};b.prototype.times=b.prototype.multiply;d.prototype._multiplyBySmall=function(a){return f(a.value*this.value)?new d(a.value*this.value):W(Math.abs(a.value),h(Math.abs(this.value)),this.sign!==a.sign)};b.prototype._multiplyBySmall=function(a){return 0===a.value?c[0]:1===a.value?this:-1===a.value?this.negate():W(Math.abs(a.value),
-this.value,this.sign!==a.sign)};d.prototype.multiply=function(a){return m(a)._multiplyBySmall(this)};d.prototype.times=d.prototype.multiply;e.prototype.multiply=function(a){return new e(this.value*m(a).value)};e.prototype.times=e.prototype.multiply;b.prototype.square=function(){return new b(X(this.value),!1)};d.prototype.square=function(){var a=this.value*this.value;return f(a)?new d(a):new b(X(h(Math.abs(this.value))),!1)};e.prototype.square=function(a){return new e(this.value*this.value)};b.prototype.divmod=
-function(a){a=G(this,a);return{quotient:a[0],remainder:a[1]}};e.prototype.divmod=d.prototype.divmod=b.prototype.divmod;b.prototype.divide=function(a){return G(this,a)[0]};e.prototype.over=e.prototype.divide=function(a){return new e(this.value/m(a).value)};d.prototype.over=d.prototype.divide=b.prototype.over=b.prototype.divide;b.prototype.mod=function(a){return G(this,a)[1]};e.prototype.mod=e.prototype.remainder=function(a){return new e(this.value%m(a).value)};d.prototype.remainder=d.prototype.mod=
-b.prototype.remainder=b.prototype.mod;b.prototype.pow=function(a){var b=m(a),e=this.value;a=b.value;var g;if(0===a)return c[1];if(0===e)return c[0];if(1===e)return c[1];if(-1===e)return b.isEven()?c[1]:c[-1];if(b.sign)return c[0];if(!b.isSmall)throw Error("The exponent "+b.toString()+" is too large.");if(this.isSmall&&f(g=Math.pow(e,a)))return new d(n(g));g=this;for(b=c[1];;){a&1&&(b=b.times(g),--a);if(0===a)break;a/=2;g=g.square()}return b};d.prototype.pow=b.prototype.pow;e.prototype.pow=function(a){var b=
-m(a),d=this.value;a=b.value;var g=BigInt(0),f=BigInt(1),h=BigInt(2);if(a===g)return c[1];if(d===g)return c[0];if(d===f)return c[1];if(d===BigInt(-1))return b.isEven()?c[1]:c[-1];if(b.isNegative())return new e(g);b=this;for(d=c[1];;){(a&f)===f&&(d=d.times(b),--a);if(a===g)break;a/=h;b=b.square()}return d};b.prototype.modPow=function(a,b){a=m(a);b=m(b);if(b.isZero())throw Error("Cannot take modPow with modulus 0");for(var d=c[1],e=this.mod(b);a.isPositive();){if(e.isZero())return c[0];a.isOdd()&&(d=
-d.multiply(e).mod(b));a=a.divide(2);e=e.square().mod(b)}return d};e.prototype.modPow=d.prototype.modPow=b.prototype.modPow;b.prototype.compareAbs=function(a){a=m(a);return a.isSmall?1:F(this.value,a.value)};d.prototype.compareAbs=function(a){a=m(a);var b=Math.abs(this.value),c=a.value;return a.isSmall?(c=Math.abs(c),b===c?0:b>c?1:-1):-1};e.prototype.compareAbs=function(a){var b=this.value;a=m(a).value;b=0<=b?b:-b;a=0<=a?a:-a;return b===a?0:b>a?1:-1};b.prototype.compare=function(a){if(Infinity===a)return-1;
-if(-Infinity===a)return 1;a=m(a);return this.sign!==a.sign?a.sign?1:-1:a.isSmall?this.sign?-1:1:F(this.value,a.value)*(this.sign?-1:1)};b.prototype.compareTo=b.prototype.compare;d.prototype.compare=function(a){if(Infinity===a)return-1;if(-Infinity===a)return 1;a=m(a);var b=this.value,c=a.value;return a.isSmall?b==c?0:b>c?1:-1:0>b!==a.sign?0>b?-1:1:0>b?1:-1};d.prototype.compareTo=d.prototype.compare;e.prototype.compare=function(a){if(Infinity===a)return-1;if(-Infinity===a)return 1;var b=this.value;
-a=m(a).value;return b===a?0:b>a?1:-1};e.prototype.compareTo=e.prototype.compare;b.prototype.equals=function(a){return 0===this.compare(a)};e.prototype.eq=e.prototype.equals=d.prototype.eq=d.prototype.equals=b.prototype.eq=b.prototype.equals;b.prototype.notEquals=function(a){return 0!==this.compare(a)};e.prototype.neq=e.prototype.notEquals=d.prototype.neq=d.prototype.notEquals=b.prototype.neq=b.prototype.notEquals;b.prototype.greater=function(a){return 0<this.compare(a)};e.prototype.gt=e.prototype.greater=
-d.prototype.gt=d.prototype.greater=b.prototype.gt=b.prototype.greater;b.prototype.lesser=function(a){return 0>this.compare(a)};e.prototype.lt=e.prototype.lesser=d.prototype.lt=d.prototype.lesser=b.prototype.lt=b.prototype.lesser;b.prototype.greaterOrEquals=function(a){return 0<=this.compare(a)};e.prototype.geq=e.prototype.greaterOrEquals=d.prototype.geq=d.prototype.greaterOrEquals=b.prototype.geq=b.prototype.greaterOrEquals;b.prototype.lesserOrEquals=function(a){return 0>=this.compare(a)};e.prototype.leq=
-e.prototype.lesserOrEquals=d.prototype.leq=d.prototype.lesserOrEquals=b.prototype.leq=b.prototype.lesserOrEquals;b.prototype.isEven=function(){return 0===(this.value[0]&1)};d.prototype.isEven=function(){return 0===(this.value&1)};e.prototype.isEven=function(){return(this.value&BigInt(1))===BigInt(0)};b.prototype.isOdd=function(){return 1===(this.value[0]&1)};d.prototype.isOdd=function(){return 1===(this.value&1)};e.prototype.isOdd=function(){return(this.value&BigInt(1))===BigInt(1)};b.prototype.isPositive=
-function(){return!this.sign};d.prototype.isPositive=function(){return 0<this.value};e.prototype.isPositive=d.prototype.isPositive;b.prototype.isNegative=function(){return this.sign};d.prototype.isNegative=function(){return 0>this.value};e.prototype.isNegative=d.prototype.isNegative;b.prototype.isUnit=function(){return!1};d.prototype.isUnit=function(){return 1===Math.abs(this.value)};e.prototype.isUnit=function(){return this.abs().value===BigInt(1)};b.prototype.isZero=function(){return!1};d.prototype.isZero=
-function(){return 0===this.value};e.prototype.isZero=function(){return this.value===BigInt(0)};b.prototype.isDivisibleBy=function(a){a=m(a);return a.isZero()?!1:a.isUnit()?!0:0===a.compareAbs(2)?this.isEven():this.mod(a).isZero()};e.prototype.isDivisibleBy=d.prototype.isDivisibleBy=b.prototype.isDivisibleBy;b.prototype.isPrime=function(b){var c=Z(this);if(c!==a)return c;var c=this.abs(),d=c.bitLength();if(64>=d)return R(c,[2,3,5,7,11,13,17,19,23,29,31,37]);d=Math.log(2)*d.toJSNumber();b=Math.ceil(!0===
-b?2*Math.pow(d,2):d);for(var d=[],e=0;e<b;e++)d.push(bigInt(e+2));return R(c,d)};e.prototype.isPrime=d.prototype.isPrime=b.prototype.isPrime;b.prototype.isProbablePrime=function(b){var c=Z(this);if(c!==a)return c;c=this.abs();b=b===a?5:b;for(var d=[],e=0;e<b;e++)d.push(bigInt.randBetween(2,c.minus(2)));return R(c,d)};e.prototype.isProbablePrime=d.prototype.isProbablePrime=b.prototype.isProbablePrime;b.prototype.modInv=function(a){for(var b=bigInt.zero,c=bigInt.one,d=m(a),e=this.abs(),g,f,h;!e.isZero();)g=
-d.divide(e),f=b,h=d,b=c,d=e,c=f.subtract(g.multiply(c)),e=h.subtract(g.multiply(e));if(!d.isUnit())throw Error(this.toString()+" and "+a.toString()+" are not co-prime");-1===b.compare(0)&&(b=b.add(a));return this.isNegative()?b.negate():b};e.prototype.modInv=d.prototype.modInv=b.prototype.modInv;b.prototype.next=function(){var a=this.value;return this.sign?D(a,1,this.sign):new b(u(a,1),this.sign)};d.prototype.next=function(){var a=this.value;return 9007199254740992>a+1?new d(a+1):new b(P,!1)};e.prototype.next=
-function(){return new e(this.value+BigInt(1))};b.prototype.prev=function(){var a=this.value;return this.sign?new b(u(a,1),!0):D(a,1,this.sign)};d.prototype.prev=function(){var a=this.value;return-9007199254740992<a-1?new d(a-1):new b(P,!0)};e.prototype.prev=function(){return new e(this.value-BigInt(1))};for(var C=[1];1E7>=2*C[C.length-1];)C.push(2*C[C.length-1]);var L=C.length,H=C[L-1];b.prototype.shiftLeft=function(a){a=m(a).toJSNumber();if(!(1E7>=Math.abs(a)))throw Error(String(a)+" is too large for shifting.");
-if(0>a)return this.shiftRight(-a);var b=this;if(b.isZero())return b;for(;a>=L;)b=b.multiply(H),a-=L-1;return b.multiply(C[a])};e.prototype.shiftLeft=d.prototype.shiftLeft=b.prototype.shiftLeft;b.prototype.shiftRight=function(a){var b;a=m(a).toJSNumber();if(!(1E7>=Math.abs(a)))throw Error(String(a)+" is too large for shifting.");if(0>a)return this.shiftLeft(-a);for(b=this;a>=L;){if(b.isZero()||b.isNegative()&&b.isUnit())return b;b=G(b,H);b=b[1].isNegative()?b[0].prev():b[0];a-=L-1}b=G(b,C[a]);return b[1].isNegative()?
-b[0].prev():b[0]};e.prototype.shiftRight=d.prototype.shiftRight=b.prototype.shiftRight;b.prototype.not=function(){return this.negate().prev()};e.prototype.not=d.prototype.not=b.prototype.not;b.prototype.and=function(a){return S(this,a,function(a,b){return a&b})};e.prototype.and=d.prototype.and=b.prototype.and;b.prototype.or=function(a){return S(this,a,function(a,b){return a|b})};e.prototype.or=d.prototype.or=b.prototype.or;b.prototype.xor=function(a){return S(this,a,function(a,b){return a^b})};e.prototype.xor=
-d.prototype.xor=b.prototype.xor;b.prototype.bitLength=function(){var a=this;0>a.compareTo(bigInt(0))&&(a=a.negate().subtract(bigInt(1)));return 0===a.compareTo(bigInt(0))?bigInt(0):bigInt(aa(a,bigInt(2)).e).add(bigInt(1))};e.prototype.bitLength=d.prototype.bitLength=b.prototype.bitLength;b.prototype.toArray=function(a){return K(this,a)};d.prototype.toArray=function(a){return K(this,a)};e.prototype.toArray=function(a){return K(this,a)};b.prototype.toString=function(b,c){b===a&&(b=10);if(10!==b)return da(this,
-b,c);for(var d=this.value,e=d.length,g=String(d[--e]),f;0<=--e;)f=String(d[e]),g+="0000000".slice(f.length)+f;return(this.sign?"-":"")+g};d.prototype.toString=function(b,c){b===a&&(b=10);return 10!=b?da(this,b,c):String(this.value)};e.prototype.toString=d.prototype.toString;e.prototype.toJSON=b.prototype.toJSON=d.prototype.toJSON=function(){return this.toString()};b.prototype.valueOf=function(){return parseInt(this.toString(),10)};b.prototype.toJSNumber=b.prototype.valueOf;d.prototype.valueOf=function(){return this.value};
-d.prototype.toJSNumber=d.prototype.valueOf;e.prototype.valueOf=e.prototype.toJSNumber=function(){return parseInt(this.toString(),10)};for(var I=0;1E3>I;I++)c[I]=m(I),0<I&&(c[-I]=m(-I));c.one=c[1];c.zero=c[0];c.minusOne=c[-1];c.max=ba;c.min=T;c.gcd=ca;c.lcm=function(a,b){a=m(a).abs();b=m(b).abs();return a.divide(ca(a,b)).multiply(b)};c.isInstance=function(a){return a instanceof b||a instanceof d||a instanceof e};c.randBetween=function(a,b){a=m(a);b=m(b);var d=T(a,b),e=ba(a,b).subtract(d).add(1);if(e.isSmall)return d.add(Math.floor(Math.random()*
-e));for(var e=K(e,1E7).value,g=[],f=!0,h=0;h<e.length;h++){var k=f?e[h]:1E7,l=n(Math.random()*k);g.push(l);l<k&&(f=!1)}return d.add(c.fromArray(g,1E7,!1))};c.fromArray=function(a,b,c){return U(a.map(m),m(b||10),c)};return c}();"undefined"!==typeof module&&module.hasOwnProperty("exports")&&(module.exports=bigInt);"function"===typeof define&&define.amd&&define("big-integer",[],function(){return bigInt});"use strict";var lnn={api:{}};lnn.api.version="0.1";lnn.api.url="/lightnion/api/v0.1";
-lnn.api.ws_port="8765";lnn.state={started:1,guarded:2,created:3,pending:4,extpath:5,success:6,started:1,created:3,pending:4,success:6};
-lnn.endpoint=function(a,c){var b="http://"+a+":"+c.toString(),b=b+lnn.api.url,d="ws://"+a+":"+lnn.api.ws_port,d=d+lnn.api.url,e={host:a,port:c,fast:null,auth:null,urls:{ws:d,http:b,guard:b+"/guard",socket:d+"/channels",channels:b+"/channels",consensus:b+"/consensus",descriptors:b+"/descriptors",signing_keys:b+"/signing-keys"},io:null,state:0,material:null,forward:null,backward:null,id:null,url:null,path:null,guard:null,stream:null,consensus:null,descriptors:null,consensus_raw:null,descriptors_raw:null,
-signing_keys:null,select_path:!1,http_request:function(a,b,c,d,k,n){void 0===n&&(n=function(){});void 0===k&&(k=function(){});lnn.send_req(e,a,b,c,d,k,n)},close:function(a,b){lnn.post.close(e,a,b)}};return e};lnn.get={};lnn.get.guard=function(a,c,b){fetch(a.urls.guard,{method:"GET"}).then(function(d){200==d.status?d.json().then(function(b){a.guard=b;void 0!==c&&c(a)}):void 0!==b&&b(a,d.status)})};
-lnn.get.consensus=function(a,c,b){fetch(a.urls.consensus,{method:"GET"}).then(function(d){200==d.status?d.json().then(function(b){a.consensus=b;void 0!==c&&c(a)}):void 0!==b&&b(a,d.status)})};lnn.get.descriptors=function(a,c,b){fetch(a.urls.descriptors,{method:"GET"}).then(function(d){200==d.status?d.json().then(function(b){a.descriptors=b;void 0!==c&&c(a)}):void 0!==b&&b(a,d.status)})};
-lnn.get.consensus_raw=function(a,c,b,d){fetch(a.urls.consensus+"-raw/"+(void 0===d?"microdesc":d),{method:"GET"}).then(function(d){200==d.status?d.text().then(function(b){a.consensus_raw=b;void 0!==c&&c(a)}):void 0!==b&&b(a,d.status)})};lnn.get.descriptors_raw=function(a,c,b,d){fetch(a.urls.descriptors+"-raw/"+(void 0===d?"microdesc":d),{method:"GET"}).then(function(d){200==d.status?d.text().then(function(b){a.descriptors_raw=b;void 0!==c&&c(a)}):void 0!==b&&b(a,d.status)})};
-lnn.get.signing_keys=function(a,c,b){fetch(a.urls.signing_keys,{method:"GET"}).then(function(d){200==d.status?d.json().then(function(b){a.signing_keys=b;void 0!==c&&c(a)}):void 0!==b&&b(a,d.status)})};lnn.ntor={};lnn.ntor.keybytes=92;lnn.ntor.protoid="ntor-curve25519-sha256-1";lnn.ntor.tweaks={expand:lnn.ntor.protoid+":key_expand",key:lnn.ntor.protoid+":key_extract",verify:lnn.ntor.protoid+":verify",server:lnn.ntor.protoid+"Server",mac:lnn.ntor.protoid+":mac"};
-lnn.ntor.hash_factory=function(a){a=lnn.ntor.tweaks[a];a=sjcl.codec.utf8String.toBits(a);var c={hmac:new sjcl.misc.hmac(a),encrypt:function(a){a=lnn.enc.bits(a);a=c.hmac.encrypt(a);return lnn.dec.bits(a)}};return c};lnn.ntor.hash={verify:lnn.ntor.hash_factory("verify"),mac:lnn.ntor.hash_factory("mac"),prk:lnn.ntor.hash_factory("key")};
-lnn.ntor.kdf=function(a,c){a=lnn.ntor.hash.prk.encrypt(a);for(var b=new sjcl.misc.hmac(lnn.enc.bits(a)),d=lnn.ntor.tweaks.expand,d=sjcl.codec.utf8String.toBits(d),e=1,f=lnn.enc.bits([]),h=lnn.enc.bits([]);sjcl.bitArray.bitLength(f)<8*c;)var g=lnn.enc.bits([e]),g=sjcl.bitArray.concat(d,g),h=b.encrypt(sjcl.bitArray.concat(h,g)),f=sjcl.bitArray.concat(f,h),e=e+1;return lnn.dec.bits(sjcl.bitArray.clamp(f,8*c))};
-lnn.ntor.hand=function(a,c,b){void 0===b&&(b=!0);void 0===c&&(c=a.guard);var d=lnn.dec.base64(c.router.identity+"=");c=lnn.dec.base64(c["ntor-onion-key"]);a.material={ntor:nacl.box.keyPair(),identity:d,onionkey:c};a=a.material.ntor.publicKey;var e=new Uint8Array(d.length+c.length+a.length);e.set(d,0);e.set(c,d.length);e.set(a,d.length+c.length);return b?lnn.enc.base64(e):e};
-lnn.ntor.fast=function(a){a.material={};a.material.ntor=nacl.box.keyPair();a.material.identity=null;a.material.onionkey=null;return lnn.enc.base64(a.material.ntor.publicKey)};
-lnn.ntor.shake=function(a,c,b){void 0===b&&(b=!0);b&&(c=lnn.dec.base64(c));var d=a.material.ntor.publicKey;b=a.material.ntor.secretKey;var e=c.slice(0,nacl.scalarMult.scalarLength);c=c.slice(nacl.scalarMult.scalarLength);var f=a.material.identity,h=a.material.onionkey;a=nacl.scalarMult(b,e);b=nacl.scalarMult(b,h);var g=lnn.dec.utf8(lnn.ntor.protoid),l=2*a.length+f.length+3*h.length,k=0,n=new Uint8Array(l+g.length);n.set(a,k);k+=a.length;n.set(b,k);k+=b.length;n.set(f,k);k+=f.length;n.set(h,k);k+=
-h.length;n.set(d,k);k+=d.length;n.set(e,k);k+=e.length;n.set(g,k);var g=lnn.ntor.hash.verify.encrypt(n),q=lnn.dec.utf8(lnn.ntor.tweaks.server),l=g.length+f.length+3*h.length,k=0,l=new Uint8Array(l+q.length);l.set(g,k);k+=g.length;l.set(f,k);k+=f.length;l.set(h,k);k+=h.length;l.set(e,k);k+=e.length;l.set(d,k);k+=d.length;l.set(q,k);f=lnn.ntor.hash.mac.encrypt(l);d=!0;l=f.length;for(e=0;e<l;e++)f[e]!=c[e]&&(d=!1);f=c=0;l=b.length;for(e=0;e<l;e++)0==b[e]&&(c+=1),0==a[e]&&(f+=1);if(c==b.length||f==a.length)d=
-!1;return d?lnn.ntor.kdf(n,lnn.ntor.keybytes):null};lnn.ntor.slice=function(a){return a={key_hash:a.slice(72),forward_digest:a.slice(0,20),backward_digest:a.slice(20,40),forward_key:a.slice(40,56),backward_key:a.slice(56,72)}};lnn.ntor.auth=function(a,c,b){var d=a.material;a.material=a.auth;b=lnn.dec.base64(b);c=lnn.ntor.shake(a,c);if(null==c)throw"Invalid auth.";a.material=d;a=c.slice(0,32);d=c.slice(32,56);b=nacl.secretbox.open(b,d,a);return JSON.parse(lnn.enc.utf8(b))};lnn.relay={};
-lnn.relay.payload_len=509;lnn.relay.data_len=lnn.relay.payload_len-11;lnn.relay.full_len=5+lnn.relay.payload_len;lnn.relay.cmd={begin:1,1:"begin",data:2,2:"data",end:3,3:"end",connected:4,4:"connected",sendme:5,5:"sendme",extend:6,6:"extend",extended:7,7:"extended",truncate:8,8:"truncate",truncated:9,9:"truncated",drop:10,10:"drop",resolve:11,11:"resolve",resolved:12,12:"resolved",begin_dir:13,13:"begin_dir",extend2:14,14:"extend2",extended2:15,15:"extended2"};
-lnn.relay.pack=function(a,c,b){void 0===b&&(b=new Uint8Array(0));void 0===c&&(c=0);"string"==typeof b&&(b=lnn.dec.utf8(b));var d=new Uint8Array(lnn.relay.full_len),e=new DataView(d.buffer);e.setUint32(0,2147483648,!1);e.setUint8(4,3,!1);e.setUint8(5,lnn.relay.cmd[a],!1);e.setUint16(6,0,!1);e.setUint16(8,c,!1);e.setUint16(14,b.length,!1);d.set(b,16);return d};
-lnn.relay.extend=function(a,c,b,d,e){var f=new Uint8Array(c.split("."));if(f.join(".")!=c)throw"Invalid extend IPv4 address, fatal.";b=parseInt(b);"string"==typeof d&&(d=lnn.dec.base64(d));"string"==typeof e&&(e=lnn.dec.base64(e+"="));c=2;void 0!==e&&(c+=1);var h=11+d.length+2+2+a.length;3==c&&(h+=2+e.length);var g=0,h=new Uint8Array(h),l=new DataView(h.buffer);l.setUint8(g,c,!1);g+=1;l.setUint8(g,0,!1);g+=1;l.setUint8(g,6,!1);g+=1;h.set(f,g);g+=4;l.setUint16(g,b,!1);g+=2;l.setUint8(g,2,!1);g+=1;
-l.setUint8(g,d.length,!1);g+=1;h.set(d,g);g+=d.length;3==c&&(l.setUint8(g,3,!1),g+=1,l.setUint8(g,e.length,!1),g+=1,h.set(e,g),g+=e.length);l.setUint16(g,2,!1);g+=2;l.setUint16(g,a.length,!1);h.set(a,g+2);return h};
-lnn.relay.begin=function(a,c){valid=!1;a.match("(\\d+\\.){3}\\d+")&&(valid=!0);a.match("^\\[[\\d:]*\\]$")&&(valid=!0);valid||"."==a.slice(-1)||(a+=".");a.match("^([a-zA-Z0-9][a-zA-Z0-9\\-]*\\.)*$")&&(valid=!0);"."==a.slice(-1)&&(a=a.slice(0,-1));if(!valid)throw"Invalid host provided?";var b=lnn.dec.utf8(a+":"+c),d=new Uint8Array(b.length+1+4);d.set(b,0);d[b.length+1+3]=5;return d};lnn.onion={};
-lnn.onion.ctr=function(a){a=lnn.enc.bits(a);var c={prf:new sjcl.cipher.aes(a),nonce:0,buffer:new Uint8Array(0),extend:function(a){a=16*(Math.floor(a/16)+1);var d=c.buffer;c.buffer=new Uint8Array(a+d.length);c.buffer.set(d,0);for(a=d.length;a<c.buffer.length;a+=16)d=new Uint8Array(16),(new DataView(d.buffer)).setUint32(12,c.nonce,!1),d=lnn.enc.bits(d),d=lnn.dec.bits(c.prf.encrypt(d)),c.buffer.set(d,a),c.nonce+=1},process:function(a){a.length>c.buffer.length&&c.extend(a.length);a=a.slice(0);for(var d=
-0;d<a.length;d++)a[d]^=c.buffer[d];c.buffer=c.buffer.slice(a.length);return a}};return c};lnn.onion.sha=function(a){a=lnn.enc.bits(a);var c={hash:new sjcl.hash.sha1,digest:function(a){c.hash.update(lnn.enc.bits(a));a=(new sjcl.hash.sha1(c.hash)).finalize();return lnn.dec.bits(a)}};c.hash.update(a);return c};
-lnn.onion.forward=function(a){var c=8,b=[];null!=a.forward&&(b=a.forward.layers,b.push(a.forward),c=a.forward.early);var d={iv:0,ctr:lnn.onion.ctr(a.material.forward_key),sha:lnn.onion.sha(a.material.forward_digest),early:c,layers:b,encrypt:function(a){if(a.length!=lnn.relay.full_len)throw"Invalid size for cell, fatal.";for(var b=a.slice(5),c=0;c<d.layers.length;c++)b.set(d.layers[c].ctr.process(b),0);a.set(d.ctr.process(b),5);0<d.early&&3==a[4]&&(--d.early,a[4]=9);return a},digest:function(a){if(a.length!=
-lnn.relay.full_len)throw"Invalid size for cell, fatal.";a=a.slice(5);a.set(new Uint8Array(4),5);return d.sha.digest(a).slice(0,4)}};return d};
-lnn.onion.backward=function(a){var c=[];null!=a.backward&&(c=a.backward.layers,c.push(a.backward));var b={iv:0,ctr:lnn.onion.ctr(a.material.backward_key),sha:lnn.onion.sha(a.material.backward_digest),layers:c,decrypt:function(a){if(a.length!=lnn.relay.full_len)throw"Invalid size for cell, fatal.";for(var c=a.slice(5),f=0;f<b.layers.length;f++){c.set(b.layers[f].ctr.process(c),0);a.set(c,5);var h=a.slice(6,8);if(h[0]==h[1]&&0==h[0]){var g=a.slice(10,14),h=b.layers[f].digest(a),l=(new DataView(a.slice(14,
-16).buffer)).getUint16(0,!1);if(h[0]==g[0]&&h[1]==g[1]&&h[2]==g[2]&&h[3]==g[3]&&l<=lnn.relay.data_len)return console.log("Warning: Cell sent by intermediate                                 tor node, after "+(f+1)+" hop(s)"),a}}a.set(b.ctr.process(c),5);g=a.slice(10,14);a.set(new Uint8Array(4),10);h=a.slice(6,8);if(h[0]!=h[1]||0!=h[0])throw"Invalid cell recognized field.";h=b.digest(a);if(g[0]!=h[0]||g[1]!=h[1]||g[2]!=h[2]||g[3]!=h[3])throw"Invalid cell digest.";l=(new DataView(a.slice(14,16).buffer)).getUint16(0,
-!1);if(l>lnn.relay.data_len)throw"Invalid cell data length.";return a},digest:function(a){if(a.length!=lnn.relay.full_len)throw"Invalid size for cell, fatal.";a=a.slice(5);a.set(new Uint8Array(4),5);return b.sha.digest(a).slice(0,4)}};return b};lnn.onion.build=function(a,c,b,d){c=lnn.relay.pack(c,b,d);c.set(a.forward.digest(c),10);return a.forward.encrypt(c)};
-lnn.onion.peel=function(a,c){c=a.backward.decrypt(c);var b=(new DataView(c.slice(14,16).buffer)).getUint16(0,!1),d=(new DataView(c.slice(8,10).buffer)).getUint16(0,!1),e=lnn.relay.cmd[c.slice(5,6)[0]],b=c.slice(16,16+b);return{cmd:e,stream_id:d,data:b}};lnn.io={};
-lnn.io.polling=function(a,c,b,d){var e={incoming:[],outcoming:[],pending:0,handler:c,success:b,error:d,cell:null,poll:function(){setTimeout(function(){lnn.post.channel(a,e.poll)},100)},send:function(a){e.outcoming.push(lnn.enc.base64(a))},recv:function(){if(!(1>e.incoming.length))return e.cell=e.incoming.shift(),lnn.dec.base64(e.cell)},start:function(){lnn.post.channel(a,e.poll)}};return a.io=e};
-lnn.io.socket=function(a,c,b,d){void 0===c&&(c=function(a){});void 0===b&&(b=function(a){});void 0===d&&(d=function(a){});var e={event:null,socket:null,closed:!1,incoming:[],outcoming:[],handler:c,success:b,error:d,cell:null,cell_recv:0,send:function(a){e.outcoming.push(a)},recv:function(){if(!(1>e.incoming.length)){e.cell=e.incoming.shift();e.cell_recv+=1;var a=Array.from(e.cell.slice(0,20)).map(function(a){return a.toString(16).padStart(2,"0")}).join("");console.log("cell recv by wbskt ",a);return e.cell}},
-start:function(){}};c=new _WebSocket(a.urls.socket+"/"+a.id);c.binaryType="arraybuffer";c.onopen=function(b){e.event=b;for(e.success(a);0<e.outcoming.length;)e.socket.send(e.outcoming.shift());e.send=function(a){if(e.closed)throw"Unable to send, connection closed.";e.socket.send(a.buffer)}};c.onerror=function(b){e.event=b;e.error(a)};c.onmessage=function(b){e.event=b;b=new Uint8Array(b.data);var c=Array.from(b.slice(0,20)).map(function(a){return a.toString(16).padStart(2,"0")}).join("");console.log("cell recv by wbskt ",
-c);e.cell=b;e.handler(a,b)};c.onclose=function(b){e.event=b;e.closed=!0;e.error(a)};a.io=e;a.io.socket=c;return e};lnn.post={};
-lnn.post.create=function(a,c,b){var d=null,d=a.fast?lnn.ntor.fast(a):lnn.ntor.hand(a),d={ntor:d};null!=a.auth&&(d.auth=lnn.enc.base64(a.auth.ntor.publicKey));d=JSON.stringify(d);fetch(a.urls.channels,{method:"POST",headers:new Headers({"content-type":"application/json"}),body:d}).then(function(d){201==d.status?d.json().then(function(b){null!=a.auth&&(b=lnn.ntor.auth(a,b.auth,b.data));a.id=b.id;a.url=a.urls.channels+"/"+b.id;a.path=b.path;a.fast&&(a.guard=b.guard,a.material.identity=lnn.dec.base64(b.guard.router.identity+
-"="),a.material.onionkey=lnn.dec.base64(b.guard["ntor-onion-key"]));b=lnn.ntor.shake(a,b.ntor);if(null==b)throw"Invalid guard handshake.";b=lnn.ntor.slice(b);a.material=b;a.forward=lnn.onion.forward(a);a.backward=lnn.onion.backward(a);void 0!==c&&c(a)}):void 0!==b&&b(a,d.status)})};
-lnn.post.circuit_info=function(a,c,b,d,e){void 0===d&&(d=!1);var f={};null!=a.auth&&(f.auth=lnn.enc.base64(a.auth.ntor.publicKey));f.select_path=d.toString();f=JSON.stringify(f);fetch(a.urls.channels,{method:"POST",headers:new Headers({"content-type":"application/json"}),body:f}).then(function(f){201==f.status?f.json().then(function(b){null!=a.auth&&(b=lnn.ntor.auth(a,b.auth,b.data));a.id=b.id;a.url=a.urls.channels+"/"+b.id;a.fast&&(a.guard=b.guard);d?(a.consensus=lnn.consensusParser.parse(a.consensus_raw),
-a.descriptors=lnn.parser.descriptors.parse(a.descriptors_raw),lnn.parser.descriptors.validate(a.descriptors,a.consensus),a.path=lnn.path.select_end_path(a.consensus,a.descriptors,a.guard,!0,e),console.log(a.guard),console.log(a.path)):a.path=b.path;void 0!==c&&c(a,b)}):void 0!==b&&b(a,f.status)})};
-lnn.post.handshake=function(a,c,b,d){var e=a.io.handler;a.io.handler=function(a,c){a.io.handler=e;c=lnn.ntor.shake(a,c.slice(7,71),!1);if(null==c)throw"Invalid guard handshake.";c=lnn.ntor.slice(c);a.material=c;a.forward=lnn.onion.forward(a);a.backward=lnn.onion.backward(a);void 0!==b&&b(a)};c=new Uint8Array(lnn.relay.full_len);d=lnn.ntor.hand(a,a.guard,!1);var f=new DataView(c.buffer);f.setUint32(0,2147483648,!1);f.setUint8(4,10,!1);f.setUint16(5,2,!1);f.setUint16(7,d.length,!1);c.set(d,9);a.io.send(c)};
-lnn.post.channel=function(a,c,b){a.io.pending=a.io.outcoming.length;fetch(a.url,{method:"POST",headers:new Headers({"content-type":"application/json"}),body:JSON.stringify({cells:a.io.outcoming})}).then(function(d){201==d.status?d.json().then(function(b){b=b.cells;if(void 0===b)void 0!==a.io.error&&a.io.error(a);else{var d=a.io.pending;0<d&&void 0!==a.io.success&&a.io.success(a);0<b.length&&(a.io.incoming=a.io.incoming.concat(b),void 0!==a.io.handler&&a.io.handler(a));a.io.outcoming=a.io.outcoming.slice(d);
-a.io.pending=0;void 0!==c&&c(a)}}):(void 0!==a.io.error&&a.io.error(a),void 0!==b&&b(a,rq.status))})};
-lnn.post.extend=function(a,c,b,d){var e=lnn.ntor.hand(a,c,!1);c=lnn.relay.extend(e,c.router.address,c.router.orport,a.material.identity,c.identity["master-key"]);c=lnn.onion.build(a,"extend2",0,c);var f=a.io.handler;a.io.handler=function(a,c){a.io.handler=f;var e=lnn.onion.peel(a,c);if(null==e||"extended2"!=e.cmd){if(void 0!==d)return d(a);throw"Invalid answer, expecting extended2 cell, fatal!";}var k=(new DataView(e.data.buffer)).getUint16(0,!1);c=e.data.slice(2,2+k);e=lnn.ntor.shake(a,c,!1);e=lnn.ntor.slice(e);
-a.material=e;if(null==e&&void 0!==d)return d(a);a.forward=lnn.onion.forward(a);a.backward=lnn.onion.backward(a);void 0!==b&&b(a)};a.io.send(c)};lnn.post.close=function(a,c,b){fetch(a.url,{method:"DELETE"}).then(function(a){202==a.status?void 0!==c&&c("Circuit closed"):void 0!==b&&b("Error in closing circuit")})};lnn.stream={};lnn.stream.entrancy=0;
-lnn.stream.backend=function(a){var c={id:0,tosend:[],sendme:0,handles:{0:{callback:function(b,c){if("sendme"==b.cmd)for(c.stream.sendme+=1,c.stream.deliverywindow+=100;0<c.stream.deliverywindow&&0<c.stream.tosend.length;)b=c.stream.tosend.shift(),c.io.send(b),--c.stream.deliverywindow;else throw a(c),"Got unexpected control cell.";}}},packagewindow:1E3,deliverywindow:1E3,register:function(a){c.id+=1;a.id=c.id;a.packagewindow=500;a.deliverywindow=500;c.handles[c.id]=a;return c.id},send:function(a,
-d){0<c.deliverywindow?(d.io.send(a),--c.deliverywindow):c.tosend.push(a)}};return c};
-lnn.stream.handler=function(a,c){lnn.stream.entrancy+=1;1<lnn.stream.entrancy&&console.log("ENTRANCY BUG");if(3!=c[4])console.log("Got non-relay cell, 'dropped': ",c[4]);else if(c=lnn.onion.peel(a,c),null==c)console.log("Got invalid cell, dropped.");else if(c.stream_id in a.stream.handles){var b=a.stream.handles[c.stream_id];"end"==c.cmd&&delete a.stream.handles[c.stream_id];b.cell=c;b.callback(c,a);"data"==c.cmd&&--a.stream.packagewindow;console.log("Update window: ",a.stream.packagewindow);900>
-a.stream.packagewindow&&(a.io.send(lnn.onion.build(a,"sendme")),a.stream.packagewindow+=100);"data"==c.cmd&&--b.packagewindow;450>b.packagewindow&&(c=lnn.onion.build(a,"sendme",b.id),a.io.send(c),b.packagewindow+=50)}else console.log("Got cell outside stream, 'dropped': ",c.stream_id);--lnn.stream.entrancy};
-lnn.stream.raw=function(a,c){var b={id:null,data:[],cell:null,send:function(c,e){var f=lnn.onion.build(b.endpoint,c,b.id,e);"data"!=c?a.io.send(f):0<b.deliverywindow?(a.stream.send(f,a),--b.deliverywindow):b.tosend.push(f)},recv:function(){var a=b.data;b.data=[];return a},state:lnn.state.started,packagewindow:null,deliverywindow:null,tosend:[],endpoint:a,callback:function(d){"connected"==d.cmd&&(b.state=lnn.state.created);"end"==d.cmd&&(b.state=lnn.state.success);if("sendme"==d.cmd)for(b.deliverywindow+=
-50;0<b.deliverywindow&&0<b.tosend.length;)d=b.tosend.shift(),a.stream.send(d,a),--b.deliverywindow;b.data.push(d);c(b);"connected"==d.cmd&&(b.state=lnn.state.pending)}};a.stream.register(b);c(b);return b};
-lnn.stream.dir=function(a,c,b){var d={id:null,data:"",cell:null,send:function(){throw"No send method on directory streams.";},recv:function(){var a=d.data;d.data="";return a},state:lnn.state.started,packagewindow:null,deliverywindow:null,tosend:[],endpoint:a,callback:function(c){"connected"==c.cmd&&(d.state=lnn.state.created,b(d),d.state=lnn.state.pending);"end"==c.cmd&&(d.state=lnn.state.success,b(d));if("sendme"==c.cmd)for(d.deliverywindow+=50;0<d.deliverywindow&&0<d.tosend.length;)c=d.tosend.shift(),
-a.stream.send(c,a),--d.deliverywindow;"data"==c.cmd&&(d.data+=lnn.enc.utf8(c.data),b(d))}},e=a.stream.register(d),f=lnn.onion.build(a,"begin_dir",e);a.io.send(f);c="GET "+c+" HTTP/1.0\r\nAccept-Encoding: identity\r\n\r\n";c=lnn.dec.utf8(c);f=lnn.onion.build(a,"data",e,c);--d.deliverywindow;a.stream.send(f,a);b(d);return d};
-lnn.stream.tcp=function(a,c,b,d){var e={id:null,data:new Uint8Array(0),cell:null,cache:[],send:function(a){void 0!==a&&e.cache.push(a);if(e.state!=lnn.state.started)for(;e.cache.length;){a=e.cache.shift();"string"==typeof a&&(a=lnn.dec.utf8(a));for(var b=new Uint8Array(lnn.relay.data_len);a.length>b.length;){b.set(a.slice(0,b.length),0);a=a.slice(b.length);var c=lnn.onion.build(e.endpoint,"data",e.id,b);0<e.deliverywindow?(e.endpoint.stream.send(c,e.endpoint),--e.deliverywindow):e.tosend.push(c)}c=
-lnn.onion.build(e.endpoint,"data",e.id,a);0<e.deliverywindow?(e.endpoint.stream.send(c,e.endpoint),--e.deliverywindow):e.tosend.push(c)}},recv:function(){var a=e.data;e.data=new Uint8Array(0);return a},close:function(){var a=new Uint8Array(1);a[0]=6;a=lnn.onion.build(e.endpoint,"end",e.id,a);e.endpoint.io.send(a)},state:lnn.state.started,packagewindow:null,deliverywindow:null,tosend:[],endpoint:a,retries:0,callback:function(a){console.log(a.cmd);"connected"==a.cmd&&(e.state=lnn.state.created,e.retries=
-0,e.send());if("end"==a.cmd)if(4==a.data[0])if(3==e.retries)console.log("Retries limit exceeded. Cant connect to host. "),e.state=lnn.state.success,e.retries=0;else{e.retries+=1;console.log("Retrying to build circuit, retry#: "+e.retries);var c=[80,443];c.includes(b)||c.push(b);lnn.open(e.endpoint.host,e.endpoint.port,e.success_on_open,e.error_on_open,void 0,e.endpoint.fast,e.endpoint.auth,e.endpoint.select_path,c)}else e.state=lnn.state.success;"data"==a.cmd&&(c=e.data,e.data=new Uint8Array(c.length+
-a.data.length),e.data.set(c,0),e.data.set(a.data,c.length));if("sendme"==a.cmd)for(e.deliverywindow+=50;0<e.deliverywindow&&0<e.tosend.length;)a=e.tosend.shift(),e.endpoint.stream.send(a,e.endpoint),--e.deliverywindow;d(e);"connected"==a.cmd&&(e.state=lnn.state.pending)},success_on_open:function(a){null==a.consensus&&(a.consensus=e.endpoint.consensus);null==a.descriptors&&(a.descriptors=e.endpoint.descriptors);null==a.consensus_raw&&(a.consensus_raw=e.endpoint.consensus_raw);null==a.descriptors_raw&&
-(a.descriptors_raw=e.endpoint.descriptors_raw);null==a.signing_keys&&(a.signing_keys=e.endpoint.signing_keys);e.endpoint=a;a=e.endpoint.stream.register(e);var f=lnn.relay.begin(c,b);a=lnn.onion.build(e.endpoint,"begin",a,f);e.endpoint.io.send(a);d(e)},error_on_open:function(a){throw a;}},f=a.stream.register(e),h=lnn.relay.begin(c,b),f=lnn.onion.build(a,"begin",f,h);a.io.send(f);d(e);return e};lnn.enc={};lnn.enc.bits=sjcl.codec.bytes.toBits;lnn.enc.utf8=nacl.util.encodeUTF8;lnn.enc.base64=nacl.util.encodeBase64;
-lnn.enc.bin=function(a){for(var c="",b=0;b<a.length;b++)c+=String.fromCharCode(a[b]);return c};lnn.dec={};lnn.dec.bits=function(a){return new Uint8Array(sjcl.codec.bytes.fromBits(a))};lnn.dec.utf8=nacl.util.decodeUTF8;lnn.dec.base64=nacl.util.decodeBase64;lnn.dec.bin=function(a){for(var c=new Uint8Array(a.length),b=0;b<a.length;b++)c[b]=a.charCodeAt(b);return c};lnn.fast=function(a,c,b,d,e,f){void 0===f&&(f=!0);return lnn.open(a,c,b,d,e,!0,null,f)};
-lnn.auth=function(a,c,b,d,e,f,h){void 0===h&&(h=!0);"string"==typeof b&&(b=b.replace(/-/g,"+").replace(/_/g,"/"),b=lnn.dec.base64(b));if("auth "!=lnn.enc.utf8(b.slice(0,5)))throw"Invalid prefix in auth. suffix!";b=b.slice(5);if(52!=b.length)throw"Invalid auth. suffix length!";return lnn.open(a,c,d,e,f,!0,{identity:b.slice(0,20),onionkey:b.slice(20),ntor:nacl.box.keyPair()},h)};
-lnn.open=function(a,c,b,d,e,f,h,g,l){var k=lnn.endpoint(a,c);void 0===e&&(e=lnn.io.socket);void 0===f&&(f=!1);void 0===d&&(d=function(){});void 0===b&&(b=function(){});void 0===g&&(g=!0);void 0===l&&(l=[80,443]);k.fast=f;k.auth=h;k.select_path=g;var n={guard:function(a){a.state=lnn.state.guarded;lnn.post.circuit_info(a,n.startWebSocket,d,g,l)},startWebSocket:function(a,b){console.log("called startWebSocket cb");a.stream=lnn.stream.backend(d);e(a,lnn.stream.handler,function(a){var b=a.state;a.state=
-lnn.state.pending;a.state=b},d);a.io.start();lnn.post.handshake(a,b,n.create,d)},create:function(a){console.log("called create cb");a.state=lnn.state.created;lnn.post.extend(a,a.path[0],n.extend,d)},extend:function(a){console.log("called extend cb");a.state=lnn.state.extpath;lnn.post.extend(a,a.path[1],n.success,d)},success:function(a){console.log("called success cb");a.state=lnn.state.success;b(a);a.io.success=function(){}}};k.state=lnn.state.started;g?lnn.get.consensus_raw(k,function(){lnn.get.signing_keys(k,
-function(){if(!lnn.signature.verify(k.consensus_raw,k.signing_keys,.5))throw"signature verification failed.";console.log("signature verification success");lnn.get.descriptors_raw(k,function(){k.fast?lnn.post.circuit_info(k,n.startWebSocket,d,g,l):lnn.get.guard(k,n.guard,d)},function(){throw"Failed to fetch raw descriptors";})},function(){throw"Failed to fetch signing keys";})},function(){throw"Failed to fetch raw consensus!";}):k.fast?lnn.post.circuit_info(k,n.startWebSocket,d,g,l):lnn.get.guard(k,
-n.guard,d);return k};lnn.agents="curl/7.61.0 curl/7.60.0 curl/7.59.0 curl/7.58.0 curl/7.57.0 curl/7.56.1 curl/7.56.0 curl/7.55.1 curl/7.55.0 curl/7.54.1 curl/7.54.0 curl/7.53.1 curl/7.53.0 curl/7.52.1 curl/7.52.0 curl/7.51.0 curl/7.50.3 curl/7.50.2 curl/7.50.1 curl/7.50.0 curl/7.50.0 curl/7.49.1 curl/7.49.0 curl/7.48.0 curl/7.47.1 curl/7.47.0 curl/7.46.0 curl/7.45.0 curl/7.44.0 curl/7.43.0 curl/7.42.1 curl/7.42.0 curl/7.41.0 curl/7.40.0 curl/7.39.0 curl/7.38.0".split(" ");
-lnn.send_req=function(a,c,b,d,e,f,h){var g=lnn.agents[Math.floor(Math.random()*lnn.agents.length)],l="",k=null,n=0,q=null,A=function(a){if(a.state==lnn.state.success)h("Connection closed");else if(a.state==lnn.state.pending){var b=a.recv();n+=b.length;l+=lnn.enc.utf8(b);null==k&&l.match("\r\n\r\n")&&(q=l.split("\r\n\r\n")[0],b=q.match("Content-Length: ([^\r]*)"),k=parseInt(b[1]));null==q||null==k||n<q.length+k||(a.close(),console.log("Stream closed"),f({headers:q,data:l.slice(q.length+4)}),f=function(a){})}};
-if("http://"==c.slice(0,7)){c=c.slice(7);var u="/"+c.split("/").slice(1).join("/"),x=null,x=null==c.match("/")?c:c.split("/",1)[0];c="80";null!=x.match(":")&&(c=x.split(":",2)[1]);"GET"!=b&&"POST"!=b?h("Unsupported method"):"json"!=e&&"form"!=e?h("Unsupported content type"):(e="json"==e?"application/json":"application/x-www-form-urlencoded","GET"==b&&0<d.length?(d="?"+d,u=encodeURI(u+d)):"application/x-www-form-urlencoded"==e&&(d=encodeURI(d)),g=[[b,u,"HTTP/1.1"].join(" "),["Host:",x].join(" "),["User-Agent:",
-g].join(" "),"Accept: */*"],"POST"==b?(g.push(["Content-Length:",d.length].join(" ")),g.push(["Content-Type:",e].join(" ")),g=g.join("\r\n")+"\r\n\r\n"+d+"\r\n"):g=g.join("\r\n")+"\r\n\r\n",console.log(g),x=x.split(":")[0],lnn.stream.tcp(a,x,c,A).send(g))}else h("Urls must start with http://")};
-lnn.http_request=function(a,c,b,d,e,f,h,g){void 0===h&&(h="localhost");void 0===g&&(g=4990);void 0===f&&(f=function(){});void 0===e&&(e=function(){});var l=!1;lnn.open(h,g,function(g){g.state==lnn.state.success&&lnn.send_req(g,a,c,b,d,function(a){l||(g.close(function(a){console.log(a)}),l=!0);e(a)},function(a){l||(g.close(function(a){console.log(a)}),l=!0);f(a)})},function(){f("Connection establishment failed")})};lnn.signature={};
-lnn.signature.verify=function(a,c,b,d){d=void 0===d?"microdesc":d;if(void 0===b)b=.5;else if(0>=b||1<b)throw"The minimal percentage must be between 0 (not included) and 1";var e=0,f=0,h=a.split("directory-signature ");a=h[0]+"directory-signature ";a="unflavored"==d?sjcl.hash.sha1.hash(a):sjcl.hash.sha256.hash(a);a=sjcl.codec.hex.fromBits(a);var h=lnn.signature.get_sig_and_keys_digests(h.splice(1)),g;for(g in h){f++;var l=c[g];d=bigInt(l.exponent);var k=bigInt(l.modulus),n=h[g]["signing-key-digest"];
-void 0!==l&&lnn.signature.verify_key(l.pem,n)&&(l=lnn.signature.get_signature_big_int(h[g].signature),d=lnn.signature.get_hash(l,d,k),d=lnn.signature.get_hash_from_rsa_cipher(d),e=void 0===d||d!==a?e:e+1)}return e>b*f};lnn.signature.get_hash=function(a,c,b){a=a.modPow(c,b).toString(16);b=b.toString(16).length-a.length;for(c=0;c<b;c++)a="0"+a;return a};
-lnn.signature.verify_key=function(a,c){var b=a.split("\n"),d=b.indexOf("-----BEGIN RSA PUBLIC KEY-----"),e=b.indexOf("-----END RSA PUBLIC KEY-----"),b=b.splice(d+1,e-d-1).join(""),b=sjcl.codec.base64.toBits(b),b=sjcl.hash.sha1.hash(b),b=sjcl.codec.hex.fromBits(b);return b.toUpperCase()===c.toUpperCase()};
-lnn.signature.get_sig_and_keys_digests=function(a){var c={};a=$jscomp.makeIterator(a);for(var b=a.next();!b.done;b=a.next())if(b=b.value,""!==b){var d=b.split("\n"),b=d.indexOf("-----BEGIN SIGNATURE-----"),e=d.indexOf("-----END SIGNATURE-----"),b=d.splice(b+1,e-b-1).join(""),d=d[0].split(" "),e=$jscomp.makeIterator(2==d.length?d:d.splice(1)),d=e.next().value,e=e.next().value;c[d]={"signing-key-digest":e,signature:b}}return c};
-lnn.signature.get_signature_big_int=function(a){a=sjcl.codec.hex.fromBits(sjcl.codec.base64.toBits(a));return bigInt(a,16)};lnn.signature.get_hash_from_rsa_cipher=function(a){if(a.startsWith("0001")){a=a.substring(4);for(var c=a.indexOf("00"),b=1;b<c;b++)if("f"!==a.charAt(b))return;return a.substring(c+2)}};lnn.consensusParser={};
-lnn.consensusParser.parse=function(a,c){c=void 0===c?"microdesc":c;if("string"!==typeof a)throw"Error: the consensus must be given as a string";lnn.consensusParser.lines=a.split("\n");lnn.consensusParser.words=lnn.consensusParser.lines[0].split(" ");lnn.consensusParser.consensus={};lnn.consensusParser.validFlags="Authority BadExit Exit Fast Guard HSDir NoEdConsensus Stable StaleDesc Running Valid V2Dir".split(" ");lnn.consensusParser.index=0;lnn.consensusParser.totalLines=lnn.consensusParser.lines.length;
-if("unflavored"!=c&&"microdesc"!=c)throw"Error: Unexpected flavor";lnn.consensusParser.consensus.flavor=c;lnn.consensusParser.consumeHeaders();lnn.consensusParser.consumeAuthority();lnn.consensusParser.consumeRouters();lnn.consensusParser.consumeFooter();return lnn.consensusParser.consensus};
-lnn.consensusParser.consumeHeaders=function(){lnn.consensusParser.consumeNetworkStatusVersion();lnn.consensusParser.consumeVoteStatus();lnn.consensusParser.consumeConsensusMethod();lnn.consensusParser.consumeDate("valid-after");lnn.consensusParser.consumeDate("fresh-until");lnn.consensusParser.consumeDate("valid-until");lnn.consensusParser.consumeVotingDelay();lnn.consensusParser.tryConsumeVersions("client-versions");for(lnn.consensusParser.tryConsumeVersions("server-versions");"package"===lnn.consensusParser.words[0];)lnn.consensusParser.consumePackage();
-lnn.consensusParser.consumeKnownFlags();lnn.consensusParser.tryConsumeProtocols("recommended-client-protocols");lnn.consensusParser.tryConsumeProtocols("recommended-relay-protocols");lnn.consensusParser.tryConsumeProtocols("required-client-protocols");lnn.consensusParser.tryConsumeProtocols("required-relay-protocols");lnn.consensusParser.tryConsumeParams();lnn.consensusParser.tryConsumeShareRand("shared-rand-previous-value");lnn.consensusParser.tryConsumeShareRand("shared-rand-current-value")};
-lnn.consensusParser.consumeNetworkStatusVersion=function(){var a=2;if("microdesc"==lnn.consensusParser.consensus.flavor&&(a=3,"microdesc"!=lnn.consensusParser.words[2]))throw"Error: Flavor mismatch in header.";a=lnn.consensusParser.tryParseKeyValueInteger("network-status-version",a);lnn.consensusParser.consensus.headers={"network-status-version":{version:a,flavor:lnn.consensusParser.consensus.flavor}};lnn.consensusParser.nextLine()};
-lnn.consensusParser.consumeVoteStatus=function(){var a=lnn.consensusParser.tryParseKeyValueString("vote-status");if("consensus"!==a)throw"WrongParameterException: vote-status must be consensus";lnn.consensusParser.consensus.headers["vote-status"]=a;lnn.consensusParser.nextLine()};lnn.consensusParser.consumeConsensusMethod=function(){lnn.consensusParser.consensus.headers["consensus-method"]=lnn.consensusParser.tryParseKeyValueInteger("consensus-method");lnn.consensusParser.nextLine()};
-lnn.consensusParser.consumeDate=function(a){lnn.consensusParser.consensus.headers[a]=lnn.consensusParser.tryParseDate(a);lnn.consensusParser.nextLine()};
-lnn.consensusParser.consumeVotingDelay=function(){lnn.consensusParser.checkFormat(3,"voting-delay");if(isNaN(lnn.consensusParser.words[1]))throw"WrongParameterException: "+words[1]+" is not a number";if(isNaN(lnn.consensusParser.words[2]))throw"WrongParameterException: "+words[2]+" is not a number";lnn.consensusParser.consensus.headers["voting-delay"]={vote:Number(lnn.consensusParser.words[1]),dist:Number(lnn.consensusParser.words[2])};lnn.consensusParser.nextLine()};
-lnn.consensusParser.tryConsumeVersions=function(a){if(void 0!==lnn.consensusParser.consensus.headers[a])throw"AlreadyPresentException: "+a+" can only appear once";lnn.consensusParser.words[0]===a&&(lnn.consensusParser.consensus.headers[a]=lnn.consensusParser.tryParseCommaSeparatedList(a),lnn.consensusParser.nextLine())};
-lnn.consensusParser.consumePackage=function(){if(5>lnn.consensusParser.words.length)throw"WrongFormatException: at least 5 fields are expected";void 0===lnn.consensusParser.consensus.headers["package"]&&(lnn.consensusParser.consensus.headers["package"]=[]);for(var a={name:lnn.consensusParser.words[1],version:lnn.consensusParser.words[2],url:lnn.consensusParser.words[3]},c=lnn.consensusParser.words.splice(4,lnn.consensusParser.words.length),b={},c=$jscomp.makeIterator(c),d=c.next();!d.done;d=c.next())d=
-d.value.split("="),b[d[0]]=d[1];a.digests=b;lnn.consensusParser.consensus.headers["package"].push(a);lnn.consensusParser.nextLine()};lnn.consensusParser.consumeKnownFlags=function(){lnn.consensusParser.consensus.headers.flags=lnn.consensusParser.tryParseFlags();lnn.consensusParser.nextLine()};
-lnn.consensusParser.tryConsumeProtocols=function(a){if(void 0!==lnn.consensusParser.consensus.headers[a])throw"AlreadyPresentException: "+a+" can only appear once";lnn.consensusParser.words[0]===a&&(lnn.consensusParser.consensus.headers[a]=lnn.consensusParser.tryParseRanges(lnn.consensusParser.words.splice(1,lnn.consensusParser.words.length)),lnn.consensusParser.nextLine())};
-lnn.consensusParser.tryConsumeParams=function(){"params"===lnn.consensusParser.words[0]&&(lnn.consensusParser.consensus.headers.params=lnn.consensusParser.tryParseParams(),lnn.consensusParser.nextLine())};
-lnn.consensusParser.tryConsumeShareRand=function(a){if(void 0!==lnn.consensusParser.consensus.headers[a])throw"AlreadyPresentException: "+a+" can only appear once";if(lnn.consensusParser.words[0]===a){var c=Number(lnn.consensusParser.words[1]),b=lnn.consensusParser.words[2];if(!lnn.consensusParser.isBase64(b))throw"InvalidParameterException: value "+b+" must be in hexadecimal";lnn.consensusParser.consensus.headers[a]={NumReveals:c,Value:b};lnn.consensusParser.nextLine()}};
-lnn.consensusParser.consumeAuthority=function(){if("dir-source"!==lnn.consensusParser.words[0])throw"WrongFieldException: there must be at least one dir-source";for(lnn.consensusParser.consensus["dir-sources"]=[];"dir-source"===lnn.consensusParser.words[0];)lnn.consensusParser.consumeDirSource()};
-lnn.consensusParser.consumeDirSource=function(){var a={};lnn.consensusParser.checkFormat(7,"dir-source");a.nickname=lnn.consensusParser.words[1];if(!lnn.consensusParser.isHex(lnn.consensusParser.words[2]))throw"InvalidParameterException: vote-digest "+lnn.consensusParser.words[2]+" must be in hexadecimal";a.identity=lnn.consensusParser.words[2].toUpperCase();a.hostname=lnn.consensusParser.words[3];if(!lnn.consensusParser.isValidIP(lnn.consensusParser.words[4]))throw"InvalidIPException: "+lnn.consensusParser.words[4]+
-" is not a valid IP";a.address=lnn.consensusParser.words[4];if(!lnn.consensusParser.isValidPort(Number(lnn.consensusParser.words[5]))||!lnn.consensusParser.isValidPort(Number(lnn.consensusParser.words[6])))throw"InvalidPortException";a.dirport=Number(lnn.consensusParser.words[5]);a.orport=Number(lnn.consensusParser.words[6]);lnn.consensusParser.nextLine();a.contact=lnn.consensusParser.words.splice(1,lnn.consensusParser.words.length).join(" ");lnn.consensusParser.nextLine();var c=lnn.consensusParser.tryParseKeyValueString("vote-digest").toUpperCase();
-if(!lnn.consensusParser.isHex(c))throw"InvalidParameterException: vote-digest "+c+" must be in hexadecimal";a["vote-digest"]=c;lnn.consensusParser.consensus["dir-sources"].push(a);lnn.consensusParser.nextLine()};
-lnn.consensusParser.consumeRouters=function(){if("r"!==lnn.consensusParser.words[0])throw"WrongFieldException: there must be at least one router";for(lnn.consensusParser.consensus.routers=[];"r"===lnn.consensusParser.words[0];){var a={};lnn.consensusParser.consumeRfield(a);for("a"===lnn.consensusParser.words[0]&&(a.a=[]);"a"===lnn.consensusParser.words[0];)lnn.consensusParser.consumeAfield(a);"microdesc"==lnn.consensusParser.consensus.flavor&&lnn.consensusParser.consumeMfield(a);lnn.consensusParser.consumeSfield(a);
-lnn.consensusParser.tryConsumeVfield(a);lnn.consensusParser.tryConsumePrField(a);lnn.consensusParser.tryConsumeWfield(a);lnn.consensusParser.tryConsumePfield(a);lnn.consensusParser.consensus.routers.push(a)}};
-lnn.consensusParser.consumeRfield=function(a){var c=9;"microdesc"==lnn.consensusParser.consensus.flavor&&(c=8);lnn.consensusParser.checkFormat(c,"r");a.nickname=lnn.consensusParser.words[1];if(!lnn.consensusParser.isBase64(lnn.consensusParser.words[2]+"="))throw"InvalidParameterException: identity "+lnn.consensusParser.words[2]+" must be in base64";a.identity=lnn.consensusParser.words[2];c=3;if("unflavored"==lnn.consensusParser.consensus.flavor){if(!lnn.consensusParser.isBase64(lnn.consensusParser.words[3]+
-"="))throw"InvalidParameterException: digest "+lnn.consensusParser.words[3]+" must be in base64";a.digest=lnn.consensusParser.words[3];c+=1}if(!lnn.consensusParser.isValidDate(lnn.consensusParser.words[c]))throw"InvalidParameterException: date "+lnn.consensusParser.words[c]+" must have the format YYYY-MM-DD";a.date=lnn.consensusParser.words[c];if(!lnn.consensusParser.isValidTime(lnn.consensusParser.words[c+1]))throw"InvalidParameterException: time "+lnn.consensusParser.words[c+1]+" must have the format HH:MM:SS";
-a.time=lnn.consensusParser.words[c+1];if(!lnn.consensusParser.isValidIP(lnn.consensusParser.words[c+2]))throw"InvalidParameterException: IP "+lnn.consensusParser.words[c+2]+" must be a valid IP address";a.address=lnn.consensusParser.words[c+2];if(!lnn.consensusParser.isValidPort(Number(lnn.consensusParser.words[c+3])))throw"InvalidParameterException: ORPort "+lnn.consensusParser.words[c+3]+" must be a valid port";a.orport=Number(lnn.consensusParser.words[c+3]);if(!lnn.consensusParser.isValidPort(Number(lnn.consensusParser.words[c+
-4])))throw"InvalidParameterException: DirPort "+lnn.consensusParser.words[c+4]+" must be a valid port";a.dirport=Number(lnn.consensusParser.words[c+4]);lnn.consensusParser.nextLine()};
-lnn.consensusParser.consumeAfield=function(a){var c=lnn.consensusParser.words[1].indexOf("]"),c=lnn.consensusParser.words[1].slice(1,c);if(!lnn.consensusParser.isValidIP(c))throw"InvalidParameterException: IP "+c+" must be a valid IP address";var b="IPv6";lnn.consensusParser.isIPv4(c)&&(b="IPv4");var d=Number(lnn.consensusParser.words[1].slice(c.length+3,lnn.consensusParser.words[1].length));if(!lnn.consensusParser.isValidPort(d))throw"InvalidParameterException: port "+d+" must be a valid port";a.a.push({ip:c,
-port:d,type:b});lnn.consensusParser.nextLine()};lnn.consensusParser.consumeSfield=function(a){a.flags=lnn.consensusParser.tryParseFlags();lnn.consensusParser.nextLine()};lnn.consensusParser.tryConsumeVfield=function(a){"v"===lnn.consensusParser.words[0]&&(lnn.consensusParser.checkFormat(3,"v"),a.version=lnn.consensusParser.words.splice(1,lnn.consensusParser.words.length).join(" "),lnn.consensusParser.nextLine())};
-lnn.consensusParser.tryConsumePrField=function(a){"pr"===lnn.consensusParser.words[0]&&(a.protocols=lnn.consensusParser.tryParseRanges(lnn.consensusParser.words.splice(1,lnn.consensusParser.words.length)),lnn.consensusParser.nextLine())};lnn.consensusParser.tryConsumeWfield=function(a){"w"===lnn.consensusParser.words[0]&&(a.w=lnn.consensusParser.tryParseParams(),lnn.consensusParser.nextLine())};
-lnn.consensusParser.tryConsumePfield=function(a){if("p"===lnn.consensusParser.words[0]){lnn.consensusParser.checkFormat(3,"p");if("accept"!==lnn.consensusParser.words[1]&&"reject"!==lnn.consensusParser.words[1])throw"WrongParameterException: "+lnn.consensusParser.words[1]+" must be either accept or reject";var c=lnn.consensusParser.parse_range_once(lnn.consensusParser.words[2]);a["exit-policy"]={type:lnn.consensusParser.words[1],PortList:c};lnn.consensusParser.nextLine()}};
-lnn.consensusParser.consumeMfield=function(a){lnn.consensusParser.checkFormat(2,"m");if(!lnn.consensusParser.isBase64(lnn.consensusParser.words[1]+"="))throw"InvalidParameterException: digest "+lnn.consensusParser.words[1]+" must be in base64";a["micro-digest"]=lnn.consensusParser.words[1];lnn.consensusParser.nextLine()};
-lnn.consensusParser.consumeFooter=function(){if("directory-footer"!==lnn.consensusParser.words[0])throw"WrongFieldException: there must be a footer";lnn.consensusParser.nextLine();lnn.consensusParser.consensus.footer={};lnn.consensusParser.tryConsumeBandwidthWeights();if("directory-signature"!==lnn.consensusParser.words[0])throw"WrongFieldException: there must be at least one signature";for(lnn.consensusParser.consensus.footer["directory-signatures"]=[];"directory-signature"===lnn.consensusParser.words[0];)lnn.consensusParser.consensus.footer["directory-signatures"].push(lnn.consensusParser.consumeSignature())};
-lnn.consensusParser.tryConsumeBandwidthWeights=function(){"bandwidth-weights"===lnn.consensusParser.words[0]&&(lnn.consensusParser.consensus.footer["bandwidth-weights"]=lnn.consensusParser.tryParseParams(),lnn.consensusParser.nextLine())};
-lnn.consensusParser.consumeSignature=function(){if("directory-signature"!==lnn.consensusParser.words[0])throw"WrongFieldException: next field must be directory-signature";var a=lnn.consensusParser.words.length,c=void 0,b=void 0;if(4===a)c=lnn.consensusParser.words[1],b=lnn.consensusParser.words.splice(2,a);else if(3===a)c="sha1",b=lnn.consensusParser.words.splice(1,a);else throw"WrongParameterException: directory-signature has 3 or 4 arguments";a=b[0];if(!lnn.consensusParser.isHex(a))throw"InvalidParameterException: the identity "+
-a+" must be in hexadecimal";b=b[1];if(!lnn.consensusParser.isHex(b))throw"InvalidParameterException: the signing-key-digest "+b+" must be in hexadecimal";lnn.consensusParser.nextLine();var d=lnn.consensusParser.parseSignature();lnn.consensusParser.index<lnn.consensusParser.totalLines-1&&lnn.consensusParser.nextLine();return{Algorithm:c,identity:a,"signing-key-digest":b,signature:d}};
-lnn.consensusParser.tryParseKeyValueInteger=function(a,c){lnn.consensusParser.checkFormat(void 0===c?2:c,a);if(isNaN(lnn.consensusParser.words[1]))throw"WrongParameterException: "+lnn.consensusParser.words[1]+" is not a number";return Math.floor(lnn.consensusParser.words[1])};lnn.consensusParser.tryParseKeyValueString=function(a){lnn.consensusParser.checkFormat(2,a);return lnn.consensusParser.words[1]};
-lnn.consensusParser.tryParseDate=function(a){lnn.consensusParser.checkFormat(3,a);if(!lnn.consensusParser.isValidDate(lnn.consensusParser.words[1]))throw"NonValidDateException: "+lnn.consensusParser.words[1]+" is not a valid date";if(!lnn.consensusParser.isValidTime(lnn.consensusParser.words[2]))throw"NonValidTimeException: "+lnn.consensusParser.words[2]+" is not a valid time";return{date:lnn.consensusParser.words[1],time:lnn.consensusParser.words[2]}};
-lnn.consensusParser.tryParseCommaSeparatedList=function(a){lnn.consensusParser.checkFormat(2,a);return lnn.consensusParser.words[1].split(",")};lnn.consensusParser.tryParseRanges=function(a){var c={};a=$jscomp.makeIterator(a);for(var b=a.next();!b.done;b=a.next())b=b.value,b.includes("=")&&(b=b.split("="),c[b[0]]=lnn.consensusParser.parse_range_once(b[1]));return c};
-lnn.consensusParser.parse_range_once=function(a){a=a.split(",");var c=[];a=$jscomp.makeIterator(a);for(var b=a.next();!b.done;b=a.next())if(b=b.value,b.includes("-")){var d=b.split("-"),b=Number(d[0]),d=Number(d[1]);b===d-1?c.push([b,d]):c.push([[b,d]])}else c.push([Number(b)]);return c};
-lnn.consensusParser.tryParseFlags=function(){for(var a=lnn.consensusParser.words.splice(1,lnn.consensusParser.words.length),c=$jscomp.makeIterator(a),b=c.next();!b.done;b=c.next())if(b=b.value,!lnn.consensusParser.validFlags.includes(b))throw"NotValidFlagException: "+b+" is not a valid flag";return a};
-lnn.consensusParser.parseSignature=function(){if("-----BEGIN"!==lnn.consensusParser.words[0])throw"WrongFormatException";lnn.consensusParser.nextLine();for(var a="";"-----END SIGNATURE-----"!==lnn.consensusParser.lines[lnn.consensusParser.index];)a+=lnn.consensusParser.lines[lnn.consensusParser.index],lnn.consensusParser.nextLine();return a};
-lnn.consensusParser.tryParseParams=function(){for(var a={},c=$jscomp.makeIterator(lnn.consensusParser.words.splice(1,lnn.consensusParser.words.length)),b=c.next();!b.done;b=c.next())b=b.value.split("="),a[b[0]]=Number(b[1]);return a};lnn.consensusParser.isValidDate=function(a){return"string"!==typeof a?!1:/^\d{4}[-](0[1-9]|1[012])[-](0[1-9]|[12][0-9]|3[01])$/.test(a)};lnn.consensusParser.isValidTime=function(a){return"string"!==typeof a?!1:/^(0[0-9]|1[0-9]|2[0-3])[:][0-5][0-9][:][0-5][0-9]$/.test(a)};
-lnn.consensusParser.isValidIP=function(a){return/^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$|^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$|^\s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(%.+)?\s*$/.test(a)};
-lnn.consensusParser.isIPv4=function(a){return/^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(a)};lnn.consensusParser.isValidPort=function(a){return isNaN(a)?!1:0<=a&&0xffff>=a};lnn.consensusParser.isHex=function(a){return/^[a-fA-F0-9]+$/.test(a)};lnn.consensusParser.isBase64=function(a){return/^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/.test(a)};
-lnn.consensusParser.nextLine=function(){if(lnn.consensusParser.index>=lnn.consensusParser.totalLines)throw"EndOfFileException: there are no lines to parse";lnn.consensusParser.words=lnn.consensusParser.lines[++lnn.consensusParser.index].split(" ")};
-lnn.consensusParser.checkFormat=function(a,c){if(lnn.consensusParser.words.length!=a)throw"WrongFormatException: "+a+" fields are expected";if(lnn.consensusParser.words[0]!=c)throw"NotEqualException:b "+c+" is not equal to "+lnn.consensusParser.words[0];};lnn.parser={};
-lnn.parser.descriptors={line_count:0,total_lines:-1,lines:void 0,valid_bridge_distribution:"none any https email moat hyphae".split(" "),exactly_once:"router bandwidth published onion-key signing-key router-signatures".split(" "),exactly_once_mic:["onion-key","policy","ipv6-policy"],parse:function(a,c){c=void 0===c?"microdesc":c;if("unflavored"!=c&&"microdesc"!=c)throw"Error: Unexpected flavor";var b=[];lnn.parser.descriptors.lines=a.split("\n");lnn.parser.descriptors.line_count=0;lnn.parser.descriptors.total_lines=
-lnn.parser.descriptors.lines.length;for(lnn.parser.descriptors.flavor=c;lnn.parser.descriptors.line_count<lnn.parser.descriptors.total_lines;)if(""===lnn.parser.descriptors.lines[lnn.parser.descriptors.line_count])lnn.parser.descriptors.line_count++;else{var d=lnn.parser.descriptors.consume_one_node();d.flavor=c;b.push(d)}return b},validate:function(a,c,b,d){d=void 0===d?!1:d;var e="unflavored"==(void 0===b?"microdesc":b)?"digest":"micro-digest";b=[];for(idx=0;idx<c.routers.length;idx++)b.push(c.routers[idx][e]);
-c=[];for(idx=0;idx<a.length;idx++)c.push(a[idx][e]);a=[];console.log(c.length);for(idx=0;idx<b.length;idx++)e=b[idx],c.includes(e)?c.splice(c.indexOf(e),1):a.push(e);console.log(c.length);if(c.length)throw"Invalid descriptors found";if(d&&0<a.length)throw"Failed to obtain some descriptors";}};var tot=0;
-lnn.parser.descriptors.consume_one_node=function(){lnn.parser.descriptors.lines[lnn.parser.descriptors.line_count].startsWith("@type")&&lnn.parser.descriptors.line_count++;""===lnn.parser.descriptors.lines[lnn.parser.descriptors.line_count]&&lnn.parser.descriptors.line_count++;var a={},c=lnn.parser.descriptors.line_count;"unflavored"==lnn.parser.descriptors.flavor?(a=lnn.parser.descriptors.consume_router(a),a=lnn.parser.descriptors.try_consume_identity_ed25519(a)):a=lnn.parser.descriptors.consume_onion_key(a);
-for(var b=lnn.parser.descriptors.lines[lnn.parser.descriptors.line_count];;){if("unflavored"==lnn.parser.descriptors.flavor){if(b.startsWith("router-signature"))break}else if(lnn.parser.descriptors.line_count==lnn.parser.descriptors.total_lines||b.startsWith("@type")||b.startsWith("onion-key"))break;var d=b.indexOf(" ");switch(-1===d?b:b.substring(0,d)){case "master-key-ed25519":a=lnn.parser.descriptors.consume_master_key_ed25519(a);break;case "platform":a=lnn.parser.descriptors.consume_platform(a);
-break;case "published":a=lnn.parser.descriptors.consume_published(a);break;case "bandwidth":a=lnn.parser.descriptors.consume_bandwidth(a);break;case "fingerprint":a=lnn.parser.descriptors.consume_fingerprint(a);break;case "hibernating":a=lnn.parser.descriptors.consume_hibernating(a);break;case "uptime":a=lnn.parser.descriptors.consume_uptime(a);break;case "extra-info-digest":a=lnn.parser.descriptors.consume_extra_info_digest(a);break;case "caches-extra-info":a=lnn.parser.descriptors.consume_single_word_line("caches-extra-info",
-a);break;case "onion-key":a=lnn.parser.descriptors.consume_onion_key(a);break;case "onion-key-crosscert":a=lnn.parser.descriptors.consume_onion_key_crosscert(a);break;case "ntor-onion-key":a=lnn.parser.descriptors.consume_base64_digest("ntor-onion-key",a);break;case "ntor-onion-key-crosscert":a=lnn.parser.descriptors.consume_ntor_onion_key_crosscert(a);break;case "accept":a=lnn.parser.descriptors.consume_exit_policy("accept",a);break;case "reject":a=lnn.parser.descriptors.consume_exit_policy("reject",
-a);break;case "signing-key":a=lnn.parser.descriptors.consume_signing_key(a);break;case "ipv6-policy":a=lnn.parser.consume_exit_policy("ipv6-policy",lnn.parser.descriptors.lines,lnn.parser.descriptors.line_count++,a);break;case "router-sig-ed25519":a=lnn.parser.descriptors.consume_router_sig_ed25519(a);break;case "contact":a=lnn.parser.consume_contact(lnn.parser.descriptors.lines,lnn.parser.descriptors.line_count++,a);break;case "bridge-distribution":a=lnn.parser.descriptors.consume_bridge_distribution(a);
-break;case "family":a=lnn.parser.descriptors.consume_family(a);break;case "read-history":a=lnn.parser.descriptors.consume_history("read",a);break;case "write-history":a=lnn.parser.descriptors.consume_history("write",a);break;case "eventdns":a=lnn.parser.descriptors.consume_eventdns(a);break;case "hidden-service-dir":a=lnn.parser.descriptors.consume_single_word_line("hidden-service-dir",a);break;case "allow-single-hop-exits":a=lnn.parser.descriptors.consume_single_word_line("allow-single-hop-exits",
-a);break;case "tunnelled-dir-server":a=lnn.parser.descriptors.consume_single_word_line("tunnelled-dir-server",a);break;case "proto":a=lnn.parser.consume_proto("proto",lnn.parser.descriptors.lines,lnn.parser.descriptors.line_count++,a);break;case "p":a=lnn.parser.consume_exit_policy("p",lnn.parser.descriptors.lines,lnn.parser.descriptors.line_count++,a);break;case "p6":a=lnn.parser.consume_exit_policy("p6",lnn.parser.descriptors.lines,lnn.parser.descriptors.line_count++,a);break;case "id":a=lnn.parser.descriptors.consume_id(a);
-break;default:++lnn.parser.descriptors.line_count}b=lnn.parser.descriptors.lines[lnn.parser.descriptors.line_count]}void 0===a["ipv6-policy"]&&(a["ipv6-policy"]={type:"reject",PortList:[[1,0xffff]]});void 0===a.policy&&(a.policy={type:"reject",PortList:[[1,0xffff]]});d=lnn.parser.descriptors.exactly_once_mic;b=lnn.parser.descriptors.line_count;"unflavored"==lnn.parser.descriptors.flavor&&(b+=1,a=lnn.parser.descriptors.consume_router_signature(a),d=lnn.parser.descriptors.exactly_once);if(!lnn.parser.descriptors.check_exactly_once(a,
-d))throw"Invalid descriptor: some mandatory fields are not present";d="";for(i=c;i<b;i++)""!=lnn.parser.descriptors.lines[i]&&(d+=lnn.parser.descriptors.lines[i]+"\n");if("unflavored"==lnn.parser.descriptors.flavor){c=sjcl.hash.sha1.hash(d);for(c=lnn.enc.base64(lnn.dec.bits(c));0<c.length&&"="==c[c.length-1];)c=c.slice(0,-1);a.digest=c}else{c=sjcl.hash.sha256.hash(d);c=lnn.dec.bits(c);for(c=lnn.enc.base64(c);0<c.length&&"="==c[c.length-1];)c=c.slice(0,-1);a["micro-digest"]=c}return a};
-lnn.parser.descriptors.check_exactly_once=function(a,c){void 0===a["ipv6-policy"]&&a;var b=!0;return(b=void 0!==a["identity-ed25519"]?void 0!==a["ntor-onion-key-crosscert"]&&void 0!==a["onion-key-crosscert"]&&void 0!==a["router-sig-ed25519"]:void 0===a["router-sig-ed25519"])&&c.every(function(b){return void 0!==a[b]})};
-lnn.parser.descriptors.consume_router=function(a){var c=lnn.parser.descriptors.lines[lnn.parser.descriptors.line_count].split(" ");lnn.parser.check_format(6,"router",c);if(!lnn.parser.is_valid_nickname(c[1]))throw"Invalid nickname: "+c[1]+" contains non-alphanumeric characters";if(!lnn.parser.is_valid_ipv4(c[2]))throw"Invalid address: "+c[2]+" is not a valid iPv4 address";if(!lnn.parser.is_valid_port(c[3]))throw"Invalid port: "+c[3]+" is not a valid port (0 to 0xffff)";if(!lnn.parser.is_valid_port(c[4]))throw"Invalid port: "+
-c[4]+" is not a valid port (0 to 0xffff)";if(!lnn.parser.is_valid_port(c[5]))throw"Invalid port: "+c[5]+" is not a valid port (0 to 0xffff)";a.router={nickname:c[1],address:c[2],orport:Number(c[3]),socksport:Number(c[4]),dirport:Number(c[5])};++lnn.parser.descriptors.line_count;return a};
-lnn.parser.descriptors.try_consume_identity_ed25519=function(a){var c=lnn.parser.descriptors.lines[lnn.parser.descriptors.line_count].split(" ");if("identity-ed25519"===c[0]){lnn.parser.check_format(1,"identity-ed25519",c);++lnn.parser.descriptors.line_count;var b=$jscomp.makeIterator(lnn.parser.consume_pem(lnn.parser.descriptors.lines,lnn.parser.descriptors.line_count)),c=b.next().value,b=b.next().value;lnn.parser.descriptors.line_count+=c+1;a.identity={type:"ed25519",cert:b}}return a};
-lnn.parser.descriptors.consume_id=function(a){var c=lnn.parser.descriptors.lines[lnn.parser.descriptors.line_count].split(" ");lnn.parser.check_format(3,"id",c);var b=c[1];if("rsa1024"!=b&&"ed25519"!=b)throw"Unexpected identity type  "+b;lnn.parser.check_reused("identity",a);if(!lnn.parser.is_valid_base64(lnn.parser.add_ending(c[2])))throw"Invalid master key: the master key "+c[2]+" must be in base64";a.identity={type:b,"master-key":c[2]};++lnn.parser.descriptors.line_count;return a};
-lnn.parser.descriptors.consume_master_key_ed25519=function(a){var c=lnn.parser.descriptors.lines[lnn.parser.descriptors.line_count].split(" ");lnn.parser.check_format(2,"master-key-ed25519",c);lnn.parser.check_reused("master-key-ed25519",a);var b=c[1];if(!lnn.parser.is_valid_base64(lnn.parser.add_ending(b)))throw"Invalid master key: the master key "+c[1]+" must be in base64";a.identity["master-key"]=b;lnn.parser.descriptors.line_count++;return a};
-lnn.parser.descriptors.consume_platform=function(a){lnn.parser.check_reused("platform",a);var c=lnn.parser.descriptors.lines[lnn.parser.descriptors.line_count].substring(9);a.platform=c;lnn.parser.descriptors.line_count++;return a};lnn.parser.descriptors.consume_published=function(a){lnn.parser.check_reused("published",a);a.published=lnn.parser.consume_date("published",lnn.parser.descriptors.lines[lnn.parser.descriptors.line_count]);++lnn.parser.descriptors.line_count;return a};
-lnn.parser.descriptors.consume_bandwidth=function(a){lnn.parser.check_reused("bandwidth",a);var c=lnn.parser.descriptors.lines[lnn.parser.descriptors.line_count++].split(" ");lnn.parser.check_format(4,"bandwidth",c);var b=Number(c[1]),d=Number(c[2]),c=Number(c[3]);if(0>b||0>d||0>c)throw"Invalid bandwidth: must be non-negative";a.bandwidth={avg:b,burst:d,observed:c};return a};
-lnn.parser.descriptors.consume_fingerprint=function(a){lnn.parser.check_reused("fingerprint",a);var c=lnn.parser.descriptors.lines[lnn.parser.descriptors.line_count++],b=c.indexOf(" "),c=c.substring(b+1),b=c.split(" "),d=b.join("");if(10!=b.length)throw"Invalid fingerprint: wrong size";if(!lnn.parser.is_valid_hex(d))throw"Invalid fingerprint: not a hex string";b=sjcl.codec.hex.toBits(d);b=sjcl.codec.base64.fromBits(b).replace("=","");a.fingerprint=c;a.router.identity=b;return a};
-lnn.parser.descriptors.consume_hibernating=function(a){lnn.parser.check_reused("hibernating",a);var c=lnn.parser.descriptors.lines[lnn.parser.descriptors.line_count++].split(" ");lnn.parser.check_format(2,"hibernating",c);c=Number(c[1]);if(0!==c&&1!==c)throw"Invalid boolean";a.hibernating=c;return a};
-lnn.parser.descriptors.consume_uptime=function(a){lnn.parser.check_reused("uptime",a);var c=lnn.parser.descriptors.lines[lnn.parser.descriptors.line_count++].split(" ");lnn.parser.check_format(2,"uptime",c);c=Number(c[1]);if(0>c)throw"Invalid uptime: uptime must be non-negative";a.uptime=c;return a};
-lnn.parser.descriptors.consume_onion_key=function(a){var c=lnn.parser.descriptors.lines[lnn.parser.descriptors.line_count].split(" ");lnn.parser.check_reused("onion-key",a);lnn.parser.check_format(1,"onion-key",c);return lnn.parser.descriptors.consume_key("onion-key",a)};
-lnn.parser.descriptors.consume_extra_info_digest=function(a){lnn.parser.check_reused("extra-info-digest",a);var c=lnn.parser.descriptors.lines[lnn.parser.descriptors.line_count++].split(" ");if(2!=c.length&&3!=c.length)throw"Invalid format: 1 or 2 fields are expected";var b=c[1];if(!lnn.parser.is_valid_hex(b))throw"Invalid encoding: the sha1 digest must be in hexadecimal";a["extra-info-digest"]={sha1:b};if(3===c.length){c=c[2];if(!lnn.parser.is_valid_base64(lnn.parser.add_ending(c)))throw"Invalid encoding: the sha256 digest must base 64";
-a["extra-info-digest"].sha256=c}return a};lnn.parser.descriptors.consume_single_word_line=function(a,c){lnn.parser.check_reused(a,c);c[a]="true";++lnn.parser.descriptors.line_count;return c};lnn.parser.descriptors.consume_onion_key_crosscert=function(a){lnn.parser.check_reused("onion-key-crosscert",a);return lnn.parser.descriptors.consume_key("onion-key-crosscert",a)};
-lnn.parser.descriptors.consume_ntor_onion_key_crosscert=function(a){lnn.parser.check_reused("ntor-onion-key-crosscert",a);var c=lnn.parser.descriptors.lines[lnn.parser.descriptors.line_count].split(" ");lnn.parser.check_format(2,"ntor-onion-key-crosscert",c);c=Number(c[1]);if(0!=c&&1!=c)throw"Invalid bit for ntor-onion-key-crosscert";var b=$jscomp.makeIterator(lnn.parser.consume_pem(lnn.parser.descriptors.lines,++lnn.parser.descriptors.line_count)),d=b.next().value,b=b.next().value;lnn.parser.descriptors.line_count+=
-d+1;a["ntor-onion-key-crosscert"]={bit:c,cert:b};return a};lnn.parser.descriptors.consume_router_sig_ed25519=function(a){var c=lnn.parser.descriptors.lines[lnn.parser.descriptors.line_count++].split(" ");lnn.parser.check_format(2,"router-sig-ed25519",c);lnn.parser.check_reused("router-signatures",a);c=c[1];if(!lnn.parser.is_valid_base64(lnn.parser.add_ending(c)))throw"Invalid digest: must be a base 64 string";a["router-signatures"]={ed25519:c};return a};
-lnn.parser.descriptors.consume_router_signature=function(a){var c=lnn.parser.descriptors.lines[lnn.parser.descriptors.line_count].split(" ");if("router-signature"===c[0]){lnn.parser.check_format(1,"router-signature",c);++lnn.parser.descriptors.line_count;var b=$jscomp.makeIterator(lnn.parser.consume_pem(lnn.parser.descriptors.lines,lnn.parser.descriptors.line_count)),c=b.next().value,b=b.next().value;lnn.parser.descriptors.line_count+=c+1;void 0===a["router-signatures"]&&(a["router-signatures"]={});
-a["router-signatures"].rsa=b;return a}};lnn.parser.descriptors.consume_bridge_distribution=function(a){lnn.parser.check_reused("bridge-distribution",a);var c=lnn.parser.descriptors.lines[lnn.parser.descriptors.line_count++].split(" ");lnn.parser.check_format(2,"bridge-distribution",c);c=c[1];lnn.parser.descriptors.valid_bridge_distribution.includes(c)||(c="none");a["bridge-distribution"]=c;return a};
-lnn.parser.descriptors.consume_family=function(a){lnn.parser.check_reused("family",a);var c=lnn.parser.descriptors.lines[lnn.parser.descriptors.line_count++].split(" ").splice(1);a.family=c;return a};
-lnn.parser.descriptors.consume_history=function(a,c){var b=a+"-history";lnn.parser.check_reused(b,c);var d=lnn.parser.descriptors.lines[lnn.parser.descriptors.line_count++].split(" ");lnn.parser.check_format(6,a+"-history",d);var e=d[1];if(!lnn.parser.is_valid_date(e))throw"Invalid date";var f=d[2];if(!lnn.parser.is_valid_time(f))throw"Invalid time";var h=Number(d[3].substring(1)),d=d[5].split(",").map(function(a){return Number(a)});c[b]={date:e,time:f,interval:h,bytes:d};return c};
-lnn.parser.descriptors.consume_eventdns=function(a){lnn.parser.check_reused("eventdns",a);var c=lnn.parser.descriptors.lines[lnn.parser.descriptors.line_count++].split(" ");lnn.parser.check_format(2,"eventdns",c);c=Number(c[1]);if(0!=c&&1!=c)throw"Invalid boolean";decriptor.eventdns=c;return a};
-lnn.parser.descriptors.consume_base64_digest=function(a,c){var b=lnn.parser.descriptors.lines[lnn.parser.descriptors.line_count++].split(" ");lnn.parser.check_format(2,a,b);lnn.parser.check_reused(a,c);b=b[1];if(!lnn.parser.is_valid_base64(lnn.parser.add_ending(b)))throw"Invalid digest: must be a base 64 string";c[a]=b;return c};lnn.parser.descriptors.consume_signing_key=function(a){lnn.parser.check_reused("signing-key",a);return lnn.parser.descriptors.consume_key("signing-key",a)};
-lnn.parser.descriptors.consume_exit_policy=function(a,c){var b=lnn.parser.descriptors.lines[lnn.parser.descriptors.line_count++].split(" ");lnn.parser.check_format(2,a,b);void 0===c.policy&&(c.policy={type:"exitpattern",rules:[]});c.policy.rules.push({type:a,pattern:b[1]});return c};
-lnn.parser.descriptors.consume_key=function(a,c){var b=$jscomp.makeIterator(lnn.parser.consume_pem(lnn.parser.descriptors.lines,++lnn.parser.descriptors.line_count));offset=b.next().value;key=b.next().value;lnn.parser.descriptors.line_count+=offset+1;c[a]=key;return c};lnn.parser.check_format=function(a,c,b){if(b.length!=a)throw"wrong_format_exception: "+a+" fields are expected";if(b[0]!==c)throw"not_equal_exception: "+c+" is not equal to "+b[0];};lnn.parser.is_valid_ipv4=function(a){return/^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(a)};
-lnn.parser.is_valid_port=function(a){return isNaN(a)?!1:0<=a&&0xffff>=a};lnn.parser.is_valid_nickname=function(a){return/^[a-z0-9]+$/i.test(a)};lnn.parser.is_valid_base64=function(a){return/^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/.test(a)};lnn.parser.is_valid_hex=function(a){return/^[a-fA-F0-9]+$/.test(a)};
-lnn.parser.consume_pem=function(a,c){var b=0,d="";if(!a[c].startsWith("-----BEGIN"))throw'Invalid signature, certificate or key: must begin with "-----BEGIN"';for(b++;!a[c+b].startsWith("-----END");)d+=a[c+b],b++;if(!lnn.parser.is_valid_base64(d))throw"Invalid PEM: must be in base 64";return[b,d]};lnn.parser.parse_range=function(a){var c={};a=$jscomp.makeIterator(a);for(var b=a.next();!b.done;b=a.next())b=b.value,b.includes("=")&&(b=b.split("="),c[b[0]]=lnn.parser.parse_range_once(b[1]));return c};
-lnn.parser.parse_range_once=function(a){a=a.split(",");var c=[];a=$jscomp.makeIterator(a);for(var b=a.next();!b.done;b=a.next())b=b.value,b.includes("-")?(b=b.split("-"),c.push([Number(b[0]),Number(b[1])])):c.push([Number(b)]);return c};
-lnn.parser.consume_exit_policy=function(a,c,b,d){lnn.parser.check_reused(a,d);b=c[b].split(" ");lnn.parser.check_format(3,a,b);c=b[1];if("accept"!==c&&"reject"!==c)throw"Invalid policy: policy must either be accept or reject";b=lnn.parser.parse_range_once(b[2]);"p"==a&&(a="policy");"p6"==a&&(a="ipv6-policy");d[a]={type:c,PortList:b};return d};lnn.parser.consume_contact=function(a,c,b){lnn.parser.check_reused("contact",b);a=a[c].substring(8);b.contact=a;return b};
-lnn.parser.is_valid_date=function(a){return"string"!==typeof a?!1:/^\d{4}[-](0[1-9]|1[012])[-](0[1-9]|[12][0-9]|3[01])$/.test(a)};lnn.parser.is_valid_time=function(a){return"string"!==typeof a?!1:/^(0[0-9]|1[0-9]|2[0-3])[:][0-5][0-9][:][0-5][0-9]$/.test(a)};
-lnn.parser.consume_date=function(a,c){var b=c.split(" ");lnn.parser.check_format(3,a,b);if(!lnn.parser.is_valid_date(b[1]))throw"Invalid date: "+b[1]+" is not a valid date";if(!lnn.parser.is_valid_time(b[2]))throw"Invalid time: "+b[2]+" is not a valid time";return{date:b[1],time:b[2]}};lnn.parser.consume_proto=function(a,c,b,d){lnn.parser.check_reused(a,d);c=c[b].split(" ").splice(1);d[a]=lnn.parser.parse_range(c);return d};
-lnn.parser.check_reused=function(a,c){if(void 0!==c[a])throw"The field "+a+" appears more than once";};lnn.parser.add_ending=function(a){if(0!==a.length%4)for(var c=a.length%4,b=0;b<4-c;b++)a+="=";return a};lnn.path={};
-lnn.path.select=function(a,c,b){lnn.path.isChutney=void 0===b?!1:b;lnn.path.descriptorsMap={};c=$jscomp.makeIterator(c);for(b=c.next();!b.done;b=c.next())b=b.value,lnn.path.descriptorsMap[b.router.identity]=b;lnn.path.consensus=a.routers.filter(function(a){return lnn.path.obeyMinimalConstraints(a)});lnn.path.exit=lnn.path.chooseGoodExit(a);lnn.path.guard=lnn.path.chooseGoodGuard(a);lnn.path.middle=lnn.path.chooseGoodMiddle(a);return[lnn.path.guard,lnn.path.middle,lnn.path.exit]};
-lnn.path.select_end_path=function(a,c,b,d,e){lnn.path.isChutney=void 0===d?!1:d;d={};for(var f=$jscomp.makeIterator(a.routers),h=f.next();!h.done;h=f.next())h=h.value,d[h["micro-digest"]]=h;lnn.path.descriptorsMap={};f=$jscomp.makeIterator(c);for(h=f.next();!h.done;h=f.next())h=h.value,h.router=d[h["micro-digest"]],h.bandwidth={},h.bandwidth.avg=h.router.w.Bandwidth,lnn.path.descriptorsMap[h.router.identity]=h;console.log(a.routers.length);console.log(c.length);lnn.path.consensus=a.routers.filter(function(a){return lnn.path.obeyMinimalConstraints(a)});
-console.log(lnn.path.consensus.length);lnn.path.guard=b;lnn.path.exit=lnn.path.chooseGoodExitGivenGuard(e);lnn.path.middle=lnn.path.chooseGoodMiddle();return[lnn.path.middle,lnn.path.exit]};lnn.path.obeyMinimalConstraints=function(a){var c=lnn.path.descriptorsMap[a.identity],b=a.flags;return void 0!==c&&b.includes("Valid")&&b.includes("Running")&&a.version.startsWith("Tor 0.3.")&&"ed25519"===c.identity.type?!0:!1};
-lnn.path.weightedRandomChoice=function(a){for(var c=0,b=$jscomp.makeIterator(a),d=b.next();!d.done;d=b.next())d=lnn.path.descriptorsMap[d.value.identity],void 0!==d&&(c+=d.bandwidth.avg);c*=Math.random();b=0;a=$jscomp.makeIterator(a);for(d=a.next();!d.done;d=a.next())if(d=lnn.path.descriptorsMap[d.value.identity],void 0!==d){var e=d.bandwidth.avg;if(b+e>=c)return d;b+=e}throw"No candidate has been chosen";};
-lnn.path.inSame16Subnet=function(a,c){if(lnn.path.isChutney)return!1;var b=a.router.address.split("."),d=c.router.address.split(".");return b[0]===d[0]&&b[1]===d[1]};lnn.path.inSameFamily=function(a,c){if(void 0!=a.family&&void 0!=c.family)for(var b=$jscomp.makeIterator(a.family),d=b.next();!d.done;d=b.next())if(c.family.includes(d.value))return!0;return!1};lnn.path.chooseGoodExit=function(){var a=lnn.path.consensus.filter(lnn.path.isGoodExit);return lnn.path.weightedRandomChoice(a)};
-lnn.path.chooseGoodExitGivenGuard=function(a){var c=lnn.path.consensus.filter(function(b){return lnn.path.isGoodExitGivenGuard(b,a)});console.log("Exit candidates: "+c.length);return lnn.path.weightedRandomChoice(c)};lnn.path.isGoodExit=function(a){var c=a.flags;if(!c.includes("Exit")||c.includes("BadExit"))return!1;void 0===a["exit-policy"]&&(a["exit-policy"]=lnn.path.descriptorsMap[a.identity].policy);return"accept"!==a["exit-policy"].type?!1:!0};
-lnn.path.isGoodExitGivenGuard=function(a,c){var b=a.flags;if(!b.includes("Exit")||b.includes("BadExit"))return!1;b=lnn.path.descriptorsMap[a.identity];void 0===a["exit-policy"]&&(a["exit-policy"]=b.policy);var d=a["exit-policy"].PortList;for(i=0;i<c.length;i++){var e=!1,f=c[i];for(j=0;j<d.length;j++)if(d[j][0]==f){e=!0;break}else if(2==d[j].length&&d[j][0]<=f&&f<=d[j][1]){e=!0;break}if("accept"==a["exit-policy"].type){if(!e)return!1}else if(e)return!1}return void 0===b||b.router.identity===lnn.path.guard.router.identity||
-lnn.path.inSame16Subnet(b,lnn.path.guard)||lnn.path.inSameFamily(b,lnn.path.guard)?!1:!0};lnn.path.chooseGoodGuard=function(){var a=lnn.path.consensus.filter(function(a){return lnn.path.isGoodGuard(a)});return lnn.path.weightedRandomChoice(a)};
-lnn.path.isGoodGuard=function(a){var c=a.flags;a=lnn.path.descriptorsMap[a.identity];return void 0!==a&&a.router.identity!==lnn.path.exit.router.identity&&c.includes("Guard")&&c.includes("Stable")&&c.includes("V2Dir")&&!lnn.path.inSame16Subnet(a,lnn.path.exit)&&!lnn.path.inSameFamily(a,lnn.path.exit)?!0:!1};lnn.path.chooseGoodMiddle=function(){var a=lnn.path.consensus.filter(function(a){return lnn.path.isGoodMiddle(a)});return lnn.path.weightedRandomChoice(a)};
-lnn.path.isGoodMiddle=function(a){a=lnn.path.descriptorsMap[a.identity];return void 0===a||a.router.identity===lnn.path.exit.router.identity||a.router.identity===lnn.path.guard.router.identity||lnn.path.inSame16Subnet(a,lnn.path.guard)||lnn.path.inSame16Subnet(a,lnn.path.exit)||lnn.path.inSameFamily(a,lnn.path.guard)||lnn.path.inSameFamily(a,lnn.path.exit)?!1:!0};window.lnn=lnn;
+var bigInt=function(undefined){"use strict";var BASE=1e7,LOG_BASE=7,MAX_INT=9007199254740992,MAX_INT_ARR=smallToArray(MAX_INT),DEFAULT_ALPHABET="0123456789abcdefghijklmnopqrstuvwxyz";var supportsNativeBigInt=typeof BigInt==="function";function Integer(v,radix,alphabet,caseSensitive){if(typeof v==="undefined")return Integer[0];if(typeof radix!=="undefined")return+radix===10&&!alphabet?parseValue(v):parseBase(v,radix,alphabet,caseSensitive);return parseValue(v)}function BigInteger(value,sign){this.value=value;this.sign=sign;this.isSmall=false}BigInteger.prototype=Object.create(Integer.prototype);function SmallInteger(value){this.value=value;this.sign=value<0;this.isSmall=true}SmallInteger.prototype=Object.create(Integer.prototype);function NativeBigInt(value){this.value=value}NativeBigInt.prototype=Object.create(Integer.prototype);function isPrecise(n){return-MAX_INT<n&&n<MAX_INT}function smallToArray(n){if(n<1e7)return[n];if(n<1e14)return[n%1e7,Math.floor(n/1e7)];return[n%1e7,Math.floor(n/1e7)%1e7,Math.floor(n/1e14)]}function arrayToSmall(arr){trim(arr);var length=arr.length;if(length<4&&compareAbs(arr,MAX_INT_ARR)<0){switch(length){case 0:return 0;case 1:return arr[0];case 2:return arr[0]+arr[1]*BASE;default:return arr[0]+(arr[1]+arr[2]*BASE)*BASE}}return arr}function trim(v){var i=v.length;while(v[--i]===0);v.length=i+1}function createArray(length){var x=new Array(length);var i=-1;while(++i<length){x[i]=0}return x}function truncate(n){if(n>0)return Math.floor(n);return Math.ceil(n)}function add(a,b){var l_a=a.length,l_b=b.length,r=new Array(l_a),carry=0,base=BASE,sum,i;for(i=0;i<l_b;i++){sum=a[i]+b[i]+carry;carry=sum>=base?1:0;r[i]=sum-carry*base}while(i<l_a){sum=a[i]+carry;carry=sum===base?1:0;r[i++]=sum-carry*base}if(carry>0)r.push(carry);return r}function addAny(a,b){if(a.length>=b.length)return add(a,b);return add(b,a)}function addSmall(a,carry){var l=a.length,r=new Array(l),base=BASE,sum,i;for(i=0;i<l;i++){sum=a[i]-base+carry;carry=Math.floor(sum/base);r[i]=sum-carry*base;carry+=1}while(carry>0){r[i++]=carry%base;carry=Math.floor(carry/base)}return r}BigInteger.prototype.add=function(v){var n=parseValue(v);if(this.sign!==n.sign){return this.subtract(n.negate())}var a=this.value,b=n.value;if(n.isSmall){return new BigInteger(addSmall(a,Math.abs(b)),this.sign)}return new BigInteger(addAny(a,b),this.sign)};BigInteger.prototype.plus=BigInteger.prototype.add;SmallInteger.prototype.add=function(v){var n=parseValue(v);var a=this.value;if(a<0!==n.sign){return this.subtract(n.negate())}var b=n.value;if(n.isSmall){if(isPrecise(a+b))return new SmallInteger(a+b);b=smallToArray(Math.abs(b))}return new BigInteger(addSmall(b,Math.abs(a)),a<0)};SmallInteger.prototype.plus=SmallInteger.prototype.add;NativeBigInt.prototype.add=function(v){return new NativeBigInt(this.value+parseValue(v).value)};NativeBigInt.prototype.plus=NativeBigInt.prototype.add;function subtract(a,b){var a_l=a.length,b_l=b.length,r=new Array(a_l),borrow=0,base=BASE,i,difference;for(i=0;i<b_l;i++){difference=a[i]-borrow-b[i];if(difference<0){difference+=base;borrow=1}else borrow=0;r[i]=difference}for(i=b_l;i<a_l;i++){difference=a[i]-borrow;if(difference<0)difference+=base;else{r[i++]=difference;break}r[i]=difference}for(;i<a_l;i++){r[i]=a[i]}trim(r);return r}function subtractAny(a,b,sign){var value;if(compareAbs(a,b)>=0){value=subtract(a,b)}else{value=subtract(b,a);sign=!sign}value=arrayToSmall(value);if(typeof value==="number"){if(sign)value=-value;return new SmallInteger(value)}return new BigInteger(value,sign)}function subtractSmall(a,b,sign){var l=a.length,r=new Array(l),carry=-b,base=BASE,i,difference;for(i=0;i<l;i++){difference=a[i]+carry;carry=Math.floor(difference/base);difference%=base;r[i]=difference<0?difference+base:difference}r=arrayToSmall(r);if(typeof r==="number"){if(sign)r=-r;return new SmallInteger(r)}return new BigInteger(r,sign)}BigInteger.prototype.subtract=function(v){var n=parseValue(v);if(this.sign!==n.sign){return this.add(n.negate())}var a=this.value,b=n.value;if(n.isSmall)return subtractSmall(a,Math.abs(b),this.sign);return subtractAny(a,b,this.sign)};BigInteger.prototype.minus=BigInteger.prototype.subtract;SmallInteger.prototype.subtract=function(v){var n=parseValue(v);var a=this.value;if(a<0!==n.sign){return this.add(n.negate())}var b=n.value;if(n.isSmall){return new SmallInteger(a-b)}return subtractSmall(b,Math.abs(a),a>=0)};SmallInteger.prototype.minus=SmallInteger.prototype.subtract;NativeBigInt.prototype.subtract=function(v){return new NativeBigInt(this.value-parseValue(v).value)};NativeBigInt.prototype.minus=NativeBigInt.prototype.subtract;BigInteger.prototype.negate=function(){return new BigInteger(this.value,!this.sign)};SmallInteger.prototype.negate=function(){var sign=this.sign;var small=new SmallInteger(-this.value);small.sign=!sign;return small};NativeBigInt.prototype.negate=function(){return new NativeBigInt(-this.value)};BigInteger.prototype.abs=function(){return new BigInteger(this.value,false)};SmallInteger.prototype.abs=function(){return new SmallInteger(Math.abs(this.value))};NativeBigInt.prototype.abs=function(){return new NativeBigInt(this.value>=0?this.value:-this.value)};function multiplyLong(a,b){var a_l=a.length,b_l=b.length,l=a_l+b_l,r=createArray(l),base=BASE,product,carry,i,a_i,b_j;for(i=0;i<a_l;++i){a_i=a[i];for(var j=0;j<b_l;++j){b_j=b[j];product=a_i*b_j+r[i+j];carry=Math.floor(product/base);r[i+j]=product-carry*base;r[i+j+1]+=carry}}trim(r);return r}function multiplySmall(a,b){var l=a.length,r=new Array(l),base=BASE,carry=0,product,i;for(i=0;i<l;i++){product=a[i]*b+carry;carry=Math.floor(product/base);r[i]=product-carry*base}while(carry>0){r[i++]=carry%base;carry=Math.floor(carry/base)}return r}function shiftLeft(x,n){var r=[];while(n-- >0)r.push(0);return r.concat(x)}function multiplyKaratsuba(x,y){var n=Math.max(x.length,y.length);if(n<=30)return multiplyLong(x,y);n=Math.ceil(n/2);var b=x.slice(n),a=x.slice(0,n),d=y.slice(n),c=y.slice(0,n);var ac=multiplyKaratsuba(a,c),bd=multiplyKaratsuba(b,d),abcd=multiplyKaratsuba(addAny(a,b),addAny(c,d));var product=addAny(addAny(ac,shiftLeft(subtract(subtract(abcd,ac),bd),n)),shiftLeft(bd,2*n));trim(product);return product}function useKaratsuba(l1,l2){return-.012*l1-.012*l2+15e-6*l1*l2>0}BigInteger.prototype.multiply=function(v){var n=parseValue(v),a=this.value,b=n.value,sign=this.sign!==n.sign,abs;if(n.isSmall){if(b===0)return Integer[0];if(b===1)return this;if(b===-1)return this.negate();abs=Math.abs(b);if(abs<BASE){return new BigInteger(multiplySmall(a,abs),sign)}b=smallToArray(abs)}if(useKaratsuba(a.length,b.length))return new BigInteger(multiplyKaratsuba(a,b),sign);return new BigInteger(multiplyLong(a,b),sign)};BigInteger.prototype.times=BigInteger.prototype.multiply;function multiplySmallAndArray(a,b,sign){if(a<BASE){return new BigInteger(multiplySmall(b,a),sign)}return new BigInteger(multiplyLong(b,smallToArray(a)),sign)}SmallInteger.prototype._multiplyBySmall=function(a){if(isPrecise(a.value*this.value)){return new SmallInteger(a.value*this.value)}return multiplySmallAndArray(Math.abs(a.value),smallToArray(Math.abs(this.value)),this.sign!==a.sign)};BigInteger.prototype._multiplyBySmall=function(a){if(a.value===0)return Integer[0];if(a.value===1)return this;if(a.value===-1)return this.negate();return multiplySmallAndArray(Math.abs(a.value),this.value,this.sign!==a.sign)};SmallInteger.prototype.multiply=function(v){return parseValue(v)._multiplyBySmall(this)};SmallInteger.prototype.times=SmallInteger.prototype.multiply;NativeBigInt.prototype.multiply=function(v){return new NativeBigInt(this.value*parseValue(v).value)};NativeBigInt.prototype.times=NativeBigInt.prototype.multiply;function square(a){var l=a.length,r=createArray(l+l),base=BASE,product,carry,i,a_i,a_j;for(i=0;i<l;i++){a_i=a[i];carry=0-a_i*a_i;for(var j=i;j<l;j++){a_j=a[j];product=2*(a_i*a_j)+r[i+j]+carry;carry=Math.floor(product/base);r[i+j]=product-carry*base}r[i+l]=carry}trim(r);return r}BigInteger.prototype.square=function(){return new BigInteger(square(this.value),false)};SmallInteger.prototype.square=function(){var value=this.value*this.value;if(isPrecise(value))return new SmallInteger(value);return new BigInteger(square(smallToArray(Math.abs(this.value))),false)};NativeBigInt.prototype.square=function(v){return new NativeBigInt(this.value*this.value)};function divMod1(a,b){var a_l=a.length,b_l=b.length,base=BASE,result=createArray(b.length),divisorMostSignificantDigit=b[b_l-1],lambda=Math.ceil(base/(2*divisorMostSignificantDigit)),remainder=multiplySmall(a,lambda),divisor=multiplySmall(b,lambda),quotientDigit,shift,carry,borrow,i,l,q;if(remainder.length<=a_l)remainder.push(0);divisor.push(0);divisorMostSignificantDigit=divisor[b_l-1];for(shift=a_l-b_l;shift>=0;shift--){quotientDigit=base-1;if(remainder[shift+b_l]!==divisorMostSignificantDigit){quotientDigit=Math.floor((remainder[shift+b_l]*base+remainder[shift+b_l-1])/divisorMostSignificantDigit)}carry=0;borrow=0;l=divisor.length;for(i=0;i<l;i++){carry+=quotientDigit*divisor[i];q=Math.floor(carry/base);borrow+=remainder[shift+i]-(carry-q*base);carry=q;if(borrow<0){remainder[shift+i]=borrow+base;borrow=-1}else{remainder[shift+i]=borrow;borrow=0}}while(borrow!==0){quotientDigit-=1;carry=0;for(i=0;i<l;i++){carry+=remainder[shift+i]-base+divisor[i];if(carry<0){remainder[shift+i]=carry+base;carry=0}else{remainder[shift+i]=carry;carry=1}}borrow+=carry}result[shift]=quotientDigit}remainder=divModSmall(remainder,lambda)[0];return[arrayToSmall(result),arrayToSmall(remainder)]}function divMod2(a,b){var a_l=a.length,b_l=b.length,result=[],part=[],base=BASE,guess,xlen,highx,highy,check;while(a_l){part.unshift(a[--a_l]);trim(part);if(compareAbs(part,b)<0){result.push(0);continue}xlen=part.length;highx=part[xlen-1]*base+part[xlen-2];highy=b[b_l-1]*base+b[b_l-2];if(xlen>b_l){highx=(highx+1)*base}guess=Math.ceil(highx/highy);do{check=multiplySmall(b,guess);if(compareAbs(check,part)<=0)break;guess--}while(guess);result.push(guess);part=subtract(part,check)}result.reverse();return[arrayToSmall(result),arrayToSmall(part)]}function divModSmall(value,lambda){var length=value.length,quotient=createArray(length),base=BASE,i,q,remainder,divisor;remainder=0;for(i=length-1;i>=0;--i){divisor=remainder*base+value[i];q=truncate(divisor/lambda);remainder=divisor-q*lambda;quotient[i]=q|0}return[quotient,remainder|0]}function divModAny(self,v){var value,n=parseValue(v);if(supportsNativeBigInt){return[new NativeBigInt(self.value/n.value),new NativeBigInt(self.value%n.value)]}var a=self.value,b=n.value;var quotient;if(b===0)throw new Error("Cannot divide by zero");if(self.isSmall){if(n.isSmall){return[new SmallInteger(truncate(a/b)),new SmallInteger(a%b)]}return[Integer[0],self]}if(n.isSmall){if(b===1)return[self,Integer[0]];if(b==-1)return[self.negate(),Integer[0]];var abs=Math.abs(b);if(abs<BASE){value=divModSmall(a,abs);quotient=arrayToSmall(value[0]);var remainder=value[1];if(self.sign)remainder=-remainder;if(typeof quotient==="number"){if(self.sign!==n.sign)quotient=-quotient;return[new SmallInteger(quotient),new SmallInteger(remainder)]}return[new BigInteger(quotient,self.sign!==n.sign),new SmallInteger(remainder)]}b=smallToArray(abs)}var comparison=compareAbs(a,b);if(comparison===-1)return[Integer[0],self];if(comparison===0)return[Integer[self.sign===n.sign?1:-1],Integer[0]];if(a.length+b.length<=200)value=divMod1(a,b);else value=divMod2(a,b);quotient=value[0];var qSign=self.sign!==n.sign,mod=value[1],mSign=self.sign;if(typeof quotient==="number"){if(qSign)quotient=-quotient;quotient=new SmallInteger(quotient)}else quotient=new BigInteger(quotient,qSign);if(typeof mod==="number"){if(mSign)mod=-mod;mod=new SmallInteger(mod)}else mod=new BigInteger(mod,mSign);return[quotient,mod]}BigInteger.prototype.divmod=function(v){var result=divModAny(this,v);return{quotient:result[0],remainder:result[1]}};NativeBigInt.prototype.divmod=SmallInteger.prototype.divmod=BigInteger.prototype.divmod;BigInteger.prototype.divide=function(v){return divModAny(this,v)[0]};NativeBigInt.prototype.over=NativeBigInt.prototype.divide=function(v){return new NativeBigInt(this.value/parseValue(v).value)};SmallInteger.prototype.over=SmallInteger.prototype.divide=BigInteger.prototype.over=BigInteger.prototype.divide;BigInteger.prototype.mod=function(v){return divModAny(this,v)[1]};NativeBigInt.prototype.mod=NativeBigInt.prototype.remainder=function(v){return new NativeBigInt(this.value%parseValue(v).value)};SmallInteger.prototype.remainder=SmallInteger.prototype.mod=BigInteger.prototype.remainder=BigInteger.prototype.mod;BigInteger.prototype.pow=function(v){var n=parseValue(v),a=this.value,b=n.value,value,x,y;if(b===0)return Integer[1];if(a===0)return Integer[0];if(a===1)return Integer[1];if(a===-1)return n.isEven()?Integer[1]:Integer[-1];if(n.sign){return Integer[0]}if(!n.isSmall)throw new Error("The exponent "+n.toString()+" is too large.");if(this.isSmall){if(isPrecise(value=Math.pow(a,b)))return new SmallInteger(truncate(value))}x=this;y=Integer[1];while(true){if(b&1===1){y=y.times(x);--b}if(b===0)break;b/=2;x=x.square()}return y};SmallInteger.prototype.pow=BigInteger.prototype.pow;NativeBigInt.prototype.pow=function(v){var n=parseValue(v);var a=this.value,b=n.value;var _0=BigInt(0),_1=BigInt(1),_2=BigInt(2);if(b===_0)return Integer[1];if(a===_0)return Integer[0];if(a===_1)return Integer[1];if(a===BigInt(-1))return n.isEven()?Integer[1]:Integer[-1];if(n.isNegative())return new NativeBigInt(_0);var x=this;var y=Integer[1];while(true){if((b&_1)===_1){y=y.times(x);--b}if(b===_0)break;b/=_2;x=x.square()}return y};BigInteger.prototype.modPow=function(exp,mod){exp=parseValue(exp);mod=parseValue(mod);if(mod.isZero())throw new Error("Cannot take modPow with modulus 0");var r=Integer[1],base=this.mod(mod);while(exp.isPositive()){if(base.isZero())return Integer[0];if(exp.isOdd())r=r.multiply(base).mod(mod);exp=exp.divide(2);base=base.square().mod(mod)}return r};NativeBigInt.prototype.modPow=SmallInteger.prototype.modPow=BigInteger.prototype.modPow;function compareAbs(a,b){if(a.length!==b.length){return a.length>b.length?1:-1}for(var i=a.length-1;i>=0;i--){if(a[i]!==b[i])return a[i]>b[i]?1:-1}return 0}BigInteger.prototype.compareAbs=function(v){var n=parseValue(v),a=this.value,b=n.value;if(n.isSmall)return 1;return compareAbs(a,b)};SmallInteger.prototype.compareAbs=function(v){var n=parseValue(v),a=Math.abs(this.value),b=n.value;if(n.isSmall){b=Math.abs(b);return a===b?0:a>b?1:-1}return-1};NativeBigInt.prototype.compareAbs=function(v){var a=this.value;var b=parseValue(v).value;a=a>=0?a:-a;b=b>=0?b:-b;return a===b?0:a>b?1:-1};BigInteger.prototype.compare=function(v){if(v===Infinity){return-1}if(v===-Infinity){return 1}var n=parseValue(v),a=this.value,b=n.value;if(this.sign!==n.sign){return n.sign?1:-1}if(n.isSmall){return this.sign?-1:1}return compareAbs(a,b)*(this.sign?-1:1)};BigInteger.prototype.compareTo=BigInteger.prototype.compare;SmallInteger.prototype.compare=function(v){if(v===Infinity){return-1}if(v===-Infinity){return 1}var n=parseValue(v),a=this.value,b=n.value;if(n.isSmall){return a==b?0:a>b?1:-1}if(a<0!==n.sign){return a<0?-1:1}return a<0?1:-1};SmallInteger.prototype.compareTo=SmallInteger.prototype.compare;NativeBigInt.prototype.compare=function(v){if(v===Infinity){return-1}if(v===-Infinity){return 1}var a=this.value;var b=parseValue(v).value;return a===b?0:a>b?1:-1};NativeBigInt.prototype.compareTo=NativeBigInt.prototype.compare;BigInteger.prototype.equals=function(v){return this.compare(v)===0};NativeBigInt.prototype.eq=NativeBigInt.prototype.equals=SmallInteger.prototype.eq=SmallInteger.prototype.equals=BigInteger.prototype.eq=BigInteger.prototype.equals;BigInteger.prototype.notEquals=function(v){return this.compare(v)!==0};NativeBigInt.prototype.neq=NativeBigInt.prototype.notEquals=SmallInteger.prototype.neq=SmallInteger.prototype.notEquals=BigInteger.prototype.neq=BigInteger.prototype.notEquals;BigInteger.prototype.greater=function(v){return this.compare(v)>0};NativeBigInt.prototype.gt=NativeBigInt.prototype.greater=SmallInteger.prototype.gt=SmallInteger.prototype.greater=BigInteger.prototype.gt=BigInteger.prototype.greater;BigInteger.prototype.lesser=function(v){return this.compare(v)<0};NativeBigInt.prototype.lt=NativeBigInt.prototype.lesser=SmallInteger.prototype.lt=SmallInteger.prototype.lesser=BigInteger.prototype.lt=BigInteger.prototype.lesser;BigInteger.prototype.greaterOrEquals=function(v){return this.compare(v)>=0};NativeBigInt.prototype.geq=NativeBigInt.prototype.greaterOrEquals=SmallInteger.prototype.geq=SmallInteger.prototype.greaterOrEquals=BigInteger.prototype.geq=BigInteger.prototype.greaterOrEquals;BigInteger.prototype.lesserOrEquals=function(v){return this.compare(v)<=0};NativeBigInt.prototype.leq=NativeBigInt.prototype.lesserOrEquals=SmallInteger.prototype.leq=SmallInteger.prototype.lesserOrEquals=BigInteger.prototype.leq=BigInteger.prototype.lesserOrEquals;BigInteger.prototype.isEven=function(){return(this.value[0]&1)===0};SmallInteger.prototype.isEven=function(){return(this.value&1)===0};NativeBigInt.prototype.isEven=function(){return(this.value&BigInt(1))===BigInt(0)};BigInteger.prototype.isOdd=function(){return(this.value[0]&1)===1};SmallInteger.prototype.isOdd=function(){return(this.value&1)===1};NativeBigInt.prototype.isOdd=function(){return(this.value&BigInt(1))===BigInt(1)};BigInteger.prototype.isPositive=function(){return!this.sign};SmallInteger.prototype.isPositive=function(){return this.value>0};NativeBigInt.prototype.isPositive=SmallInteger.prototype.isPositive;BigInteger.prototype.isNegative=function(){return this.sign};SmallInteger.prototype.isNegative=function(){return this.value<0};NativeBigInt.prototype.isNegative=SmallInteger.prototype.isNegative;BigInteger.prototype.isUnit=function(){return false};SmallInteger.prototype.isUnit=function(){return Math.abs(this.value)===1};NativeBigInt.prototype.isUnit=function(){return this.abs().value===BigInt(1)};BigInteger.prototype.isZero=function(){return false};SmallInteger.prototype.isZero=function(){return this.value===0};NativeBigInt.prototype.isZero=function(){return this.value===BigInt(0)};BigInteger.prototype.isDivisibleBy=function(v){var n=parseValue(v);if(n.isZero())return false;if(n.isUnit())return true;if(n.compareAbs(2)===0)return this.isEven();return this.mod(n).isZero()};NativeBigInt.prototype.isDivisibleBy=SmallInteger.prototype.isDivisibleBy=BigInteger.prototype.isDivisibleBy;function isBasicPrime(v){var n=v.abs();if(n.isUnit())return false;if(n.equals(2)||n.equals(3)||n.equals(5))return true;if(n.isEven()||n.isDivisibleBy(3)||n.isDivisibleBy(5))return false;if(n.lesser(49))return true}function millerRabinTest(n,a){var nPrev=n.prev(),b=nPrev,r=0,d,t,i,x;while(b.isEven())b=b.divide(2),r++;next:for(i=0;i<a.length;i++){if(n.lesser(a[i]))continue;x=bigInt(a[i]).modPow(b,n);if(x.isUnit()||x.equals(nPrev))continue;for(d=r-1;d!=0;d--){x=x.square().mod(n);if(x.isUnit())return false;if(x.equals(nPrev))continue next}return false}return true}BigInteger.prototype.isPrime=function(strict){var isPrime=isBasicPrime(this);if(isPrime!==undefined)return isPrime;var n=this.abs();var bits=n.bitLength();if(bits<=64)return millerRabinTest(n,[2,3,5,7,11,13,17,19,23,29,31,37]);var logN=Math.log(2)*bits.toJSNumber();var t=Math.ceil(strict===true?2*Math.pow(logN,2):logN);for(var a=[],i=0;i<t;i++){a.push(bigInt(i+2))}return millerRabinTest(n,a)};NativeBigInt.prototype.isPrime=SmallInteger.prototype.isPrime=BigInteger.prototype.isPrime;BigInteger.prototype.isProbablePrime=function(iterations){var isPrime=isBasicPrime(this);if(isPrime!==undefined)return isPrime;var n=this.abs();var t=iterations===undefined?5:iterations;for(var a=[],i=0;i<t;i++){a.push(bigInt.randBetween(2,n.minus(2)))}return millerRabinTest(n,a)};NativeBigInt.prototype.isProbablePrime=SmallInteger.prototype.isProbablePrime=BigInteger.prototype.isProbablePrime;BigInteger.prototype.modInv=function(n){var t=bigInt.zero,newT=bigInt.one,r=parseValue(n),newR=this.abs(),q,lastT,lastR;while(!newR.isZero()){q=r.divide(newR);lastT=t;lastR=r;t=newT;r=newR;newT=lastT.subtract(q.multiply(newT));newR=lastR.subtract(q.multiply(newR))}if(!r.isUnit())throw new Error(this.toString()+" and "+n.toString()+" are not co-prime");if(t.compare(0)===-1){t=t.add(n)}if(this.isNegative()){return t.negate()}return t};NativeBigInt.prototype.modInv=SmallInteger.prototype.modInv=BigInteger.prototype.modInv;BigInteger.prototype.next=function(){var value=this.value;if(this.sign){return subtractSmall(value,1,this.sign)}return new BigInteger(addSmall(value,1),this.sign)};SmallInteger.prototype.next=function(){var value=this.value;if(value+1<MAX_INT)return new SmallInteger(value+1);return new BigInteger(MAX_INT_ARR,false)};NativeBigInt.prototype.next=function(){return new NativeBigInt(this.value+BigInt(1))};BigInteger.prototype.prev=function(){var value=this.value;if(this.sign){return new BigInteger(addSmall(value,1),true)}return subtractSmall(value,1,this.sign)};SmallInteger.prototype.prev=function(){var value=this.value;if(value-1>-MAX_INT)return new SmallInteger(value-1);return new BigInteger(MAX_INT_ARR,true)};NativeBigInt.prototype.prev=function(){return new NativeBigInt(this.value-BigInt(1))};var powersOfTwo=[1];while(2*powersOfTwo[powersOfTwo.length-1]<=BASE)powersOfTwo.push(2*powersOfTwo[powersOfTwo.length-1]);var powers2Length=powersOfTwo.length,highestPower2=powersOfTwo[powers2Length-1];function shift_isSmall(n){return Math.abs(n)<=BASE}BigInteger.prototype.shiftLeft=function(v){var n=parseValue(v).toJSNumber();if(!shift_isSmall(n)){throw new Error(String(n)+" is too large for shifting.")}if(n<0)return this.shiftRight(-n);var result=this;if(result.isZero())return result;while(n>=powers2Length){result=result.multiply(highestPower2);n-=powers2Length-1}return result.multiply(powersOfTwo[n])};NativeBigInt.prototype.shiftLeft=SmallInteger.prototype.shiftLeft=BigInteger.prototype.shiftLeft;BigInteger.prototype.shiftRight=function(v){var remQuo;var n=parseValue(v).toJSNumber();if(!shift_isSmall(n)){throw new Error(String(n)+" is too large for shifting.")}if(n<0)return this.shiftLeft(-n);var result=this;while(n>=powers2Length){if(result.isZero()||result.isNegative()&&result.isUnit())return result;remQuo=divModAny(result,highestPower2);result=remQuo[1].isNegative()?remQuo[0].prev():remQuo[0];n-=powers2Length-1}remQuo=divModAny(result,powersOfTwo[n]);return remQuo[1].isNegative()?remQuo[0].prev():remQuo[0]};NativeBigInt.prototype.shiftRight=SmallInteger.prototype.shiftRight=BigInteger.prototype.shiftRight;function bitwise(x,y,fn){y=parseValue(y);var xSign=x.isNegative(),ySign=y.isNegative();var xRem=xSign?x.not():x,yRem=ySign?y.not():y;var xDigit=0,yDigit=0;var xDivMod=null,yDivMod=null;var result=[];while(!xRem.isZero()||!yRem.isZero()){xDivMod=divModAny(xRem,highestPower2);xDigit=xDivMod[1].toJSNumber();if(xSign){xDigit=highestPower2-1-xDigit}yDivMod=divModAny(yRem,highestPower2);yDigit=yDivMod[1].toJSNumber();if(ySign){yDigit=highestPower2-1-yDigit}xRem=xDivMod[0];yRem=yDivMod[0];result.push(fn(xDigit,yDigit))}var sum=fn(xSign?1:0,ySign?1:0)!==0?bigInt(-1):bigInt(0);for(var i=result.length-1;i>=0;i-=1){sum=sum.multiply(highestPower2).add(bigInt(result[i]))}return sum}BigInteger.prototype.not=function(){return this.negate().prev()};NativeBigInt.prototype.not=SmallInteger.prototype.not=BigInteger.prototype.not;BigInteger.prototype.and=function(n){return bitwise(this,n,function(a,b){return a&b})};NativeBigInt.prototype.and=SmallInteger.prototype.and=BigInteger.prototype.and;BigInteger.prototype.or=function(n){return bitwise(this,n,function(a,b){return a|b})};NativeBigInt.prototype.or=SmallInteger.prototype.or=BigInteger.prototype.or;BigInteger.prototype.xor=function(n){return bitwise(this,n,function(a,b){return a^b})};NativeBigInt.prototype.xor=SmallInteger.prototype.xor=BigInteger.prototype.xor;var LOBMASK_I=1<<30,LOBMASK_BI=(BASE&-BASE)*(BASE&-BASE)|LOBMASK_I;function roughLOB(n){var v=n.value,x=typeof v==="number"?v|LOBMASK_I:typeof v==="bigint"?v|BigInt(LOBMASK_I):v[0]+v[1]*BASE|LOBMASK_BI;return x&-x}function integerLogarithm(value,base){if(base.compareTo(value)<=0){var tmp=integerLogarithm(value,base.square(base));var p=tmp.p;var e=tmp.e;var t=p.multiply(base);return t.compareTo(value)<=0?{p:t,e:e*2+1}:{p:p,e:e*2}}return{p:bigInt(1),e:0}}BigInteger.prototype.bitLength=function(){var n=this;if(n.compareTo(bigInt(0))<0){n=n.negate().subtract(bigInt(1))}if(n.compareTo(bigInt(0))===0){return bigInt(0)}return bigInt(integerLogarithm(n,bigInt(2)).e).add(bigInt(1))};NativeBigInt.prototype.bitLength=SmallInteger.prototype.bitLength=BigInteger.prototype.bitLength;function max(a,b){a=parseValue(a);b=parseValue(b);return a.greater(b)?a:b}function min(a,b){a=parseValue(a);b=parseValue(b);return a.lesser(b)?a:b}function gcd(a,b){a=parseValue(a).abs();b=parseValue(b).abs();if(a.equals(b))return a;if(a.isZero())return b;if(b.isZero())return a;var c=Integer[1],d,t;while(a.isEven()&&b.isEven()){d=min(roughLOB(a),roughLOB(b));a=a.divide(d);b=b.divide(d);c=c.multiply(d)}while(a.isEven()){a=a.divide(roughLOB(a))}do{while(b.isEven()){b=b.divide(roughLOB(b))}if(a.greater(b)){t=b;b=a;a=t}b=b.subtract(a)}while(!b.isZero());return c.isUnit()?a:a.multiply(c)}function lcm(a,b){a=parseValue(a).abs();b=parseValue(b).abs();return a.divide(gcd(a,b)).multiply(b)}function randBetween(a,b){a=parseValue(a);b=parseValue(b);var low=min(a,b),high=max(a,b);var range=high.subtract(low).add(1);if(range.isSmall)return low.add(Math.floor(Math.random()*range));var digits=toBase(range,BASE).value;var result=[],restricted=true;for(var i=0;i<digits.length;i++){var top=restricted?digits[i]:BASE;var digit=truncate(Math.random()*top);result.push(digit);if(digit<top)restricted=false}return low.add(Integer.fromArray(result,BASE,false))}var parseBase=function(text,base,alphabet,caseSensitive){alphabet=alphabet||DEFAULT_ALPHABET;text=String(text);if(!caseSensitive){text=text.toLowerCase();alphabet=alphabet.toLowerCase()}var length=text.length;var i;var absBase=Math.abs(base);var alphabetValues={};for(i=0;i<alphabet.length;i++){alphabetValues[alphabet[i]]=i}for(i=0;i<length;i++){var c=text[i];if(c==="-")continue;if(c in alphabetValues){if(alphabetValues[c]>=absBase){if(c==="1"&&absBase===1)continue;throw new Error(c+" is not a valid digit in base "+base+".")}}}base=parseValue(base);var digits=[];var isNegative=text[0]==="-";for(i=isNegative?1:0;i<text.length;i++){var c=text[i];if(c in alphabetValues)digits.push(parseValue(alphabetValues[c]));else if(c==="<"){var start=i;do{i++}while(text[i]!==">"&&i<text.length);digits.push(parseValue(text.slice(start+1,i)))}else throw new Error(c+" is not a valid character")}return parseBaseFromArray(digits,base,isNegative)};function parseBaseFromArray(digits,base,isNegative){var val=Integer[0],pow=Integer[1],i;for(i=digits.length-1;i>=0;i--){val=val.add(digits[i].times(pow));pow=pow.times(base)}return isNegative?val.negate():val}function stringify(digit,alphabet){alphabet=alphabet||DEFAULT_ALPHABET;if(digit<alphabet.length){return alphabet[digit]}return"<"+digit+">"}function toBase(n,base){base=bigInt(base);if(base.isZero()){if(n.isZero())return{value:[0],isNegative:false};throw new Error("Cannot convert nonzero numbers to base 0.")}if(base.equals(-1)){if(n.isZero())return{value:[0],isNegative:false};if(n.isNegative())return{value:[].concat.apply([],Array.apply(null,Array(-n.toJSNumber())).map(Array.prototype.valueOf,[1,0])),isNegative:false};var arr=Array.apply(null,Array(n.toJSNumber()-1)).map(Array.prototype.valueOf,[0,1]);arr.unshift([1]);return{value:[].concat.apply([],arr),isNegative:false}}var neg=false;if(n.isNegative()&&base.isPositive()){neg=true;n=n.abs()}if(base.isUnit()){if(n.isZero())return{value:[0],isNegative:false};return{value:Array.apply(null,Array(n.toJSNumber())).map(Number.prototype.valueOf,1),isNegative:neg}}var out=[];var left=n,divmod;while(left.isNegative()||left.compareAbs(base)>=0){divmod=left.divmod(base);left=divmod.quotient;var digit=divmod.remainder;if(digit.isNegative()){digit=base.minus(digit).abs();left=left.next()}out.push(digit.toJSNumber())}out.push(left.toJSNumber());return{value:out.reverse(),isNegative:neg}}function toBaseString(n,base,alphabet){var arr=toBase(n,base);return(arr.isNegative?"-":"")+arr.value.map(function(x){return stringify(x,alphabet)}).join("")}BigInteger.prototype.toArray=function(radix){return toBase(this,radix)};SmallInteger.prototype.toArray=function(radix){return toBase(this,radix)};NativeBigInt.prototype.toArray=function(radix){return toBase(this,radix)};BigInteger.prototype.toString=function(radix,alphabet){if(radix===undefined)radix=10;if(radix!==10)return toBaseString(this,radix,alphabet);var v=this.value,l=v.length,str=String(v[--l]),zeros="0000000",digit;while(--l>=0){digit=String(v[l]);str+=zeros.slice(digit.length)+digit}var sign=this.sign?"-":"";return sign+str};SmallInteger.prototype.toString=function(radix,alphabet){if(radix===undefined)radix=10;if(radix!=10)return toBaseString(this,radix,alphabet);return String(this.value)};NativeBigInt.prototype.toString=SmallInteger.prototype.toString;NativeBigInt.prototype.toJSON=BigInteger.prototype.toJSON=SmallInteger.prototype.toJSON=function(){return this.toString()};BigInteger.prototype.valueOf=function(){return parseInt(this.toString(),10)};BigInteger.prototype.toJSNumber=BigInteger.prototype.valueOf;SmallInteger.prototype.valueOf=function(){return this.value};SmallInteger.prototype.toJSNumber=SmallInteger.prototype.valueOf;NativeBigInt.prototype.valueOf=NativeBigInt.prototype.toJSNumber=function(){return parseInt(this.toString(),10)};function parseStringValue(v){if(isPrecise(+v)){var x=+v;if(x===truncate(x))return supportsNativeBigInt?new NativeBigInt(BigInt(x)):new SmallInteger(x);throw new Error("Invalid integer: "+v)}var sign=v[0]==="-";if(sign)v=v.slice(1);var split=v.split(/e/i);if(split.length>2)throw new Error("Invalid integer: "+split.join("e"));if(split.length===2){var exp=split[1];if(exp[0]==="+")exp=exp.slice(1);exp=+exp;if(exp!==truncate(exp)||!isPrecise(exp))throw new Error("Invalid integer: "+exp+" is not a valid exponent.");var text=split[0];var decimalPlace=text.indexOf(".");if(decimalPlace>=0){exp-=text.length-decimalPlace-1;text=text.slice(0,decimalPlace)+text.slice(decimalPlace+1)}if(exp<0)throw new Error("Cannot include negative exponent part for integers");text+=new Array(exp+1).join("0");v=text}var isValid=/^([0-9][0-9]*)$/.test(v);if(!isValid)throw new Error("Invalid integer: "+v);if(supportsNativeBigInt){return new NativeBigInt(BigInt(sign?"-"+v:v))}var r=[],max=v.length,l=LOG_BASE,min=max-l;while(max>0){r.push(+v.slice(min,max));min-=l;if(min<0)min=0;max-=l}trim(r);return new BigInteger(r,sign)}function parseNumberValue(v){if(supportsNativeBigInt){return new NativeBigInt(BigInt(v))}if(isPrecise(v)){if(v!==truncate(v))throw new Error(v+" is not an integer.");return new SmallInteger(v)}return parseStringValue(v.toString())}function parseValue(v){if(typeof v==="number"){return parseNumberValue(v)}if(typeof v==="string"){return parseStringValue(v)}if(typeof v==="bigint"){return new NativeBigInt(v)}return v}for(var i=0;i<1e3;i++){Integer[i]=parseValue(i);if(i>0)Integer[-i]=parseValue(-i)}Integer.one=Integer[1];Integer.zero=Integer[0];Integer.minusOne=Integer[-1];Integer.max=max;Integer.min=min;Integer.gcd=gcd;Integer.lcm=lcm;Integer.isInstance=function(x){return x instanceof BigInteger||x instanceof SmallInteger||x instanceof NativeBigInt};Integer.randBetween=randBetween;Integer.fromArray=function(digits,base,isNegative){return parseBaseFromArray(digits.map(parseValue),parseValue(base||10),isNegative)};return Integer}();if(typeof module!=="undefined"&&module.hasOwnProperty("exports")){module.exports=bigInt}if(typeof define==="function"&&define.amd){define("big-integer",[],function(){return bigInt})}"use strict"
+
+/**
+ * The Lightnion Javascript client, top-level namespace.
+ *
+ * @namespace
+ * @see lnn.open
+ * @see lnn.stream.tcp
+ * @see lnn.state
+ * @example
+ * lnn.open('proxy.server', 4990, function(endpoint)
+ * {
+ *     if (endpoint.state != lnn.state.success)
+ *         return
+ *     tcp = lnn.stream.tcp(endpoint, 'api.ipify.org', 80, handler)
+ *     tcp.send('GET / HTTP/1.1\r\nHost: api.ipify.org\r\n\r\n')
+ * })
+ *
+ * function handler(request)
+ * {
+ *     switch(request.state)
+ *     {
+ *         case lnn.state.created: console.log('ready')
+ *             return
+ *         case lnn.state.pending:
+ *             console.log(lnn.enc.utf8(request.recv()))
+ *             return
+ *         case lnn.state.success: console.log('closed')
+ *             return
+ *     }
+ * }
+ *
+ */
+var lnn = {}
+
+/**
+ * Common API constants.
+ * @namespace
+ */
+lnn.api = {}
+
+/**
+ * Supported API version.
+ * @readonly
+ * @default
+ */
+lnn.api.version = "0.1"
+
+/**
+ * Prefix used to craft API endpoints.
+ * @default
+ **/
+lnn.api.url = "/lightnion/api/v0.1"
+
+/**
+ * Port used to craft websockets.
+ * @default
+ **/
+lnn.api.ws_port = "8765"
+
+/**
+ * Request state enumeration.
+ * @enum
+ * @readonly
+ **/
+lnn.state = {
+        /**
+         * operation started
+         * @type channel
+         */
+        started: 1,
+        /**
+         * /guard get success (channel only)
+         * @type channel
+         */
+        guarded: 2,
+        /**
+         * circuit created
+         * @type channel
+         */
+        created: 3,
+        /**
+         * circuit negotiation
+         * @type channel
+         */
+        pending: 4,
+        /** circuit extended (channel only)
+         * @type channel
+         */
+        extpath: 5,
+        /**
+         * ready to use
+         * @type channel
+         */
+        success: 6,
+        /**
+         * operation started
+         * @type stream
+         */
+        started: 1,
+        /**
+         * ready to use
+         * @type stream
+         */
+        created: 3,
+        /**
+         * incoming data
+         * @type stream
+         */
+        pending: 4,
+        /**
+         * completed or closed
+         * @type stream
+         */
+        success: 6
+    }
+/**
+ * Create an empty endpoint object, consider using {@link lnn.open} first.
+ *
+ * @todo TODO: migrate from http+ws to https+wss
+ * @todo TODO: use only one port for https+wss
+ *
+ * @param {string} host (ex: localhost, example.com)
+ * @param {string} port (ex: 4990, 8080, 5000, 443…)
+ * @return {endpoint_t}
+ */
+lnn.endpoint = function(host, port)
+{
+    var http = "http://" + host + ":" + port.toString()
+    http += lnn.api.url
+
+    var ws = "ws://" + host + ":" + lnn.api.ws_port
+    ws += lnn.api.url
+
+    /**
+     * Internal object, stores API urls used for parent endpoint calls.
+     *
+     * <pre>
+     * Note: {@link lnn.api.ws_port} is inlined in .ws and .socket
+     *       (used by {@link lnn.io.socket}).
+     * </pre>
+     *
+     * @interface endpoint_t~urls_t
+     * @see endpoint_t
+     *
+     * @property {string} ws        websocket base url
+     * @property {string} http      http calls base url
+     * @property {string} guard     GET /consensus
+     * @property {string} consensus GET /consensus
+     * @property {string} socket    websocket endpoint
+     * @property {string} channels  POST+DELETE /channels
+     * @property {string} consensus GET /consensus
+     */
+    var urls = {
+        ws: ws,
+        http: http,
+        guard: http + "/guard",
+        socket: ws + "/channels",
+        channels: http + "/channels",
+        consensus: http + "/consensus",
+        descriptors: http + "/descriptors",
+        signing_keys: http + "/signing-keys"
+    }
+
+    /**
+     * Captures the state of a channel, returned by {@link lnn.open}.
+     *
+     * @interface endpoint_t
+     * @see lnn.endpoint
+     *
+     * @property {lnn.state} state              channel state
+     * @property {io.io_t} io                   io adapter in use
+     * @property {endpoint_t~urls_t} urls       static API urls in use
+     * @property {backend_t} stream             stream backend in use
+     * @property {backward_t} backward          backward cryptographic state
+     * @property {forward_t} forward            forward cryptographic state
+     * @property {material_t|half_t} material   shared cryptographic material
+     * @property {null|half_t} auth             stores {@link lnn.auth}
+     *                                          material
+     * @property {Boolean} fast                 is {@link lnn.fast}
+     *                                          in use?
+     */
+    var endpoint = {
+        /**
+         * Host in use, as given to {@link lnn.endpoint} factory.
+         *
+         * @name endpoint_t#host
+         * @readonly
+         */
+        host: host,
+        /**
+         * Port in use, as given to {@link lnn.endpoint} factory.
+         *
+         * @name endpoint_t#port
+         * @readonly
+         */
+        port: port,
+        fast: null,
+        auth: null,
+        urls: urls,
+        io: null,
+        state: 0,
+        /**
+         * Last shared cryptographic material retrieved, written by:
+         * <ul>
+         *  <li> {@link lnn.post.create}
+         *  <li> {@link lnn.post.extend}
+         *  <li> {@link lnn.ntor.hand}
+         *  <li> {@link lnn.ntor.fast}
+         *  <li> {@link lnn.ntor.auth}
+         * </ul>
+         *
+         * Either stores {@link material_t} or {@link half_t}.
+         *
+         * @name endpoint_t#material
+         * @type {material_t|half_t}
+         *
+         * @see lnn.ntor.hand
+         */
+        material: null,
+        forward: null,
+        backward: null,
+        /**
+         * Identifier of the channel in used, written by successful a
+         * {@link lnn.post.create} call.
+         * @name endpoint_t#id
+         * @readonly
+         * @default null
+         */
+        id: null,
+        /**
+         * Polling url endpoint used for polling io requests.
+         * @see lnn.post.channel
+         * @see lnn.io.polling
+         *
+         * @name endpoint_t#url
+         * @readonly
+         * @default null
+         */
+        url: null,
+        /**
+         * Middle and Exit nodes descriptors obtained by {@link lnn.open}
+         * during channel setup.
+         *
+         * <pre>
+         * Note: writing this field will NOT change the path in use.
+         * </pre>
+         *
+         * @name endpoint_t#path
+         * @readonly
+         * @default null
+         */
+        path: null,
+        /**
+         * Guard descriptor obtained by {@link lnn.open} during channel
+         * setup, written by {@link lnn.get.guard}.
+         *
+         * @name endpoint_t#guard
+         * @readonly
+         * @default null
+         */
+        guard: null,
+        stream: null,
+        /**
+         * Consensus obtained by {@link lnn.get.consensus} upon request.
+         *
+         * @name endpoint_t#consensus
+         * @readonly
+         * @default null
+         */
+        consensus: null,
+        
+        /**
+         * Consensus obtained by {@link lnn.get.descriptors} upon request
+         * @name endpoint_t#descriptors
+         * @readonly
+         * @default null
+         */
+        descriptors: null,
+        consensus_raw: null,
+        descriptors_raw: null,
+        signing_keys: null,
+
+        select_path: false,
+
+        /*perform http get/post request*/
+        
+        http_request: function(url, method, data, data_type, success, error) 
+        {   
+            if (error === undefined)
+                error = function() { }
+            if (success === undefined)
+                success = function() { }
+
+           lnn.send_req(endpoint,url, method, data, data_type, success,error)
+        },
+
+        /*destroy the circuit*/
+        close: function(success,error)
+        {
+            lnn.post.close(endpoint,success,error)
+        }
+    }
+
+    return endpoint
+}
+/**
+ * GET operations.
+ * @namespace
+ * @see lnn.get.guard
+ */
+lnn.get = {}
+
+/**
+ * Perform GET /guard and update endpoint accordingly,
+ * see {@link endpoint_t#guard}.
+ *
+ * @param {endpoint_t} endpoint     endpoint in use, stores answer
+ * @param {callback} success        optional, called on success
+ * @param {callback} error          optional, called on error
+ * @example
+ * // Note: lnn.open perform these steps for you whenever needed.
+ * endpoint = lnn.endpoint('localhost', 4990)
+ * lnn.get.guard(endpoint, function (endpoint)
+ * {
+ *     console.log('Guard identity:', endpoint.guard.router.identity)
+ * })
+ * // (can also have error callback: function (endpoint, xhttp_status) { })
+ */
+lnn.get.guard = function(endpoint, success, error)
+{
+    fetch(endpoint.urls.guard, {
+        method: 'GET'
+    }).then(response => {
+        if (response.status == 200) {
+            response.json().then(data => {
+                endpoint.guard = data
+                if (success !== undefined)
+                    success(endpoint)
+            })
+        } else if (error !== undefined) {
+            error(endpoint, response.status)
+        }
+    })
+}
+
+/**
+ * Perform GET /consensus and update endpoint accordingly,
+ * see {@link endpoint_t#consensus}.
+ *
+ * <pre>
+ * Note: provided for testing purposes and currently have no use.
+ * </pre>
+ *
+ * Usage and parameters are similar to {@link lnn.get.guard}, stores the
+ * consensus as parsed from the proxy-server answer.
+ *
+ * @param {endpoint_t} endpoint     endpoint in use, stores answer
+ * @param {callback} success        optional, called on success
+ * @param {callback} error          optional, called on error
+ *
+ * @see lnn.get.guard
+ */
+lnn.get.consensus = function(endpoint, success, error)
+{
+    fetch(endpoint.urls.consensus, {
+        method: 'GET'
+    }).then(response => {
+        if (response.status == 200) {
+            response.json().then(data => {
+                endpoint.consensus = data
+                if (success !== undefined)
+                    success(endpoint)
+                })
+        } else if (error !== undefined) {
+            error(endpoint, response.status)
+        }
+    })
+}
+
+/**
+ * Perform GET /descriptors 
+ */
+lnn.get.descriptors = function(endpoint, success, error){
+    fetch(endpoint.urls.descriptors, {
+        method: 'GET'
+    }).then(response => {
+        if (response.status == 200) {
+            response.json().then(data => {
+                endpoint.descriptors = data
+            
+                if(success !== undefined) success(endpoint)    
+            })
+        } else if (error !== undefined) {
+            error(endpoint, response.status)
+        }
+    })
+}
+
+lnn.get.consensus_raw = function(endpoint, success, error,flavor = 'microdesc')
+{
+    fetch(endpoint.urls.consensus+ "-raw/" + flavor, {
+        method: 'GET'
+    }).then(response => {
+        if (response.status == 200) {
+            response.text().then(data => {
+                endpoint.consensus_raw =  data
+                if (success !== undefined)
+                    success(endpoint)
+                })
+        } else if (error !== undefined) {
+            error(endpoint, response.status)
+        }
+    })
+}
+
+/**
+ * Perform GET /descriptors 
+ */
+lnn.get.descriptors_raw = function(endpoint, success, error,flavor = 'microdesc'){
+    fetch(endpoint.urls.descriptors+ "-raw/" + flavor, {
+        method: 'GET'
+    }).then(response => {
+        if (response.status == 200) {
+            response.text().then(data => {
+                endpoint.descriptors_raw = data
+            
+                if(success !== undefined) success(endpoint)
+            })
+        } else if (error !== undefined) {
+            error(endpoint, response.status)
+        }
+    })
+}
+
+lnn.get.signing_keys = function(endpoint, success, error){
+    fetch(endpoint.urls.signing_keys, {
+        method: 'GET'
+    }).then(response => {
+        if (response.status == 200) {
+            response.json().then(data => {
+                endpoint.signing_keys = data
+            
+                if(success !== undefined) success(endpoint)
+            })
+        } else if (error !== undefined) {
+            error(endpoint, response.status)
+        }
+    })
+}
+
+/**
+ * Cryptographic operations related to ntor handshakes.
+ * @namespace
+ * @see lnn.ntor.hand
+ * @see lnn.ntor.shake
+ */
+lnn.ntor = {}
+
+/**
+ * Number of bytes to derive from successful ntor handshakes.
+ * @readonly
+ * @default
+ */
+lnn.ntor.keybytes = 92
+
+/**
+ * Protocol identifier, prefix tweaks used in ntor handshakes various hashes.
+ * @readonly
+ * @default
+ *
+ * @see lnn.ntor.tweaks
+ */
+lnn.ntor.protoid = "ntor-curve25519-sha256-1"
+
+/**
+ * Tweaks used in ntor handshakes for various hashes and key derivation.
+ * @enum
+ * @readonly
+ *
+ * @see lnn.ntor.hash
+ */
+lnn.ntor.tweaks = {
+    /**
+     * rfc5869 Expand {info}
+     * @type kdf
+     */
+    expand: lnn.ntor.protoid + ":key_expand",
+    /**
+     * rfc5869 Extract {salt}
+     * @type kdf
+     */
+    key: lnn.ntor.protoid + ":key_extract",
+    /**
+     * H({secret_input}, t_verify)
+     * @type ntor
+     */
+    verify: lnn.ntor.protoid + ":verify",
+    /**
+     * suffix of {auth_input}
+     * @type ntor
+     */
+    server: lnn.ntor.protoid + "Server",
+    /**
+     * H({auth_input}, t_mac)
+     * @type ntor
+     */
+    mac: lnn.ntor.protoid + ":mac"}
+
+/**
+ * Tweaked pseudo-random function factory, see {@link lnn.ntor.hash}.
+ *
+ * @param {lnn.ntor.tweaks} tweak      tweak to use
+ * @return {hash_t}
+ *
+ * @see lnn.ntor.hash
+ */
+lnn.ntor.hash_factory = function(tweak)
+{
+    tweak = lnn.ntor.tweaks[tweak]
+    tweak = sjcl.codec.utf8String.toBits(tweak)
+
+    /**
+     * Tweaked pseudo-random function used by {@link lnn.ntor}, returned
+     * by {@link lnn.ntor.hash_factory}.
+     *
+     * @interface hash_t
+     * @see lnn.ntor.hash
+     *
+     * @property {Object} hmac      underlying hmac provider
+     */
+    var hash = {
+        hmac: new sjcl.misc.hmac(tweak),
+        /**
+         * Compute parent tweaked pseudo-random function on provided data.
+         *
+         * @function
+         * @name hash_t#encrypt
+         * @param {Uint8Array} data     input data
+         */
+        encrypt: function(data)
+        {
+            data = lnn.enc.bits(data)
+            data = hash.hmac.encrypt(data)
+            return lnn.dec.bits(data)
+        }}
+    return hash
+}
+
+/**
+ * Tweaked pseudo-random functions used in ntor handshakes.
+ * @enum
+ * @type hash_t
+ *
+ * @see lnn.ntor.tweaks
+ */
+lnn.ntor.hash = {
+        /**
+         * used for H({secret_input}, t_verify) during ntor handshakes
+         */
+        verify: lnn.ntor.hash_factory("verify"),
+        /**
+         * used for H({auth_input}, t_mac) during ntor handshakes
+         */
+        mac: lnn.ntor.hash_factory("mac"),
+        /**
+         * used for extraction during ntor handshakes key derivation
+         */
+        prk: lnn.ntor.hash_factory("key")
+    }
+
+/**
+ * Compute ntor key derivation from given material to n bytes.
+ *
+ * @param {Uint8Array} material     ntor {secret_input} handshake
+ * @param {int} n                   number of bytes to output
+ * @return {Uint8Array}
+ */
+lnn.ntor.kdf = function(material, n)
+{
+    material = lnn.ntor.hash.prk.encrypt(material)
+    var hash = new sjcl.misc.hmac(lnn.enc.bits(material))
+
+    var tweak = lnn.ntor.tweaks["expand"]
+    tweak = sjcl.codec.utf8String.toBits(tweak)
+
+    var idx = 1
+    var out = lnn.enc.bits([])
+    var last = lnn.enc.bits([])
+    while (sjcl.bitArray.bitLength(out) < n * 8)
+    {
+        var idxbits = lnn.enc.bits([idx])
+        var current = sjcl.bitArray.concat(tweak, idxbits)
+
+        last = hash.encrypt(sjcl.bitArray.concat(last, current))
+        out = sjcl.bitArray.concat(out, last)
+        idx = idx + 1
+    }
+
+    return lnn.dec.bits(sjcl.bitArray.clamp(out, n * 8))
+}
+
+
+/**
+ * Compute the first part of a ntor handshake,
+ * writes a {@link half_t} in {@link endpoint_t#material}.
+ *
+ * @param {endpoint_t} endpoint     state where to store half-finished material
+ * @param {Object} descriptor       node descriptor to handshake with
+ * @param {Boolean} encode          if true, returns base64 (default: true)
+ * @return {Uint8Array|string}
+ *
+ * @see lnn.ntor.shake
+ */
+lnn.ntor.hand = function(endpoint, descriptor, encode)
+{
+    if (encode === undefined)
+        encode = true
+    if (descriptor === undefined)
+        descriptor = endpoint.guard
+
+    var identity = lnn.dec.base64(descriptor.router.identity + "=")
+    var onionkey = lnn.dec.base64(descriptor["ntor-onion-key"])
+
+    /**
+    * Internal object, half-finished ntor handshake state in {@link
+    * endpoint_t#material}, created by:
+    * <ul>
+    *   <li> {@link lnn.ntor.hand}
+    *   <li> {@link lnn.ntor.fast}
+    *   <li> {@link lnn.auth}
+    * </ul>
+    * Captures cryptographic state required to finish the handshake.
+    *
+    * @interface half_t
+    *
+    * @property {Object} ntor key pair
+    * @property {Uint8Array} identity node identity
+    * @property {Uint8Array} onionkey node public key
+    */
+    endpoint.material = {
+            ntor: nacl.box.keyPair(),
+            identity: identity,
+            onionkey: onionkey
+        }
+
+    var pubkey = endpoint.material.ntor.publicKey
+    var length = identity.length + onionkey.length + pubkey.length
+
+    var payload = new Uint8Array(length)
+    payload.set(identity, 0)
+    payload.set(onionkey, identity.length)
+    payload.set(pubkey, identity.length+onionkey.length)
+
+    if (encode)
+        return lnn.enc.base64(payload)
+    return payload
+}
+
+/**
+ * Just as {@link lnn.ntor.hand} but without node identity and onion key – used
+ * by {@link lnn.fast}, writes a {@link half_t} in {@link endpoint_t#material}.
+ *
+ * <pre>Note: always returns base64-encoded handshake.</pre>
+ *
+ * @param {endpoint_t} endpoint     state where to store half-finished material
+ * @return {string}
+ *
+ * @see lnn.fast
+ */
+lnn.ntor.fast = function(endpoint)
+{
+    endpoint.material = {}
+    endpoint.material.ntor = nacl.box.keyPair()
+    endpoint.material.identity = null
+    endpoint.material.onionkey = null
+    return lnn.enc.base64(endpoint.material.ntor.publicKey)
+}
+
+/**
+ * Compute the second part of a ntor handshake read
+ * from {@link endpoint_t#material}, returns derived bytes suitable as
+ * {@link lnn.ntor.slice} input.
+ *
+ * <pre>Note: returns null if handshake is invalid.</pre>
+ *
+ * @param {endpoint_t} endpoint     state where to read half-finished material
+ * @param {Uint8Array|string} data  server part of the handshake
+ * @param {boolean} encoded         if true, decode data as base64
+ *                                  (default: true)
+ * @return {Uint8Array|null}
+ *
+ * @see lnn.ntor.hand
+ */
+lnn.ntor.shake = function(endpoint, data, encoded)
+{
+    if (encoded === undefined)
+        encoded = true
+    if (encoded)
+        data = lnn.dec.base64(data)
+
+    var client_pubkey = endpoint.material.ntor.publicKey
+    var client_secret = endpoint.material.ntor.secretKey
+    var server_pubkey = data.slice(0, nacl.scalarMult.scalarLength)
+    var server_auth = data.slice(nacl.scalarMult.scalarLength)
+
+    var identity = endpoint.material.identity
+    var onionkey = endpoint.material.onionkey
+
+    var exp_share = nacl.scalarMult(client_secret, server_pubkey)
+    var exp_onion = nacl.scalarMult(client_secret, onionkey)
+
+    var protoid = lnn.dec.utf8(lnn.ntor.protoid)
+    var length = exp_share.length * 2 + identity.length + onionkey.length * 3
+    var off = 0
+
+    var secret_input = new Uint8Array(length + protoid.length)
+    secret_input.set(exp_share, off); off += exp_share.length
+    secret_input.set(exp_onion, off); off += exp_onion.length
+    secret_input.set(identity, off); off += identity.length
+    secret_input.set(onionkey, off); off += onionkey.length
+    secret_input.set(client_pubkey, off); off += client_pubkey.length
+    secret_input.set(server_pubkey, off); off += server_pubkey.length
+    secret_input.set(protoid, off)
+    var verify = lnn.ntor.hash.verify.encrypt(secret_input)
+
+    var server = lnn.dec.utf8(lnn.ntor.tweaks["server"])
+    var length = verify.length + identity.length + onionkey.length * 3
+    var off = 0
+
+    var auth_input = new Uint8Array(length + server.length)
+    auth_input.set(verify, off); off += verify.length
+    auth_input.set(identity, off); off += identity.length
+    auth_input.set(onionkey, off); off += onionkey.length
+    auth_input.set(server_pubkey, off); off += server_pubkey.length
+    auth_input.set(client_pubkey, off); off += client_pubkey.length
+    auth_input.set(server, off)
+    var client_auth = lnn.ntor.hash.mac.encrypt(auth_input)
+
+    var valid = true
+    length = client_auth.length
+    for (var i = 0; i < length; i++)
+    {
+        if (client_auth[i] != server_auth[i])
+            valid = false
+    }
+
+    var zero_onion = 0
+    var zero_share = 0
+    length = exp_onion.length
+    for (var i = 0; i < length; i++)
+    {
+        if (exp_onion[i] == 0)
+            zero_onion = zero_onion + 1
+        if (exp_share[i] == 0)
+            zero_share = zero_share + 1
+    }
+
+    if (zero_onion == exp_onion.length || zero_share == exp_share.length)
+        valid = false
+
+    if (valid)
+    {
+        return lnn.ntor.kdf(secret_input, lnn.ntor.keybytes)
+    }
+    return null
+}
+
+/**
+ * Build a shared cryptographic {@link material_t} for
+ * {@link endpoint_t#material} from the output of {@link lnn.ntor.shake}.
+ *
+ * <pre>
+ * Note: assume KEY_LEN == 16 (aes256) and HASH_LEN == 20 (sha1) internally.
+ * </pre>
+ *
+ * @param {Uint8Array} material     exactly {@link lnn.ntor.keybytes}
+ *                                  bytes
+ * @return {material_t}
+ */
+lnn.ntor.slice = function(material)
+{
+    var k = 16 // KEY_LEN
+    var h = 20 // HASH_LEN
+
+    /**
+     * Internal object, stores shared cryptographic material
+     * as {@link endpoint_t#material}, returned by {@link lnn.ntor.slice}.
+     *
+     * @interface material_t
+     * @see lnn.ntor.slice
+     *
+     * @property {Uint8Array} key_hash          unused
+     * @property {Uint8Array} forward_key       used in {@link forward_t}
+     * @property {Uint8Array} forward_digest    used in {@link forward_t}
+     * @property {Uint8Array} backward_key      used in {@link backward_t}
+     * @property {Uint8Array} backward_digest   used in {@link backward_t}
+     */
+    var material = {
+        key_hash: material.slice(h * 2 + k * 2),
+        forward_digest: material.slice(0, h),
+        backward_digest: material.slice(h, h * 2),
+        forward_key: material.slice(h * 2, h * 2 + k),
+        backward_key: material.slice(h * 2 + k, h * 2 + k * 2)
+    }
+    return material
+}
+
+// (function only used for proxy auth, not a part of regular ntor handshake)
+
+/**
+ * <pre>
+ * Note: this function is used for proxy-server authentication and is not a
+ * part of regular ntor handshakes nor the Tor specification.
+ * </pre>
+ *
+ * Take an endpoint that uses the proxy-server authentication API (such as one
+ * configured through {@link lnn.auth}) and the base64-encoded fields "auth"
+ * and "data" as returned by the proxy-server, then returns the decoded data
+ * if and only if the authentication succeeded.
+ *
+ */
+lnn.ntor.auth = function(endpoint, client, data)
+{
+    var pending_material = endpoint.material
+    endpoint.material = endpoint.auth
+
+    var data = lnn.dec.base64(data)
+    var material = lnn.ntor.shake(endpoint, client)
+    if (material == null)
+        throw "Invalid auth."
+    endpoint.material = pending_material
+
+    var key = material.slice(0, 32)
+    var nonce = material.slice(32, 32+24)
+    data = nacl.secretbox.open(data, nonce, key)
+    return JSON.parse(lnn.enc.utf8(data))
+}
+lnn.relay = {}
+lnn.relay.payload_len = 509
+lnn.relay.data_len = lnn.relay.payload_len - 11
+lnn.relay.full_len = 5 + lnn.relay.payload_len
+lnn.relay.cmd = {
+        "begin"     : 1,   1: "begin",
+        "data"      : 2,   2: "data",
+        "end"       : 3,   3: "end",
+        "connected" : 4,   4: "connected",
+        "sendme"    : 5,   5: "sendme",
+        "extend"    : 6,   6: "extend",
+        "extended"  : 7,   7: "extended",
+        "truncate"  : 8,   8: "truncate",
+        "truncated" : 9,   9: "truncated",
+        "drop"      : 10, 10: "drop",
+        "resolve"   : 11, 11: "resolve",
+        "resolved"  : 12, 12: "resolved",
+        "begin_dir" : 13, 13: "begin_dir",
+        "extend2"   : 14, 14: "extend2",
+        "extended2" : 15, 15: "extended2"
+    }
+
+lnn.relay.pack = function(cmd, stream_id, data)
+{
+    if (data === undefined)
+        data = new Uint8Array(0)
+    if (stream_id === undefined)
+        stream_id = 0
+
+    if (typeof(data) == "string")
+        data = lnn.dec.utf8(data)
+
+    var cell = new Uint8Array(lnn.relay.full_len) /* padded with \x00 */
+    var view = new DataView(cell.buffer)
+
+    view.setUint32(0, 2147483648 /* fake circuit_id */, false)
+    view.setUint8(4, 3 /* RELAY CELL */, false)
+    view.setUint8(5, lnn.relay.cmd[cmd], false)
+    view.setUint16(6, 0 /* recognized */, false)
+    view.setUint16(8, stream_id, false)
+    // (implicit 4-bytes zeroed digest at offset 10)
+    view.setUint16(14, data.length, false)
+    cell.set(data, 16)
+
+    return cell
+}
+
+lnn.relay.extend = function(handshake, host, port, identity, eidentity)
+{
+    // (assuming that host is an IPv4)
+    var addr = new Uint8Array(host.split("."))
+    if (addr.join(".") != host)
+        throw "Invalid extend IPv4 address, fatal."
+
+    port = parseInt(port)
+    if (typeof(identity) == "string")
+        identity = lnn.dec.base64(identity)
+    if (typeof(eidentity) == "string")
+        eidentity = lnn.dec.base64(eidentity + "=")
+
+    var nspec = 2
+    if (eidentity !== undefined)
+        nspec += 1
+
+    var length = (1                     // Number of link specifiers
+        + 1 + 1 + 6                         // 1. IPv4 addr+port
+        + 1 + 1 + identity.length           // 2. Legacy identity
+        + 2                             // Client handshake type (0x00002 ntor)
+        + 2                             // Client handshake length
+        + handshake.length)             // Actual handshake content
+
+    if (nspec == 3)
+        length += 1 + 1 + eidentity.length  // 3. Ed25519 identity
+
+    var off = 0
+    var data = new Uint8Array(length)
+    var view = new DataView(data.buffer)
+    view.setUint8(off, nspec /* nb of specifiers */, false); off += 1
+
+    view.setUint8(off, 0 /* TLS-over-TCP IPv4 specifier */, false); off += 1
+    view.setUint8(off, 6, false); off += 1      /* length   1 byte  */
+    data.set(addr, off); off += 4        /* address  4 bytes */
+    view.setUint16(off, port, false); off += 2  /* port     2 bytes */
+
+    view.setUint8(off, 2 /* Legacy identity specifier */, false); off += 1
+    view.setUint8(off, identity.length, false); off += 1
+    data.set(identity, off); off += identity.length
+
+    if (nspec == 3)
+    {
+        view.setUint8(off, 3 /* Ed25519 identity specifier */, false); off += 1
+        view.setUint8(off, eidentity.length, false); off += 1
+        data.set(eidentity, off); off += eidentity.length
+    }
+
+    view.setUint16(off, 2 /* handshake: 0x00002 ntor */, false); off += 2
+    view.setUint16(off, handshake.length, false); off += 2
+    data.set(handshake, off)
+
+    return data
+}
+
+lnn.relay.begin = function(host, port)
+{
+    valid = false
+    if (host.match("(\\d\+\\.){3}\\d\+"))
+        valid = true
+    if (host.match("^\\[[\\d:]*\\]$"))
+        valid = true
+    if (!valid && host.slice(-1) != ".")
+        host = host + "."
+    if (host.match("^([a-zA-Z0-9][a-zA-Z0-9\\-]*\\.)*$"))
+        valid = true
+    if (host.slice(-1) == ".")
+        host = host.slice(0, -1)
+
+    if (!valid)
+        throw "Invalid host provided?"
+    var address = lnn.dec.utf8(host + ":" + port)
+
+    var data = new Uint8Array(address.length + 1 + 4) // (1o null, 4o flags)
+    data.set(address, 0)
+    data[address.length+1+3] = 5 // flags IPv6 okay+preferred and IPv4 okay
+
+    return data
+}
+lnn.onion = {}
+lnn.onion.ctr = function(key)
+{
+    var key = lnn.enc.bits(key)
+    var aes = new sjcl.cipher.aes(key)
+
+    var ctr = {
+        prf: aes,
+        nonce: 0,
+        buffer: new Uint8Array(0),
+        extend: function(n)
+        {
+            var length = (Math.floor(n / 16) + 1) * 16
+            var remains = ctr.buffer
+            ctr.buffer = new Uint8Array(length+remains.length)
+            ctr.buffer.set(remains, 0)
+
+            for (var idx = remains.length; idx < ctr.buffer.length; idx += 16)
+            {
+                var nonce = new Uint8Array(16)
+                new DataView(nonce.buffer).setUint32(12, ctr.nonce, false)
+
+                nonce = lnn.enc.bits(nonce)
+                var pad = lnn.dec.bits(ctr.prf.encrypt(nonce))
+
+                ctr.buffer.set(pad, idx)
+                ctr.nonce = ctr.nonce + 1
+            }
+        },
+        process: function(data)
+        {
+            if (data.length > ctr.buffer.length)
+                ctr.extend(data.length)
+
+            var data = data.slice(0)
+            for (var idx = 0; idx < data.length; idx++)
+            {
+                data[idx] ^= ctr.buffer[idx]
+            }
+            ctr.buffer = ctr.buffer.slice(data.length)
+
+            return data
+        }
+    }
+    return ctr
+}
+
+lnn.onion.sha = function(digest)
+{
+    var digest = lnn.enc.bits(digest)
+
+    var sha = {
+        hash: new sjcl.hash.sha1(),
+        digest: function(data)
+        {
+            sha.hash.update(lnn.enc.bits(data))
+            data = new sjcl.hash.sha1(sha.hash).finalize()
+            return lnn.dec.bits(data)
+        }
+    }
+
+    sha.hash.update(digest)
+    return sha
+}
+
+lnn.onion.forward = function(endpoint)
+{
+    var early = 8
+    var layers = []
+    if (endpoint.forward != null)
+    {
+        layers = endpoint.forward.layers
+        layers.push(endpoint.forward)
+        early = endpoint.forward.early
+    }
+
+    var forward = {
+        iv: 0,
+        ctr: lnn.onion.ctr(endpoint.material.forward_key),
+        sha: lnn.onion.sha(endpoint.material.forward_digest),
+        early: early, // (first 8 relay cells will be replaced by relay_early)
+        layers: layers,
+        encrypt: function(cell)
+        {
+            if ((cell.length) != lnn.relay.full_len)
+                throw "Invalid size for cell, fatal."
+
+            var body = cell.slice(5)
+            for (var idx = 0; idx < forward.layers.length; idx++)
+            {
+                body.set(forward.layers[idx].ctr.process(body), 0)
+            }
+            cell.set(forward.ctr.process(body), 5)
+
+            if (forward.early > 0 && cell[4] == 3 /* relay */)
+            {
+                forward.early = forward.early - 1
+                cell[4] = 9 /* relay_early */
+            }
+            return cell
+        },
+        digest: function(cell)
+        {
+            if ((cell.length) != lnn.relay.full_len)
+                throw "Invalid size for cell, fatal."
+
+            var body = cell.slice(5)
+            body.set(new Uint8Array(4), 5)
+            return forward.sha.digest(body).slice(0, 4)
+        }
+    }
+    return forward
+}
+
+lnn.onion.backward = function(endpoint)
+{
+    var layers = []
+    if (endpoint.backward != null)
+    {
+        layers = endpoint.backward.layers
+        layers.push(endpoint.backward)
+    }
+
+    var backward = {
+        iv: 0,
+        ctr: lnn.onion.ctr(endpoint.material.backward_key),
+        sha: lnn.onion.sha(endpoint.material.backward_digest),
+        layers: layers,
+        decrypt: function(cell)
+        {
+            if ((cell.length) != lnn.relay.full_len)
+                throw "Invalid size for cell, fatal."
+
+            var body = cell.slice(5)
+            
+            for (var idx = 0; idx < backward.layers.length; idx++)
+            {
+                body.set(backward.layers[idx].ctr.process(body), 0)
+                
+                cell.set(body, 5)
+            
+                var recognized = cell.slice(6, 8)
+                if (recognized[0] == recognized[1] && recognized[0] == 0)
+                {
+                    var digest = cell.slice(10, 14)
+                    var expect = backward.layers[idx].digest(cell)
+
+                    var length = new DataView(cell.slice(14, 16).buffer).getUint16(0, false)
+
+                    if(expect[0] == digest[0] &&
+                        expect[1] == digest[1] &&
+                        expect[2] == digest[2] &&
+                        expect[3] == digest[3] ) {
+                        if (length <= lnn.relay.data_len)
+                        {
+                            console.log("Warning: Cell sent by intermediate \
+                                tor node, after " + (idx+1) + " hop(s)")
+                            return cell
+                        }   
+                    }
+                }
+            }
+            
+            cell.set(backward.ctr.process(body), 5)
+            var digest = cell.slice(10, 14)
+            cell.set(new Uint8Array(4), 10)
+
+            var recognized = cell.slice(6, 8)
+            if (!(recognized[0] == recognized[1] && recognized[0] == 0))
+            {
+                throw "Invalid cell recognized field."
+            }
+
+            var expect = backward.digest(cell)
+            if (!(true
+                && digest[0] == expect[0]
+                && digest[1] == expect[1]
+                && digest[2] == expect[2]
+                && digest[3] == expect[3]))
+            {
+                throw "Invalid cell digest."
+            }
+            
+            var length = new DataView(cell.slice(14, 16).buffer).getUint16(0, false)
+            if (length > lnn.relay.data_len)
+            {
+                throw "Invalid cell data length."
+            }
+
+            return cell
+
+            
+        },
+        digest: function(cell)
+        {
+            if ((cell.length) != lnn.relay.full_len)
+                throw "Invalid size for cell, fatal."
+
+            var body = cell.slice(5)
+            body.set(new Uint8Array(4), 5)
+            return backward.sha.digest(body).slice(0, 4)
+        }
+    }
+    return backward
+}
+
+lnn.onion.build = function(endpoint, cmd, stream_id, data)
+{
+    var cell = lnn.relay.pack(cmd, stream_id, data)
+    cell.set(endpoint.forward.digest(cell), 10)
+    return endpoint.forward.encrypt(cell)
+}
+
+lnn.onion.peel = function(endpoint, cell)
+{
+    var cell = endpoint.backward.decrypt(cell)
+    
+    
+
+    var length = new DataView(cell.slice(14, 16).buffer).getUint16(0, false)
+
+    var id = new DataView(cell.slice(8, 10).buffer).getUint16(0, false)
+    var cmd = lnn.relay.cmd[cell.slice(5, 6)[0]]
+    var data = cell.slice(16, 16 + length)
+    var relay = {cmd: cmd, stream_id: id, data: data}
+    
+    return relay
+}
+lnn.io = {}
+lnn.io.polling = function(endpoint, handler, success, error)
+{
+    var io = {
+        incoming: [],
+        outcoming: [],
+        pending: 0,
+        handler: handler,
+        success: success,
+        error: error,
+        cell: null,
+        poll: function()
+        {
+            setTimeout(function()
+            {
+                lnn.post.channel(endpoint, io.poll)
+            }, 100)
+        },
+        send: function(cell)
+        {
+            io.outcoming.push(lnn.enc.base64(cell))
+        },
+        recv: function()
+        {
+            if (io.incoming.length < 1)
+                return undefined
+
+            io.cell = io.incoming.shift()
+            return lnn.dec.base64(io.cell)
+        },
+        start: function()
+        {
+            lnn.post.channel(endpoint, io.poll)
+        }
+    }
+    endpoint.io = io
+    return io
+}
+
+lnn.io.socket = function(endpoint, handler, success, error)
+{
+    if (handler === undefined)
+        handler = function(endpoint) { }
+    if (success === undefined)
+        success = function(endpoint) { }
+    if (error === undefined)
+        error = function(endpoint) { }
+
+    var io = {
+        event: null,
+        socket: null,
+        closed: false,
+        incoming: [],
+        outcoming: [],
+        handler: handler,
+        success: success,
+        error: error,
+        cell: null,
+	cell_recv: 0,
+	//cell_sent: 0,
+        send: function(cell)
+        {
+            io.outcoming.push(cell)
+
+            //io.cell_sent += 1
+            //var cell_repr = Array.from(cell.slice(0,20)).map(function(x) {return x.toString(16).padStart(2, '0')}).join('')
+            //console.log("cell ", io.cell_sent.toString(), " sent to wbskt ", cell_repr)
+        },
+        recv: function()
+        {
+            if (io.incoming.length < 1)
+                return undefined
+
+            io.cell = io.incoming.shift()
+
+            io.cell_recv += 1
+            var cell_repr = Array.from(io.cell.slice(0,20)).map(function(x) {return x.toString(16).padStart(2, '0')}).join('')
+            console.log("cell recv by wbskt ", cell_repr)
+
+            return io.cell
+        },
+        start: function() { }
+    }
+    var socket = new window._WebSocket(endpoint.urls.socket + "/" + endpoint.id)
+
+    socket.binaryType = "arraybuffer"
+    socket.onopen = function(event)
+    {
+        io.event = event
+        io.success(endpoint)
+
+        while (io.outcoming.length > 0)
+            io.socket.send(io.outcoming.shift())
+
+        io.send = function(cell)
+        {
+            if (io.closed)
+                throw "Unable to send, connection closed."
+            io.socket.send(cell.buffer)
+
+            //io.cell_sent += 1
+            //var cell_repr = Array.from(cell.slice(0,20)).map(function(x) {return x.toString(16).padStart(2, '0')}).join('')
+            //console.log("cell ", io.cell_sent.toString(), " sent to wbskt ", cell_repr)
+        }
+    }
+    socket.onerror = function(event)
+    {
+        io.event = event
+        io.error(endpoint)
+    }
+    socket.onmessage = function(event)
+    {
+        io.event = event
+
+	var data = new Uint8Array(event.data)
+
+	var cell_repr = Array.from(data.slice(0,20)).map(function(x) {return x.toString(16).padStart(2, '0')}).join('')
+	console.log("cell recv by wbskt ", cell_repr)
+
+        // io.incoming.push(data)
+	io.cell = data
+        io.handler(endpoint, data)
+    }
+    socket.onclose = function(event)
+    {
+        io.event = event
+        io.closed = true
+        io.error(endpoint)
+    }
+
+    endpoint.io = io
+    endpoint.io.socket = socket
+    return io
+}
+lnn.post = {}
+lnn.post.create = function(endpoint, success, error)
+{
+    var payload = null
+    if (endpoint.fast)
+        payload = lnn.ntor.fast(endpoint)
+    else
+        payload = lnn.ntor.hand(endpoint)
+
+    payload = {ntor: payload}
+    if (endpoint.auth != null)
+    {
+        payload["auth"] = lnn.enc.base64(endpoint.auth.ntor.publicKey)
+    }
+    payload = JSON.stringify(payload)
+
+    fetch(endpoint.urls.channels, {
+        method: 'POST',
+        headers: new Headers({'content-type': 'application/json'}),
+        body: payload
+    }).then(response => {
+        if (response.status == 201) {
+            response.json().then(data => {
+
+                var info = data
+                if (endpoint.auth != null)
+                {
+                    info = lnn.ntor.auth(endpoint, info["auth"], info["data"])
+                }
+                endpoint.id = info["id"]
+                endpoint.url = endpoint.urls.channels + "/" + info["id"]
+                endpoint.path = info["path"]
+
+                if (endpoint.fast)
+                {
+                    endpoint.guard = info["guard"]
+                    endpoint.material.identity = lnn.dec.base64(
+                        info["guard"].router.identity + "=")
+                    endpoint.material.onionkey = lnn.dec.base64(
+                        info["guard"]["ntor-onion-key"])
+                }
+    
+                var material = lnn.ntor.shake(endpoint, info["ntor"])
+                if (material == null)
+                    throw "Invalid guard handshake."
+    
+                material = lnn.ntor.slice(material)
+                endpoint.material = material
+    
+                endpoint.forward = lnn.onion.forward(endpoint)
+                endpoint.backward = lnn.onion.backward(endpoint)
+                if (success !== undefined)
+                    success(endpoint)
+    
+            })
+        } else if (error !== undefined) {
+            error(endpoint, response.status)
+        }
+    })
+}
+
+
+lnn.post.circuit_info = function(endpoint, success, error, select_path, tcp_ports)
+{
+    if(select_path === undefined) {
+        select_path = false
+    }
+
+    var payload = {}
+    /**
+    if (endpoint.fast)
+        payload = lnn.ntor.fast(endpoint)
+    else
+        payload = lnn.ntor.hand(endpoint)
+
+    payload = {ntor: payload}*/
+    if (endpoint.auth != null)
+    {
+        payload["auth"] = lnn.enc.base64(endpoint.auth.ntor.publicKey)
+    }
+    payload["select_path"] = select_path.toString()
+    payload = JSON.stringify(payload)
+
+    fetch(endpoint.urls.channels, {
+        method: 'POST',
+        headers: new Headers({'content-type': 'application/json'}),
+        body: payload
+    }).then(response => {
+        if (response.status == 201) {
+            response.json().then(data => {
+                var info = data
+                if (endpoint.auth != null)
+                {
+                    info = lnn.ntor.auth(endpoint, info["auth"], info["data"])
+                }
+
+                endpoint.id = info["id"]
+                endpoint.url = endpoint.urls.channels + "/" + info["id"]
+                
+
+                if (endpoint.fast)
+                {
+                    endpoint.guard = info["guard"]
+                }
+
+                if(!select_path)
+                    endpoint.path = info["path"]
+                else {
+                    endpoint.consensus = lnn.consensusParser.parse(endpoint.consensus_raw)
+                    endpoint.descriptors = lnn.parser.descriptors.parse(endpoint.descriptors_raw)
+                    lnn.parser.descriptors.validate(endpoint.descriptors,endpoint.consensus)
+
+
+                    endpoint.path = lnn.path.select_end_path(endpoint.consensus, endpoint.descriptors, endpoint.guard, true, tcp_ports)
+                    console.log(endpoint.guard)
+                    console.log(endpoint.path)
+                }
+
+                if (success !== undefined)
+                    success(endpoint, info)
+            })
+        } else if (error !== undefined) {
+            error(endpoint, response.status)
+        }
+    })
+}
+
+lnn.post.handshake = function(endpoint, info, success, error)
+{
+    //var handshake = info['handshake']
+    var normal_handler = endpoint.io.handler
+
+    var handler = function(endpoint, material)
+    {
+        endpoint.io.handler = normal_handler
+        //var material = endpoint.io.recv()
+
+        material = lnn.ntor.shake(endpoint, material.slice(7, 7+64), false)
+
+        if (material == null)
+            throw "Invalid guard handshake."
+
+
+        material = lnn.ntor.slice(material)
+        endpoint.material = material
+
+        endpoint.forward = lnn.onion.forward(endpoint)
+        endpoint.backward = lnn.onion.backward(endpoint)
+
+        if (success !== undefined)
+            success(endpoint)
+    }
+
+    endpoint.io.handler = handler
+    
+    var handshake = new Uint8Array(lnn.relay.full_len)
+    var payload = lnn.ntor.hand(endpoint,endpoint.guard,false)
+
+
+    var view = new DataView(handshake.buffer)
+    view.setUint32(0, 2147483648 /* fake circuit_id */, false)
+    view.setUint8(4, 10 /* CREATE2 CELL */, false)
+    view.setUint16(5, 2 /* ntor handshake */, false)
+    view.setUint16(7, payload.length, false)
+    handshake.set(payload,9)
+
+
+    endpoint.io.send(handshake)
+}
+
+lnn.post.channel = function(endpoint, success, error)
+{
+    endpoint.io.pending = endpoint.io.outcoming.length
+
+    fetch(endpoint.url, {
+        method: 'POST',
+        headers: new Headers({'content-type': 'application/json'}),
+        body: JSON.stringify({cells: endpoint.io.outcoming})
+    }).then(response => {
+        if (response.status == 201) {
+            response.json().then(data => {
+                var cells = data["cells"]
+                if (cells === undefined)
+                {
+                    if (endpoint.io.error !== undefined)
+                        endpoint.io.error(endpoint)
+                    return
+                }
+    
+                var pending = endpoint.io.pending
+                if (pending > 0 && endpoint.io.success !== undefined)
+                    endpoint.io.success(endpoint)
+    
+                if (cells.length > 0)
+                {
+                    endpoint.io.incoming = endpoint.io.incoming.concat(cells)
+                    if (endpoint.io.handler !== undefined)
+                        endpoint.io.handler(endpoint)
+                }
+    
+                endpoint.io.outcoming = endpoint.io.outcoming.slice(pending)
+                endpoint.io.pending = 0
+    
+                if (success !== undefined)
+                    success(endpoint)
+            })
+        } else {
+            if (endpoint.io.error !== undefined)
+                endpoint.io.error(endpoint)
+
+            if (error !== undefined)
+                error(endpoint, rq.status)
+        }
+    })
+
+}
+
+lnn.post.extend = function(endpoint, descriptor, success, error)
+{
+    var hand = lnn.ntor.hand(endpoint, descriptor, false)
+
+    var eidentity = descriptor["identity"]["master-key"] // (assuming ed25519)
+    var identity = endpoint.material.identity
+    var addr = descriptor["router"]["address"]
+    var port = descriptor["router"]["orport"]
+
+    var data = lnn.relay.extend(hand, addr, port, identity, eidentity)
+    var cell = lnn.onion.build(endpoint, "extend2", 0, data)
+
+    var extend_error = error
+    var extend_success = success
+    var normal_handler = endpoint.io.handler
+
+    var handler = function(endpoint, data)
+    {
+        endpoint.io.handler = normal_handler
+
+        var cell = lnn.onion.peel(endpoint, data)
+        if (cell == null || cell.cmd != "extended2")
+        {
+            if (extend_error !== undefined)
+                return extend_error(endpoint)
+            throw "Invalid answer, expecting extended2 cell, fatal!"
+        }
+
+        var view = new DataView(cell.data.buffer)
+        var length = view.getUint16(0, false)
+        var data = cell.data.slice(2, 2+length)
+
+        var material = lnn.ntor.shake(endpoint, data, false)
+        material = lnn.ntor.slice(material)
+        endpoint.material = material
+
+        if (material == null && extend_error !== undefined)
+            return extend_error(endpoint)
+
+        endpoint.forward = lnn.onion.forward(endpoint)
+        endpoint.backward = lnn.onion.backward(endpoint)
+
+        if (extend_success !== undefined)
+            extend_success(endpoint)
+    }
+
+    endpoint.io.handler = handler
+    endpoint.io.send(cell)
+}
+
+
+lnn.post.close = function(endpoint, success, error)
+{
+    fetch(endpoint.url, {
+        method: 'DELETE'
+    }).then(response => {
+        if (response.status == 202) {
+            if (success !== undefined)
+                success("Circuit closed")
+        } else if (error !== undefined) {
+            error("Error in closing circuit")
+        }
+    })
+}
+
+lnn.stream = {}
+lnn.stream.entrancy = 0
+lnn.stream.backend = function(error)
+{
+    var sendme = function(cell, endpoint)
+    {
+        if (cell.cmd == "sendme"){
+            endpoint.stream.sendme += 1
+            endpoint.stream.deliverywindow += 100
+            //flush the send queue for the circuit
+
+            while(endpoint.stream.deliverywindow > 0 && endpoint.stream.tosend.length > 0) {
+                var cell = endpoint.stream.tosend.shift()
+                endpoint.io.send(cell)
+                endpoint.stream.deliverywindow -= 1
+            }
+        }
+        else
+        {
+            error(endpoint)
+            throw "Got unexpected control cell."
+        }
+    }
+
+    var backend = {
+        id: 0,
+        tosend: [],
+        sendme: 0,
+        handles: {0: {callback: sendme}},
+        packagewindow: 1000, // (circuit-level receiving window)
+        deliverywindow: 1000,// circuit level sending window
+        register: function(handle)
+        {
+            backend.id += 1
+            handle.id = backend.id
+            handle.packagewindow = 500 // (stream-level receiving window)
+            handle.deliverywindow = 500// stream level sending window
+            backend.handles[backend.id] = handle
+            return backend.id
+        },
+        send: function(cell, endpoint)
+        {
+            if(backend.deliverywindow > 0) { //if we can send
+                endpoint.io.send(cell)
+                backend.deliverywindow -= 1 
+            }
+            else { ///add to the send queue, will be sent when "sendme" is received. 
+                backend.tosend.push(cell)
+            }
+        }
+    }
+    return backend
+}
+
+lnn.stream.handler = function(endpoint, cell)
+{
+    lnn.stream.entrancy += 1
+    if(lnn.stream.entrancy > 1) {
+	console.log("ENTRANCY BUG")
+    }
+
+    if (cell[4] != 3) // (relay cell only)
+    {
+	console.log("Got non-relay cell, dropped: ", cell[4])
+	lnn.stream.entrancy -= 1
+	return
+    }
+
+    cell = lnn.onion.peel(endpoint, cell)
+    if (cell == null)
+    {
+	console.log("Got invalid cell, dropped.")
+	lnn.stream.entrancy -= 1
+	return
+    }
+
+    if (!(cell.stream_id in endpoint.stream.handles))
+    {
+	console.log("Got cell outside stream, dropped: ", cell.stream_id)
+	lnn.stream.entrancy -= 1
+	return
+    }
+
+    var handle = endpoint.stream.handles[cell.stream_id]
+    if (cell.cmd == "end")
+	delete endpoint.stream.handles[cell.stream_id]
+
+    handle.cell = cell
+    handle.callback(cell, endpoint)
+
+    /* handle circuit-level sendme */
+
+
+    if(cell.cmd == "data") {
+        endpoint.stream.packagewindow -= 1
+    }
+    console.log('Update window: ', endpoint.stream.packagewindow)
+    if (endpoint.stream.packagewindow < 900)
+    {
+    	//console.log("Circuit window is ", endpoint.stream.packagewindow)
+    	//console.log("Sending circuit level sendme cell now ", endpoint.io.counter)
+    	endpoint.io.send(lnn.onion.build(endpoint, 'sendme'))
+    	endpoint.stream.packagewindow += 100
+    }
+
+    /* handle stream-level sendme */
+    if(cell.cmd == "data"){
+        handle.packagewindow -= 1
+    }
+    if (handle.packagewindow < 450)
+    {
+        //console.log("Stream window is ", handle.packagewindow)
+        //console.log("Sending stream level sendme cell now ", endpoint.io.counter)
+        cell = lnn.onion.build(endpoint, 'sendme', handle.id)
+        endpoint.io.send(cell)
+        handle.packagewindow += 50
+    }
+
+    lnn.stream.entrancy -= 1
+}
+
+lnn.stream.raw = function(endpoint, handler)
+{
+    var request = {
+        id: null,
+        data: [],
+        cell: null,
+        send: function(cmd, data)
+        {
+
+            var cell = lnn.onion.build(
+                request.endpoint, cmd, request.id, data)
+
+            if(cmd != "data") {
+                endpoint.io.send(cell) //non-data cells dont affect congestion control
+                return
+            }
+
+            if(request.deliverywindow > 0) { //send if stream level window is non zero
+                endpoint.stream.send(cell,endpoint) //send thru circuit level window.
+                request.deliverywindow -= 1 
+            }
+            else {
+                request.tosend.push(cell) //add to queue of stream level window
+            }
+        },
+        recv: function()
+        {
+            var data = request.data
+            request.data = []
+            return data
+        },
+        state: lnn.state.started,
+        packagewindow: null,
+        deliverywindow: null,
+        tosend: [],
+        endpoint: endpoint,
+        callback: function(cell)
+        {
+            if (cell.cmd == "connected")
+                request.state = lnn.state.created
+            if (cell.cmd == "end")
+                request.state = lnn.state.success
+
+            if(cell.cmd == "sendme") { //receive stream level sendme
+                request.deliverywindow += 50
+                while(request.deliverywindow > 0 && request.tosend.length > 0) {
+                    var cell = request.tosend.shift()
+                    endpoint.stream.send(cell,endpoint)
+                    request.deliverywindow -= 1
+                }
+            }
+
+            request.data.push(cell)
+            handler(request)
+
+            if (cell.cmd == "connected")
+                request.state = lnn.state.pending
+        }
+    }
+
+    var id = endpoint.stream.register(request)
+    handler(request)
+    return request
+}
+
+lnn.stream.dir = function(endpoint, path, handler)
+{
+    var request = {
+        id: null,
+        data: "",
+        cell: null,
+        send: function() { throw "No send method on directory streams." },
+        recv: function()
+        {
+            var data = request.data
+            request.data = ""
+            return data
+        },
+        state: lnn.state.started,
+        packagewindow: null,
+        deliverywindow: null,
+        tosend: [],
+        endpoint: endpoint,
+        callback: function(cell)
+        {
+            if (cell.cmd == "connected")
+            {
+                request.state = lnn.state.created
+                handler(request)
+                request.state = lnn.state.pending
+            }
+            if (cell.cmd == "end")
+            {
+                request.state = lnn.state.success
+                handler(request)
+            }
+            if(cell.cmd == "sendme") {
+                request.deliverywindow += 50
+                while(request.deliverywindow > 0 && request.tosend.length > 0) {
+                    var cell = request.tosend.shift()
+                    endpoint.stream.send(cell,endpoint)
+                    request.deliverywindow -= 1
+                }
+            }
+
+            if (cell.cmd != "data")
+                return
+
+            request.data += lnn.enc.utf8(cell.data)
+            handler(request)
+        }
+    }
+
+    var id = endpoint.stream.register(request)
+    var cell = lnn.onion.build(endpoint, "begin_dir", id)
+    endpoint.io.send(cell)
+
+    var data = "GET " + path + " HTTP/1.0\r\n"
+    data += "Accept-Encoding: identity\r\n\r\n"
+    data = lnn.dec.utf8(data)
+
+    cell = lnn.onion.build(endpoint, "data", id, data)
+    request.deliverywindow -= 1
+    endpoint.stream.send(cell,endpoint)
+
+    handler(request)
+    return request
+}
+
+lnn.stream.tcp = function(endPoint, host, port, handler)
+{
+    var request = {
+        id: null,
+        data: new Uint8Array(0),
+        cell: null,
+        cache: [],
+        send: function(send_data)
+        {
+            if(send_data !== undefined){ 
+                request.cache.push(send_data)
+            }
+
+            if(request.state == lnn.state.started) { //not yet recvd reply for relay begin
+                return
+            }
+
+            while(request.cache.length) {
+                var data = request.cache.shift()
+                
+                if (typeof(data) == "string")
+                    data = lnn.dec.utf8(data)
+
+                var payload = new Uint8Array(lnn.relay.data_len)
+                while (data.length > payload.length)
+                {
+                    payload.set(data.slice(0, payload.length), 0)
+                    data = data.slice(payload.length)
+
+                    var cell = lnn.onion.build(
+                        request.endpoint, "data", request.id, payload)
+
+                    if(request.deliverywindow > 0) {
+                        request.endpoint.stream.send(cell,request.endpoint)
+                        request.deliverywindow -= 1 
+                    }
+                    else {
+                        request.tosend.push(cell)
+                    }
+
+                }
+                var cell = lnn.onion.build(
+                        request.endpoint, "data", request.id, data)
+
+                if(request.deliverywindow > 0) {
+                    request.endpoint.stream.send(cell,request.endpoint)
+                    request.deliverywindow -= 1 
+                }
+                else {
+                    request.tosend.push(cell)
+                }
+            }
+
+        },
+        recv: function()
+        {
+            var data = request.data
+            request.data = new Uint8Array(0)
+            return data
+        },
+        close: function()
+        {
+            var data = new Uint8Array(1)
+            data[0] = 6 //reason  done.
+            var cell = lnn.onion.build(request.endpoint,"end",request.id,data)
+            request.endpoint.io.send(cell)
+        },
+        state: lnn.state.started,
+        packagewindow: null,
+        deliverywindow: null,
+        tosend: [],
+        endpoint: endPoint,
+        retries: 0,
+        callback: function(cell)
+        {
+            console.log(cell.cmd)
+            if (cell.cmd == "connected"){
+                request.state = lnn.state.created
+                request.retries = 0
+                request.send()
+            }
+            if (cell.cmd == "end"){
+                if(cell.data[0] == 4) { //REASON EXIT_POLICY
+                    if(request.retries == 3) { //threshold for retrying
+                        console.log( 'Retries limit exceeded. Cant connect to host. ' )
+                        request.state = lnn.state.success
+                        request.retries = 0
+                    }
+                    else {
+                        request.retries += 1
+                        console.log("Retrying to build circuit, retry#: " + request.retries)
+
+                        var ports = [80,443]
+                        if(!ports.includes(port))
+                            ports.push(port)
+
+                        lnn.open(
+                            request.endpoint.host,
+                            request.endpoint.port,
+                            request.success_on_open,
+                            request.error_on_open,
+                            undefined,
+                            request.endpoint.fast,
+                            request.endpoint.auth,
+                            request.endpoint.select_path,
+                            ports
+                        )
+                    }
+                }
+                else {
+                    request.state = lnn.state.success
+                }
+            }
+            if (cell.cmd == "data")
+            {
+                var data = request.data
+                request.data = new Uint8Array(data.length + cell.data.length)
+                request.data.set(data, 0)
+                request.data.set(cell.data, data.length)
+            }
+            if(cell.cmd == "sendme") {
+
+                request.deliverywindow += 50
+                while(request.deliverywindow > 0 && request.tosend.length > 0) {
+                    var cell = request.tosend.shift()
+                    request.endpoint.stream.send(cell,request.endpoint)
+                    request.deliverywindow -= 1
+                }
+            }
+
+
+            handler(request)
+            if (cell.cmd == "connected")
+                request.state = lnn.state.pending
+        },
+        success_on_open: function(endp) {
+            if(endp.consensus == null)
+                endp.consensus = request.endpoint.consensus
+            if(endp.descriptors == null)
+                endp.descriptors = request.endpoint.descriptors
+            if(endp.consensus_raw == null)
+                endp.consensus_raw = request.endpoint.consensus_raw
+            if(endp.descriptors_raw == null)
+                endp.descriptors_raw = request.endpoint.descriptors_raw
+            if(endp.signing_keys == null)
+                endp.signing_keys = request.endpoint.signing_keys
+
+            request.endpoint = endp
+
+            var id = request.endpoint.stream.register(request)
+            var data = lnn.relay.begin(host, port)
+            var cell = lnn.onion.build(request.endpoint, "begin", id, data)
+            request.endpoint.io.send(cell)
+
+            handler(request)   
+        },
+        error_on_open: function(error_msg) {
+            throw error_msg
+        }
+    }
+
+    var id = endPoint.stream.register(request)
+
+    var data = lnn.relay.begin(host, port)
+    var cell = lnn.onion.build(endPoint, "begin", id, data)
+    endPoint.io.send(cell)
+
+    handler(request)
+    return request
+}
+lnn.enc = {}
+lnn.enc.bits = sjcl.codec.bytes.toBits
+lnn.enc.utf8 = nacl.util.encodeUTF8
+lnn.enc.base64 = nacl.util.encodeBase64
+lnn.enc.bin = function(data)
+{
+    var str = ""
+    for(var idx = 0; idx < data.length; idx++)
+        str += String.fromCharCode(data[idx])
+    return str
+}
+
+lnn.dec = {}
+lnn.dec.bits = function(data)
+{
+    return new Uint8Array(sjcl.codec.bytes.fromBits(data))
+}
+lnn.dec.utf8 = nacl.util.decodeUTF8
+lnn.dec.base64 = nacl.util.decodeBase64
+lnn.dec.bin = function(str)
+{
+    var data = new Uint8Array(str.length)
+    for(var idx = 0; idx < str.length; idx++)
+        data[idx] = str.charCodeAt(idx)
+    return data
+}
+lnn.fast = function(host, port, success, error, io, select_path)
+{
+    if(select_path === undefined) 
+        select_path = true
+    return lnn.open(host, port, success, error, io, true, null, select_path)
+}
+
+lnn.auth = function(host, port, suffix, success, error, io, select_path)
+{
+    if(select_path === undefined) 
+        select_path = true
+    if (typeof(suffix) == "string")
+    {
+        suffix = suffix.replace(/-/g, "+").replace(/_/g, "/")
+        suffix = lnn.dec.base64(suffix)
+    }
+    if (lnn.enc.utf8(suffix.slice(0, 5)) != "auth ")
+        throw "Invalid prefix in auth. suffix!"
+
+    suffix = suffix.slice(5)
+    if (suffix.length != 20 + 32)
+        throw "Invalid auth. suffix length!"
+
+    return lnn.open(host, port, success, error, io, true, {
+        identity: suffix.slice(0, 20),
+        onionkey: suffix.slice(20),
+        ntor: nacl.box.keyPair()}, select_path)
+}
+
+lnn.open = function(host, port, success, error, io, fast, auth, select_path, tcp_ports)
+{
+    var endpoint = lnn.endpoint(host, port)
+    if (io === undefined)
+        io = lnn.io.socket
+    if (fast === undefined)
+        fast = false
+    if (error === undefined)
+        error = function() { }
+    if (success === undefined)
+        success = function() { }
+    if(select_path === undefined) 
+        select_path = true
+    if(tcp_ports === undefined )
+        tcp_ports = [80,443]
+
+    endpoint.fast = fast
+    endpoint.auth = auth
+    endpoint.select_path = select_path
+
+    var cb = {
+        guard: function(endpoint)
+        {
+            endpoint.state = lnn.state.guarded
+            
+
+            lnn.post.circuit_info(endpoint, cb.startWebSocket, error, select_path, tcp_ports)
+        },
+	startWebSocket: function(endpoint, info) {
+	    console.log('called startWebSocket cb')
+            endpoint.stream = lnn.stream.backend(error)
+            io(endpoint, lnn.stream.handler, function(endpoint)
+            {
+                var state = endpoint.state
+
+                endpoint.state = lnn.state.pending
+                
+                endpoint.state = state
+            }, error)
+            endpoint.io.start()
+
+            lnn.post.handshake(endpoint, info, cb.create, error)
+	},
+        create: function(endpoint)
+        {
+	    console.log('called create cb')
+            endpoint.state = lnn.state.created
+            
+
+            lnn.post.extend(endpoint, endpoint.path[0], cb.extend, error)
+        },
+        extend: function(endpoint)
+        {
+	    console.log('called extend cb')
+            endpoint.state = lnn.state.extpath
+            
+
+            lnn.post.extend(endpoint, endpoint.path[1], cb.success, error)
+        },
+        success: function(endpoint)
+        {
+	    console.log('called success cb')
+            endpoint.state = lnn.state.success
+            success(endpoint)
+            endpoint.io.success = function() { }
+        }
+    }
+
+    endpoint.state = lnn.state.started
+    
+
+    if(select_path) {
+        lnn.get.consensus_raw(endpoint,function()
+        {
+            lnn.get.signing_keys(endpoint,function() 
+            {
+                if(!lnn.signature.verify(endpoint.consensus_raw,endpoint.signing_keys,0.5))
+                {
+                    throw "signature verification failed."
+                }
+                console.log("signature verification success")
+                lnn.get.descriptors_raw(endpoint,function()
+                {
+                    if (endpoint.fast)
+                        lnn.post.circuit_info(endpoint, cb.startWebSocket, error, select_path, tcp_ports)
+                    else
+                        lnn.get.guard(endpoint, cb.guard, error)
+
+                },function()
+                {
+                    throw "Failed to fetch raw descriptors"
+                })
+            },function() 
+            {
+                throw "Failed to fetch signing keys"
+            })    
+        },function()
+        {
+            throw "Failed to fetch raw consensus!"
+        })
+    } 
+    else 
+    {
+        // fast channel: one-request channel creation (no guard pinning)
+        if (endpoint.fast)
+            lnn.post.circuit_info(endpoint, cb.startWebSocket, error, select_path, tcp_ports)
+        else
+            lnn.get.guard(endpoint, cb.guard, error)
+    }
+
+    return endpoint
+}
+
+
+/***** high level apis ****/
+
+lnn.agents = [
+    "curl/7.61.0",
+    "curl/7.60.0",
+    "curl/7.59.0",
+    "curl/7.58.0",
+    "curl/7.57.0",
+    "curl/7.56.1",
+    "curl/7.56.0",
+    "curl/7.55.1",
+    "curl/7.55.0",
+    "curl/7.54.1",
+    "curl/7.54.0",
+    "curl/7.53.1",
+    "curl/7.53.0",
+    "curl/7.52.1",
+    "curl/7.52.0",
+    "curl/7.51.0",
+    "curl/7.50.3",
+    "curl/7.50.2",
+    "curl/7.50.1",
+    "curl/7.50.0",
+    "curl/7.50.0",
+    "curl/7.49.1",
+    "curl/7.49.0",
+    "curl/7.48.0",
+    "curl/7.47.1",
+    "curl/7.47.0",
+    "curl/7.46.0",
+    "curl/7.45.0",
+    "curl/7.44.0",
+    "curl/7.43.0",
+    "curl/7.42.1",
+    "curl/7.42.0",
+    "curl/7.41.0",
+    "curl/7.40.0",
+    "curl/7.39.0",
+    "curl/7.38.0"
+]
+
+lnn.send_req = function(endpoint,url, method, data, data_type, success,error) {
+    var agent = lnn.agents[Math.floor(Math.random() * lnn.agents.length)]
+
+    var data_recv = ''
+    var length = null
+    var rawlen = 0
+    var headers = null
+    var handler = function(request) 
+    {
+        if(request.state == lnn.state.success) {
+            error('Connection closed')
+            return
+        }
+
+        if (request.state != lnn.state.pending)
+            return
+
+        var payload = request.recv()
+        rawlen += payload.length
+        data_recv += lnn.enc.utf8(payload)
+        
+        
+        if (length == null)
+        {
+            if (data_recv.match('\r\n\r\n'))
+            {
+                headers = data_recv.split('\r\n\r\n')[0]
+                var len = headers.match('Content-Length: ([^\r]*)')
+                length = parseInt(len[1])
+            }
+        }
+        
+        if (headers == null || length == null || rawlen < headers.length + length)
+            return
+
+        request.close()
+        console.log("Stream closed")
+
+        success({headers: headers,
+            data: data_recv.slice(headers.length + 4)})
+        success = function(request) { }
+    }
+
+    if (url.slice(0, 7) == "http://")
+        url = url.slice(7)
+    else
+    {
+        error ('Urls must start with http://')
+        return
+    }
+
+    var path = "/" + url.split("/").slice(1).join("/")
+    var host = null
+    if (url.match("/") == null)
+        host = url
+    else
+        host = url.split("/", 1)[0]
+
+    var port = "80"
+    if (host.match(":") != null)
+        port = host.split(":", 2)[1]
+
+    if(method != "GET" && method != "POST") {
+        error ('Unsupported method')
+        return
+    }
+
+    if(data_type != "json" && data_type != "form") {
+        error('Unsupported content type')
+        return
+    }
+
+    if(data_type == "json") 
+        data_type = "application/json"
+    else
+        data_type = "application/x-www-form-urlencoded"
+    
+    if(method == "GET" && data.length > 0) {
+        data = "?" + data
+        path += data
+        path = encodeURI(path)
+    }
+    else if(data_type == "application/x-www-form-urlencoded"){
+        data = encodeURI(data)
+    }
+
+    var payload = [
+        [method, path, "HTTP/1.1"].join(" "),
+        ["Host:", host].join(" "),
+        ["User-Agent:", agent].join(" "),
+        ["Accept:", "*/*"].join(" ")]
+
+    if(method == "POST") {
+        payload.push(["Content-Length:",data.length].join(" "))
+        payload.push(["Content-Type:",data_type].join(" "))
+        payload = payload.join("\r\n") + "\r\n\r\n" + data + "\r\n"
+    } 
+    else{
+        payload = payload.join("\r\n") + "\r\n\r\n"
+    }
+
+
+    console.log(payload)
+
+    host = host.split(':')[0]
+    lnn.stream.tcp(endpoint, host, port, handler).send(payload)
+}
+
+lnn.http_request = function(url, method, data, data_type, success, error,tor_host,tor_port) 
+{   
+    if(tor_host === undefined) 
+        tor_host = 'localhost'
+    if(tor_port === undefined) 
+        tor_port = 4990
+    if (error === undefined)
+        error = function() { }
+    if (success === undefined)
+        success = function() { }
+
+    var closed = false
+
+    var channel = lnn.open(
+        tor_host,tor_port,function(endpoint)
+        {
+            if (endpoint.state != lnn.state.success) {
+                return
+            }
+            
+            lnn.send_req(endpoint,url, method, data, data_type,function(request) {
+                //close circuit here.
+                if(!closed) {
+                    endpoint.close(function(success_msg) {console.log(success_msg)})
+                    closed = true
+                }
+                success(request)
+            },function(message) {
+                //close circuit here
+                if(!closed) {
+                    endpoint.close(function(success_msg) {console.log(success_msg)})
+                    closed = true
+                }
+                error(message)
+            })
+
+        }
+        ,function() 
+        {
+            error("Connection establishment failed")
+        }
+    )
+}
+
+
+lnn.signature = {}
+
+/**
+ *  This function verifies the given raw consensus
+ *
+ *   Note 1: TOR does not perform a full PKCS#1 v1.5 signature (RFC 2313) as mentioned in the TOR's reference.
+ *           The padding of the data that must be signed is done following the reference (see subsection 8.1 of the
+ *           RFC 2313 for more details), however the digest is not wrapped into the data structure described in the
+ *           subsection 10.1.2. This is the reason why RSA is performed manually.
+ * 
+ *   Note 2: <script src="http://peterolson.github.com/BigInteger.js/BigInteger.min.js"></script> must be included in the HTML file using this function.
+ * 
+ * @param {String} raw_cons the consensus we want to verify
+ * @param {Object} keys object mapping the authorities' fingerprint to their key with the following format:
+ *                  fingerprint:{
+ *                       pem: key_pem            //the key in pem format
+ *                       modulus: modulus        //the modulus of the key as a string
+ *                       exponent: exponent      //the exponent of the key as a string
+ *                   }
+ * @param {Number} minimal the minimal percentage of the signatures that must be verified in order to verify the consensus
+ * @returns {Boolean} the result of the verification
+ */
+lnn.signature.verify = function (raw_cons, keys, minimal, flavor = 'microdesc') {
+    if (minimal === undefined) {
+        minimal = 0.5
+    } else if (minimal <= 0 || minimal > 1) {
+        throw 'The minimal percentage must be between 0 (not included) and 1'
+    }
+
+    let nbr_verified = 0
+    let total = 0
+
+    //get the hash of the consensus
+    let split_cons = raw_cons.split('directory-signature ')
+    raw_cons = split_cons[0] + "directory-signature "
+
+    let hash = (flavor == 'unflavored') ? sjcl.hash.sha1.hash(raw_cons) : sjcl.hash.sha256.hash(raw_cons)
+    hash = sjcl.codec.hex.fromBits(hash)
+
+    // Get the signatures and the signing keys
+    let sig_and_keys_digests = lnn.signature.get_sig_and_keys_digests(split_cons.splice(1))
+
+    for (let fingerprint in sig_and_keys_digests) {
+        total++
+        
+        let key = keys[fingerprint]
+        let e = bigInt(key["exponent"])
+        let n = bigInt(key["modulus"])
+        let key_digest = sig_and_keys_digests[fingerprint]["signing-key-digest"]
+
+        if (key === undefined || !lnn.signature.verify_key(key["pem"], key_digest)) continue
+
+        let signature = sig_and_keys_digests[fingerprint]["signature"]
+        let sig_big_int = lnn.signature.get_signature_big_int(signature)
+        let padded_hash = lnn.signature.get_hash(sig_big_int, e, n)
+        let recovered_hash = lnn.signature.get_hash_from_rsa_cipher(padded_hash)
+
+        nbr_verified = (recovered_hash === undefined || recovered_hash !== hash) ? nbr_verified : nbr_verified + 1
+    }
+
+    return nbr_verified > minimal * total
+}
+
+/**
+ * This function get the digest encrypted by the RSA corresponding to given the exponent and modulus
+ *
+ * @param {BigInteger} signature the encrypted signature
+ * @param {BigInteger} exponent the exponent of the key
+ * @param {BigInteger} modulus the modulus of the key
+ * @returns {String} the padded hash 
+ */
+lnn.signature.get_hash = function (signature, exponent, modulus) {
+    let padded_hash = signature.modPow(exponent, modulus).toString(16)
+    let size = modulus.toString(16).length
+    let offset = size - padded_hash.length
+    for (let i = 0; i < offset; i++) {
+        padded_hash = "0" + padded_hash
+    }
+    return padded_hash
+}
+
+/**
+ * This function verifies that the key corresponds to one that signed the consensus
+ * 
+ * @param {string} key the key with the format pem
+ * @param {string} key_digest the hex digest extracted from the consensus
+ */
+lnn.signature.verify_key = function (key, key_digest) {
+    let raw_key = key.split('\n')
+    let b_index = raw_key.indexOf("-----BEGIN RSA PUBLIC KEY-----")
+    let e_index = raw_key.indexOf("-----END RSA PUBLIC KEY-----")
+
+    raw_key = raw_key.splice(b_index + 1, e_index - b_index - 1).join("")
+    raw_key = sjcl.codec.base64.toBits(raw_key)
+    let hash = sjcl.hash.sha1.hash(raw_key)
+    hash = sjcl.codec.hex.fromBits(hash)
+    return hash.toUpperCase() === key_digest.toUpperCase()
+}
+
+
+/**
+ * This function gets the signatures and the signing key digests from the authority section of the consensus
+ *
+ * @param {Array} remaining the remaining part of the consensus after the split by "directory-signature "
+ * @returns {object} the following mapping:
+ *      fingerprint:{
+ *          signature-key-digest
+ *          signature
+ *      }
+ */
+lnn.signature.get_sig_and_keys_digests = function (remaining) {
+    let sign_and_digests = {}
+    for (let r of remaining) {
+        if (r !== '') {
+            let split = r.split('\n')
+            let b_index = split.indexOf("-----BEGIN SIGNATURE-----")
+            let e_index = split.indexOf("-----END SIGNATURE-----")
+            let sign = split.splice(b_index + 1, e_index - b_index - 1).join("")
+            let digests = split[0].split(" ")
+
+            let [fingerprint, key_hex_digest] = (digests.length == 2) ? digests : digests.splice(1)
+
+            sign_and_digests[fingerprint] = {
+                "signing-key-digest": key_hex_digest,
+                "signature": sign
+            }
+        }
+    }
+    return sign_and_digests
+}
+/**
+ * 
+ * This function transforms a signature in base64 into a bigInteger
+ * @param {string} signature the signature encoded in base64
+ * @returns {BigInteger} the integer corresponding to the signature
+ */
+lnn.signature.get_signature_big_int = function (signature) {
+    let sig_hex = sjcl.codec.hex.fromBits(sjcl.codec.base64.toBits(signature))
+    let sig = bigInt(sig_hex, 16)
+    return sig
+}
+
+/**
+ * Verifies that the cipher has the required format and extract the substring corresponding to the hash of the consensus
+ *
+ * @param {string} cipher the padded hash of the consensus
+ * @returns {string} the hash of the consensus
+ */
+lnn.signature.get_hash_from_rsa_cipher = function (padded_hash) {
+
+    if (!padded_hash.startsWith("0001")) return undefined
+    padded_hash = padded_hash.substring(4)
+    let sep_index = padded_hash.indexOf("00")
+
+    for (let i = 1; i < sep_index; i++) {
+        if (padded_hash.charAt(i) !== "f") return undefined
+    }
+
+    return padded_hash.substring(sep_index + 2)
+}
+lnn.consensusParser = {} 
+lnn.consensusParser.parse = function(rawText,flavor = 'microdesc') {
+    if (typeof rawText !== 'string') throw `Error: the consensus must be given as a string`
+    lnn.consensusParser.lines = rawText.split('\n')
+    lnn.consensusParser.words = lnn.consensusParser.lines[0].split(' ')
+    lnn.consensusParser.consensus = {}
+    lnn.consensusParser.validFlags = ['Authority', 'BadExit', 'Exit', 'Fast', 'Guard', 'HSDir', 'NoEdConsensus', 'Stable', 'StaleDesc', 'Running', 'Valid', 'V2Dir']
+    lnn.consensusParser.index = 0
+    lnn.consensusParser.totalLines = lnn.consensusParser.lines.length
+
+    if(flavor != 'unflavored' && flavor != 'microdesc') {
+        throw 'Error: Unexpected flavor'
+    }
+    lnn.consensusParser.consensus['flavor'] = flavor
+
+    lnn.consensusParser.consumeHeaders()
+    lnn.consensusParser.consumeAuthority()
+    lnn.consensusParser.consumeRouters()
+    lnn.consensusParser.consumeFooter()
+
+    return lnn.consensusParser.consensus
+}
+
+//----------------------------------HEADERS PARSER--------------------------------
+
+/**
+ * Function that parses the headers
+ */
+lnn.consensusParser.consumeHeaders = function() {
+    lnn.consensusParser.consumeNetworkStatusVersion()
+    lnn.consensusParser.consumeVoteStatus()
+    lnn.consensusParser.consumeConsensusMethod()
+    lnn.consensusParser.consumeDate('valid-after')
+    lnn.consensusParser.consumeDate('fresh-until')
+    lnn.consensusParser.consumeDate('valid-until')
+    lnn.consensusParser.consumeVotingDelay()
+    lnn.consensusParser.tryConsumeVersions('client-versions')
+    lnn.consensusParser.tryConsumeVersions('server-versions')
+
+    while (lnn.consensusParser.words[0] === 'package') {
+        lnn.consensusParser.consumePackage()
+    }
+
+    lnn.consensusParser.consumeKnownFlags()
+    lnn.consensusParser.tryConsumeProtocols('recommended-client-protocols')
+    lnn.consensusParser.tryConsumeProtocols('recommended-relay-protocols')
+    lnn.consensusParser.tryConsumeProtocols('required-client-protocols')
+    lnn.consensusParser.tryConsumeProtocols('required-relay-protocols')
+    lnn.consensusParser.tryConsumeParams()
+    lnn.consensusParser.tryConsumeShareRand('shared-rand-previous-value')
+    lnn.consensusParser.tryConsumeShareRand('shared-rand-current-value')
+
+}
+
+/**
+ * Parse the field network-status-version
+ */
+lnn.consensusParser.consumeNetworkStatusVersion = function() {
+    let expectedLength = 2
+    if(lnn.consensusParser.consensus.flavor == 'microdesc') {
+        expectedLength = 3
+        if(lnn.consensusParser.words[2] != 'microdesc')
+            throw 'Error: Flavor mismatch in header.'
+    }
+
+    let version = lnn.consensusParser.tryParseKeyValueInteger('network-status-version',expectedLength)
+    lnn.consensusParser.consensus['headers'] = {
+        'network-status-version': {
+            'version': version,
+            'flavor': lnn.consensusParser.consensus.flavor
+        }
+    }
+
+    lnn.consensusParser.nextLine()
+}
+
+/**
+ * Parse the field vote-status
+ * @throws WrongParameterException if status is not consensus
+ */
+lnn.consensusParser.consumeVoteStatus = function() {
+    let status = lnn.consensusParser.tryParseKeyValueString('vote-status')
+    if (status !== 'consensus') throw `WrongParameterException: vote-status must be consensus`
+    lnn.consensusParser.consensus['headers']['vote-status'] = status
+    lnn.consensusParser.nextLine()
+}
+
+/**
+ * Parse the field consensus-method
+ */
+lnn.consensusParser.consumeConsensusMethod = function() {
+    lnn.consensusParser.consensus['headers']['consensus-method'] = lnn.consensusParser.tryParseKeyValueInteger('consensus-method')
+    lnn.consensusParser.nextLine()
+}
+
+/**
+ * Parse the fields valid-after, fresh-until and valid-until
+ * @param {strin} word 
+ */
+lnn.consensusParser.consumeDate = function(word) {
+    lnn.consensusParser.consensus['headers'][word] = lnn.consensusParser.tryParseDate(word)
+    lnn.consensusParser.nextLine()
+}
+
+/**
+ * Parse the field voting-delay
+ * @throws NotEqualException if lnn.consensusParser.words[0] != word
+ * @throws WrongParameterException if lnn.consensusParser.words[1] or lnn.consensusParser.words[2] is not a number
+ * @throws WrongFormatException if lnn.consensusParser.words.length is not 3
+ */
+lnn.consensusParser.consumeVotingDelay = function() {
+    lnn.consensusParser.checkFormat(3, 'voting-delay')
+    if (isNaN(lnn.consensusParser.words[1])) throw `WrongParameterException: ${words[1]} is not a number`
+    if (isNaN(lnn.consensusParser.words[2])) throw `WrongParameterException: ${words[2]} is not a number`
+
+    lnn.consensusParser.consensus['headers']['voting-delay'] = {
+        'vote': Number(lnn.consensusParser.words[1]),
+        'dist': Number(lnn.consensusParser.words[2])
+    }
+
+    lnn.consensusParser.nextLine()
+}
+
+/**
+ * Try to parse the fields client-versions or server-versions if they are present
+ * @param {string} word either client-versions or server-versions
+ */
+lnn.consensusParser.tryConsumeVersions = function(word) {
+
+    if (lnn.consensusParser.consensus['headers'][word] !== undefined) throw `AlreadyPresentException: ${word} can only appear once`
+    if (lnn.consensusParser.words[0] === word) {
+        lnn.consensusParser.consensus['headers'][word] = lnn.consensusParser.tryParseCommaSeparatedList(word)
+        lnn.consensusParser.nextLine()
+    }
+}
+
+/**
+ * Parses the field package
+ * @throws WrongFormatException if lnn.consensusParser.words.length is smaller than 5
+ */
+lnn.consensusParser.consumePackage = function() {
+
+    if (lnn.consensusParser.words.length < 5) throw `WrongFormatException: at least 5 fields are expected`
+    if (lnn.consensusParser.consensus['headers']['package'] === undefined) lnn.consensusParser.consensus['headers']['package'] = []
+
+    let pack = {
+        'name': lnn.consensusParser.words[1],
+        'version': lnn.consensusParser.words[2],
+        'url': lnn.consensusParser.words[3]
+    }
+    let remaining = lnn.consensusParser.words.splice(4, lnn.consensusParser.words.length)
+    let digests = {}
+
+    for (let digest of remaining) {
+        let tmp = digest.split('=')
+        digests[tmp[0]] = tmp[1]
+    }
+
+    pack['digests'] = digests
+    lnn.consensusParser.consensus['headers']['package'].push(pack)
+    lnn.consensusParser.nextLine()
+}
+
+/**
+ * Parses the field package
+ * @throws NotValidFlagException if one of the flags is not in the valid flag list
+ */
+lnn.consensusParser.consumeKnownFlags = function() {
+    lnn.consensusParser.consensus['headers']['flags'] = lnn.consensusParser.tryParseFlags()
+    lnn.consensusParser.nextLine()
+}
+
+/**
+ * Try to parse the fields recommended-client-protocols, recommended-relay-protocols, required-client-protocols and required-client-protocols if they are present
+ * @param {string} word either client-versions or server-versions
+ */
+lnn.consensusParser.tryConsumeProtocols = function(word) {
+    if (lnn.consensusParser.consensus['headers'][word] !== undefined) throw `AlreadyPresentException: ${word} can only appear once`
+    if (lnn.consensusParser.words[0] === word) {
+        lnn.consensusParser.consensus['headers'][word] = lnn.consensusParser.tryParseRanges(lnn.consensusParser.words.splice(1, lnn.consensusParser.words.length))
+        lnn.consensusParser.nextLine()
+    }
+
+}
+/**
+ * Try to parse the field params if it is present
+ */
+lnn.consensusParser.tryConsumeParams = function() {
+    if (lnn.consensusParser.words[0] === 'params') {
+        lnn.consensusParser.consensus['headers']['params'] = lnn.consensusParser.tryParseParams()
+        lnn.consensusParser.nextLine()
+    }
+}
+
+/**
+ * Try to parse the fields shared-rand-previous-value and shared-rand-current-value if they are present
+ * @param {string} word specify the field 
+ */
+lnn.consensusParser.tryConsumeShareRand = function(word) {
+    if (lnn.consensusParser.consensus['headers'][word] !== undefined) throw `AlreadyPresentException: ${word} can only appear once`
+    if (lnn.consensusParser.words[0] === word) {
+        let reveals = Number(lnn.consensusParser.words[1])
+        let value = lnn.consensusParser.words[2]
+
+        if (!lnn.consensusParser.isBase64(value)) throw `InvalidParameterException: value ${value} must be in hexadecimal`
+
+        lnn.consensusParser.consensus['headers'][word] = {
+            'NumReveals': reveals,
+            'Value': value
+        }
+
+        lnn.consensusParser.nextLine()
+    }
+}
+
+//-------------------AUTHORITY PARSER--------------------------------
+/**
+ * Parses the authority part of the consensus
+ * @throws InvalidIPException if address or IP are not valid IP addresses
+ * @throws InvalidPortException if dirport or orport are not valid ports
+ */
+lnn.consensusParser.consumeAuthority = function() {
+    if (lnn.consensusParser.words[0] !== 'dir-source') throw `WrongFieldException: there must be at least one dir-source`
+    lnn.consensusParser.consensus['dir-sources'] = []
+
+    while (lnn.consensusParser.words[0] === 'dir-source') {
+        lnn.consensusParser.consumeDirSource()
+    }
+}
+
+/**
+ * Parse a dir-source
+ * @throws InvalidIPException if the IP-address is not valid
+ * @throws InvalidPortException if dirport or orport are not valid
+ * @throws InvalidParameterException if the vote-digest is not in hexadecimal
+ */
+lnn.consensusParser.consumeDirSource = function() {
+    let dirSource = {}
+    lnn.consensusParser.checkFormat(7, 'dir-source')
+
+    dirSource['nickname'] = lnn.consensusParser.words[1]
+
+    if (!lnn.consensusParser.isHex(lnn.consensusParser.words[2])) throw `InvalidParameterException: vote-digest ${lnn.consensusParser.words[2]} must be in hexadecimal`
+    dirSource['identity'] = lnn.consensusParser.words[2].toUpperCase()
+
+    dirSource['hostname'] = lnn.consensusParser.words[3]
+
+    if (!lnn.consensusParser.isValidIP(lnn.consensusParser.words[4])) throw `InvalidIPException: ${lnn.consensusParser.words[4]} is not a valid IP`
+
+    dirSource['address'] = lnn.consensusParser.words[4]
+
+    if (!lnn.consensusParser.isValidPort(Number(lnn.consensusParser.words[5])) || !lnn.consensusParser.isValidPort(Number(lnn.consensusParser.words[6]))) throw `InvalidPortException`
+
+    dirSource['dirport'] = Number(lnn.consensusParser.words[5])
+    dirSource['orport'] = Number(lnn.consensusParser.words[6])
+
+    lnn.consensusParser.nextLine()
+    dirSource['contact'] = lnn.consensusParser.words.splice(1, lnn.consensusParser.words.length).join(' ')
+    lnn.consensusParser.nextLine()
+    let digest = lnn.consensusParser.tryParseKeyValueString('vote-digest').toUpperCase()
+
+    if (!lnn.consensusParser.isHex(digest)) throw `InvalidParameterException: vote-digest ${digest} must be in hexadecimal`
+
+    dirSource['vote-digest'] = digest
+    lnn.consensusParser.consensus['dir-sources'].push(dirSource)
+    lnn.consensusParser.nextLine()
+
+
+}
+
+//-------------------ROUTER PARSER-----------------------------------
+/**
+ * Consume each router status entry
+ * @throws WrongFieldException if there is no router entry
+ */
+lnn.consensusParser.consumeRouters = function() {
+    if (lnn.consensusParser.words[0] !== 'r') throw `WrongFieldException: there must be at least one router`
+    lnn.consensusParser.consensus['routers'] = []
+
+    while (lnn.consensusParser.words[0] === 'r') {
+        let router = {}
+        lnn.consensusParser.consumeRfield(router)
+
+        if (lnn.consensusParser.words[0] === 'a') router['a'] = []
+        while (lnn.consensusParser.words[0] === 'a') {
+            lnn.consensusParser.consumeAfield(router)
+        }
+
+        if(lnn.consensusParser.consensus.flavor == 'microdesc') {
+            lnn.consensusParser.consumeMfield(router)
+        }
+
+        lnn.consensusParser.consumeSfield(router)
+        lnn.consensusParser.tryConsumeVfield(router)
+        lnn.consensusParser.tryConsumePrField(router)
+        lnn.consensusParser.tryConsumeWfield(router)
+        lnn.consensusParser.tryConsumePfield(router)
+
+        lnn.consensusParser.consensus['routers'].push(router)
+    }
+
+}
+
+/**
+ * Parses the field 'r' of the router status entry
+ * @param {} router 
+ * @throws InvalidParameterException if the fields are not valid
+ */
+lnn.consensusParser.consumeRfield = function(router) {
+    let len = 9
+    if(lnn.consensusParser.consensus.flavor == 'microdesc') len = 8
+    lnn.consensusParser.checkFormat(len, 'r')
+
+    router['nickname'] = lnn.consensusParser.words[1]
+
+    if (!lnn.consensusParser.isBase64(lnn.consensusParser.words[2] + "=")) throw `InvalidParameterException: identity ${lnn.consensusParser.words[2]} must be in base64`
+    router['identity'] = lnn.consensusParser.words[2]
+    
+    let nxt = 3
+    if(lnn.consensusParser.consensus.flavor == 'unflavored') {
+        if (!lnn.consensusParser.isBase64(lnn.consensusParser.words[3] + "=")) throw `InvalidParameterException: digest ${lnn.consensusParser.words[3]} must be in base64`
+        router['digest'] = lnn.consensusParser.words[3]
+        nxt += 1
+    }
+
+    if (!lnn.consensusParser.isValidDate(lnn.consensusParser.words[nxt])) throw `InvalidParameterException: date ${lnn.consensusParser.words[nxt]} must have the format YYYY-MM-DD`
+    router['date'] = lnn.consensusParser.words[nxt]
+
+    if (!lnn.consensusParser.isValidTime(lnn.consensusParser.words[nxt + 1])) throw `InvalidParameterException: time ${lnn.consensusParser.words[nxt + 1]} must have the format HH:MM:SS`
+    router['time'] = lnn.consensusParser.words[nxt + 1]
+
+    if (!lnn.consensusParser.isValidIP(lnn.consensusParser.words[nxt + 2])) throw `InvalidParameterException: IP ${lnn.consensusParser.words[nxt + 2]} must be a valid IP address`
+    router['address'] = lnn.consensusParser.words[nxt + 2]
+
+    if (!lnn.consensusParser.isValidPort(Number(lnn.consensusParser.words[nxt + 3]))) throw `InvalidParameterException: ORPort ${lnn.consensusParser.words[nxt + 3]} must be a valid port`
+    router['orport'] = Number(lnn.consensusParser.words[nxt + 3])
+
+    if (!lnn.consensusParser.isValidPort(Number(lnn.consensusParser.words[nxt + 4]))) throw `InvalidParameterException: DirPort ${lnn.consensusParser.words[nxt + 4]} must be a valid port`
+    router['dirport'] = Number(lnn.consensusParser.words[nxt + 4])
+
+    lnn.consensusParser.nextLine()
+}
+
+/**
+ * Parses the field 'a' of the router status entry
+ * @param {} router 
+ * @throws InvalidParameterException if the fields are not valid
+ */
+lnn.consensusParser.consumeAfield = function(router) {
+    let i = lnn.consensusParser.words[1].indexOf("]")
+    let address = lnn.consensusParser.words[1].slice(1, i)
+    if (!lnn.consensusParser.isValidIP(address)) throw `InvalidParameterException: IP ${address} must be a valid IP address`
+
+    let guessedType = 'IPv6'
+    if (lnn.consensusParser.isIPv4(address)) {
+        guessedType = 'IPv4'
+    }
+
+    let port = Number(lnn.consensusParser.words[1].slice(address.length + 3, lnn.consensusParser.words[1].length))
+
+    if (!lnn.consensusParser.isValidPort(port)) throw `InvalidParameterException: port ${port} must be a valid port`
+
+    router['a'].push({
+        'ip': address,
+        'port': port,
+        'type': guessedType
+    })
+
+    lnn.consensusParser.nextLine()
+
+}
+
+/**
+ * Parses the field 's' of the router status entry
+ * @param {} router 
+ */
+lnn.consensusParser.consumeSfield = function(router) {
+    router['flags'] = lnn.consensusParser.tryParseFlags()
+    lnn.consensusParser.nextLine()
+}
+
+/**
+ * Tries to parse the field 'v' of the router status entry
+ * @param {} router 
+ */
+lnn.consensusParser.tryConsumeVfield = function(router) {
+    if (lnn.consensusParser.words[0] === 'v') {
+        lnn.consensusParser.checkFormat(3, 'v')
+        router['version'] = lnn.consensusParser.words.splice(1, lnn.consensusParser.words.length).join(' ')
+        lnn.consensusParser.nextLine()
+    }
+}
+/**
+ * Tries to parse the field 'v' of the router status entry
+ * @param {} router 
+ */
+lnn.consensusParser.tryConsumePrField = function(router) {
+    if (lnn.consensusParser.words[0] === 'pr') {
+        router['protocols'] = lnn.consensusParser.tryParseRanges(lnn.consensusParser.words.splice(1, lnn.consensusParser.words.length))
+        lnn.consensusParser.nextLine()
+    }
+}
+/**
+ * Tries to parse the field 'w' of the router status entry
+ * @param {} router 
+ */
+lnn.consensusParser.tryConsumeWfield = function(router) {
+    if (lnn.consensusParser.words[0] === 'w') {
+        router['w'] = lnn.consensusParser.tryParseParams()
+        lnn.consensusParser.nextLine()
+    }
+}
+/**
+ * Tries to parse the field 'p' of the router status entry
+ * @param {} router 
+ */
+lnn.consensusParser.tryConsumePfield = function(router) {
+    if (lnn.consensusParser.words[0] === 'p') {
+        lnn.consensusParser.checkFormat(3, 'p')
+        if (lnn.consensusParser.words[1] !== 'accept' && lnn.consensusParser.words[1] !== 'reject') throw `WrongParameterException: ${lnn.consensusParser.words[1]} must be either accept or reject`
+
+
+        let portList = lnn.consensusParser.parse_range_once(lnn.consensusParser.words[2])
+
+        router['exit-policy'] = {
+            'type': lnn.consensusParser.words[1],
+            'PortList': portList
+        }
+        lnn.consensusParser.nextLine()
+    }
+}
+
+/**
+ * Parses the field 'm' of the router status entry (for microdesc flavor)
+ * @param {} router 
+ */
+lnn.consensusParser.consumeMfield = function(router) {
+    lnn.consensusParser.checkFormat(2, 'm')
+    
+    if (!lnn.consensusParser.isBase64(lnn.consensusParser.words[1] + "=")) throw `InvalidParameterException: digest ${lnn.consensusParser.words[1]} must be in base64`
+        router['micro-digest'] = lnn.consensusParser.words[1]
+    
+    lnn.consensusParser.nextLine()
+}
+
+
+//-------------------FOOTER PARSER ----------------------------------
+
+/**
+ * Consume the footer
+ * @throws WrongFieldException if there is no footer or no signature
+ */
+lnn.consensusParser.consumeFooter = function() {
+    if (lnn.consensusParser.words[0] !== 'directory-footer') throw `WrongFieldException: there must be a footer`
+    lnn.consensusParser.nextLine()
+    lnn.consensusParser.consensus['footer'] = {}
+    lnn.consensusParser.tryConsumeBandwidthWeights()
+
+    if (lnn.consensusParser.words[0] !== 'directory-signature') throw `WrongFieldException: there must be at least one signature`
+    lnn.consensusParser.consensus['footer']['directory-signatures'] = []
+
+    while (lnn.consensusParser.words[0] === 'directory-signature') {
+        lnn.consensusParser.consensus['footer']['directory-signatures'].push(lnn.consensusParser.consumeSignature());
+    }
+
+}
+
+/**
+ * Tries to consume the bandwidth weights
+ */
+lnn.consensusParser.tryConsumeBandwidthWeights = function() {
+    if (lnn.consensusParser.words[0] === 'bandwidth-weights') {
+        lnn.consensusParser.consensus['footer']['bandwidth-weights'] = lnn.consensusParser.tryParseParams()
+        lnn.consensusParser.nextLine()
+    }
+}
+
+/**
+ * Consumes the signature
+ * @throws WrongFieldException if the first field is not directory-signature
+ * @throws InvalidParameterException if either the identity or the signing-key-digest are not in hexadecimal
+ */
+lnn.consensusParser.consumeSignature = function() {
+    if (lnn.consensusParser.words[0] !== 'directory-signature') throw `WrongFieldException: next field must be directory-signature`
+    let length = lnn.consensusParser.words.length
+
+    let algo
+    let remaining
+    if (length === 4) {
+        algo = lnn.consensusParser.words[1]
+        remaining = lnn.consensusParser.words.splice(2, length)
+    } else if (length === 3) {
+        algo = 'sha1'
+        remaining = lnn.consensusParser.words.splice(1, length)
+    }
+    else throw `WrongParameterException: directory-signature has 3 or 4 arguments`
+
+    let identity = remaining[0]
+    if (!lnn.consensusParser.isHex(identity)) throw `InvalidParameterException: the identity ${identity} must be in hexadecimal`
+
+    let digest = remaining[1]
+    if (!lnn.consensusParser.isHex(digest)) throw `InvalidParameterException: the signing-key-digest ${digest} must be in hexadecimal`
+
+    lnn.consensusParser.nextLine()
+
+    let signature = lnn.consensusParser.parseSignature()
+    if (lnn.consensusParser.index < lnn.consensusParser.totalLines - 1) lnn.consensusParser.nextLine()
+
+    return {
+        'Algorithm': algo,
+        'identity': identity,
+        'signing-key-digest': digest,
+        'signature': signature
+    }
+}
+//-------------------GENERAL PARSER-----------------------------------
+
+/**
+* Parses lines with the format "field value" where value is an integer and field must be equal to word and return value. 
+* @param {string} word indicates to which field we are adding the newly parsed line
+* @throws NotEqualException if lnn.consensusParser.words[0] != word
+* @throws WrongParameterException if lnn.consensusParser.words[1] is not a number
+* @throws WrongFormatException if lnn.consensusParser.words.length is not 2
+*/
+lnn.consensusParser.tryParseKeyValueInteger = function(word,expectedLength = 2) {
+    lnn.consensusParser.checkFormat(expectedLength, word)
+    if (isNaN(lnn.consensusParser.words[1])) throw `WrongParameterException: ${lnn.consensusParser.words[1]} is not a number`
+
+    return Math.floor(lnn.consensusParser.words[1])
+}
+
+/**
+ * Parses lines with the format "field value" where value is a string and field must be equal to word and return value. 
+ * @param {string} word indicates to which field we are adding the newly parsed line
+ * @throws NotEqualException if lnn.consensusParser.words[0] != word
+ * @throws WrongFormatException if lnn.consensusParser.words.length is not 2
+ */
+lnn.consensusParser.tryParseKeyValueString = function(word) {
+    lnn.consensusParser.checkFormat(2, word)
+    return lnn.consensusParser.words[1]
+}
+
+/**
+ * Parses lines with the format "field YYYY-MM-DD HH:MM:SS" where field must be equal to word and return a date object
+ * @param {string} word indicates to which field we are adding the newly parsed line
+ * @throws NotEqualException if lnn.consensusParser.words[0] != word
+ * @throws WrongFormatException if lnn.consensusParser.words.length is not 2
+ * @throws NonValidDateException if the date is not valid
+ * @throws NonValidTimeException if the time is not valid
+ */
+lnn.consensusParser.tryParseDate = function(word) {
+    lnn.consensusParser.checkFormat(3, word)
+    if (!lnn.consensusParser.isValidDate(lnn.consensusParser.words[1])) throw `NonValidDateException: ${lnn.consensusParser.words[1]} is not a valid date`
+    if (!lnn.consensusParser.isValidTime(lnn.consensusParser.words[2])) throw `NonValidTimeException: ${lnn.consensusParser.words[2]} is not a valid time`
+
+    return {
+        "date": lnn.consensusParser.words[1],
+        "time": lnn.consensusParser.words[2]
+    }
+}
+
+/**
+ * Parses lines with the format "field list" where list is a comma separated list, returns the list as an array
+ * @param {string} word indicates to which field we are adding the newly parsed line
+ * @throws NotEqualException if lnn.consensusParser.words[0] != word
+ * @throws WrongFormatException if lnn.consensusParser.words.length is not 2
+ */
+lnn.consensusParser.tryParseCommaSeparatedList = function(word) {
+    lnn.consensusParser.checkFormat(2, word)
+    return lnn.consensusParser.words[1].split(",")
+}
+
+/**
+* Parse the ranges of the protocols
+* @param pairs Array of entries => Keyword=Values where values is the range
+*/
+lnn.consensusParser.tryParseRanges = function(pairs) {
+    let content = {}
+
+    for (let pair of pairs) {
+        if (pair.includes("=")) {
+            let tmp = pair.split("=")
+            content[tmp[0]] = lnn.consensusParser.parse_range_once(tmp[1])
+        }
+    }
+
+    return content
+}
+
+/**
+* Helper function to parse the ranges of the protocols
+* @param value the range we want to parse
+*/
+lnn.consensusParser.parse_range_once = function(value) {
+    value = value.split(',')
+    let subvalues = []
+
+    for (let subvalue of value) {
+        if (subvalue.includes('-')) {
+            let lowHigh = subvalue.split('-')
+            let low = Number(lowHigh[0])
+            let high = Number(lowHigh[1])
+
+            if (low === high - 1) {
+                subvalues.push([low, high])
+            } else {
+                subvalues.push([[low, high]])
+            }
+        } else {
+            subvalues.push([Number(subvalue)])
+        }
+    }
+    return subvalues
+}
+/**
+ * Parse the flags
+ * @throws NotValidFlagException if one of the flags is not valid
+ */
+lnn.consensusParser.tryParseFlags = function() {
+    let flags = lnn.consensusParser.words.splice(1, lnn.consensusParser.words.length)
+    
+    for (let f of flags) {
+        if (!lnn.consensusParser.validFlags.includes(f)) throw `NotValidFlagException: ${f} is not a valid flag`
+    }
+
+    return flags
+}
+
+/**
+ * Parse signature 
+ * @throws WrongFormatException if the line does not start with ----BEGIN
+ */
+lnn.consensusParser.parseSignature = function() {
+    if (lnn.consensusParser.words[0] !== '-----BEGIN') throw `WrongFormatException`
+    lnn.consensusParser.nextLine()
+    let signature = ''
+    while (lnn.consensusParser.lines[lnn.consensusParser.index] !== "-----END SIGNATURE-----") {
+        signature += lnn.consensusParser.lines[lnn.consensusParser.index]
+        lnn.consensusParser.nextLine()
+    }
+    return signature
+}
+
+
+/**
+ * parase parameters
+ */
+lnn.consensusParser.tryParseParams = function() {
+    let content = {}
+    for (let param of lnn.consensusParser.words.splice(1, lnn.consensusParser.words.length)) {
+        let tmp = param.split('=')
+        content[tmp[0]] = Number(tmp[1])
+    }
+    return content
+}
+
+/**
+* Check if the string in date has the format YYYY-MM-DD
+* @param {string} time String representing the date
+*/
+lnn.consensusParser.isValidDate = function(date) {
+    if (typeof date !== 'string') return false
+    let regex = /^\d{4}[-](0[1-9]|1[012])[-](0[1-9]|[12][0-9]|3[01])$/
+    return regex.test(date)
+}
+
+/**Check if the string time has the format HH:MM:SS
+ * @param {string} time String representing the time
+ */
+lnn.consensusParser.isValidTime = function(time) {
+    if (typeof time !== 'string') return false
+    let regex = /^(0[0-9]|1[0-9]|2[0-3])[:][0-5][0-9][:][0-5][0-9]$/
+    return regex.test(time)
+}
+
+/**
+ * Check if the IP address is valid (either IPv4 or IPv6)
+ * @param {string} IP the address we want to check
+ */
+lnn.consensusParser.isValidIP = function(IP) {
+    let regex = /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$|^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$|^\s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(%.+)?\s*$/
+    return regex.test(IP)
+}
+
+/**
+ * Check if the IP is an IPv4 address
+ * @param {string} IP 
+ */
+lnn.consensusParser.isIPv4 = function(IP) {
+    let regex = /^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/
+    return regex.test(IP)
+}
+
+/**
+ * Check if the given port is valid
+ * @param {number} port
+ */
+lnn.consensusParser.isValidPort = function(port) {
+    if (isNaN(port)) return false
+    //TODO: < or <= ?
+    return port >= 0 && port <= 65535
+}
+
+/**
+ * Check if the given string is in hexadecimal
+ * @param {string} str 
+ */
+lnn.consensusParser.isHex = function(str) {
+    let regex = /^[a-fA-F0-9]+$/
+    return regex.test(str)
+}
+
+/**
+ * Check if the given string is in base 64
+ * @param {string} str 
+ */
+lnn.consensusParser.isBase64 = function(str) {
+    let regex = /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/
+    return regex.test(str)
+}
+
+/**
+ * Updates lnn.consensusParser.index and lnn.consensusParser.words
+ * @throws EndOfFileException if the end of the file has already been reached
+ */
+lnn.consensusParser.nextLine = function() {
+    if (lnn.consensusParser.index >= lnn.consensusParser.totalLines) throw `EndOfFileException: there are no lines to parse`
+    lnn.consensusParser.words = lnn.consensusParser.lines[++lnn.consensusParser.index].split(" ")
+}
+
+/**
+ * Checks if words has the expected size and that words[0] is equal to word
+ * @param {number} expectedLength the expected length of words
+ * @param {string} expectedWord the expected word[0]
+ */
+lnn.consensusParser.checkFormat = function(expectedLength, expectedWord) {
+    if (lnn.consensusParser.words.length != expectedLength) throw `WrongFormatException: ${expectedLength} fields are expected`
+    if (lnn.consensusParser.words[0] != expectedWord) throw `NotEqualException:b ${expectedWord} is not equal to ${lnn.consensusParser.words[0]}`
+}
+
+lnn.parser = {}
+
+lnn.parser.descriptors = {
+    line_count: 0,
+    total_lines: -1,
+    lines: undefined,
+    valid_bridge_distribution: ["none", "any", "https", "email", "moat", "hyphae"],
+    
+    exactly_once: ["router", "bandwidth", "published", "onion-key", "signing-key", "router-signatures"],
+    exactly_once_mic: ["onion-key","policy","ipv6-policy"],
+
+    parse: function (raw_descriptors, flavor = 'microdesc') {
+        if(flavor != 'unflavored' && flavor != 'microdesc') {
+            throw 'Error: Unexpected flavor'
+        }
+
+        let descriptors = []
+        lnn.parser.descriptors.lines = raw_descriptors.split('\n')
+        lnn.parser.descriptors.line_count = 0
+        lnn.parser.descriptors.total_lines = lnn.parser.descriptors.lines.length
+        lnn.parser.descriptors.flavor = flavor
+
+        while (lnn.parser.descriptors.line_count < lnn.parser.descriptors.total_lines) {
+            if(lnn.parser.descriptors.lines[lnn.parser.descriptors.line_count] === ""){
+                lnn.parser.descriptors.line_count++
+                continue
+            }
+            
+            let descriptor = lnn.parser.descriptors.consume_one_node()
+            descriptor['flavor'] = flavor
+            descriptors.push(descriptor)
+        }
+        return descriptors
+    },
+    validate: function(descriptors,consensus,flavor = 'microdesc',fail_on_missing = false) {
+        let digest_name = (flavor == 'unflavored') ? 'digest' : 'micro-digest'
+        let digests = []
+        for (idx = 0; idx < consensus['routers'].length; idx++){ 
+            let router = consensus['routers'][idx]    
+            digests.push(router[digest_name])
+        }
+
+        let obtained = []
+        for (idx = 0; idx < descriptors.length; idx++){ 
+            obtained.push(descriptors[idx][digest_name])    
+        }
+
+        let invalid = []
+        console.log(obtained.length)
+        for (idx = 0; idx < digests.length; idx++){
+            let digest = digests[idx]
+            if (obtained.includes(digest)){
+                obtained.splice( obtained.indexOf(digest), 1 );
+            }
+            else
+                invalid.push(digest)
+        }
+        console.log(obtained.length)
+           
+        if (obtained.length){
+            throw `Invalid descriptors found`
+        }
+
+        if (fail_on_missing && invalid.length > 0)
+            throw `Failed to obtain some descriptors`
+    }
+}
+
+/**
+ * Parse one node in the raw data file
+ * @returns {object} the descriptor of the parsed node
+ */
+ let tot  =0
+lnn.parser.descriptors.consume_one_node = function () {
+
+    if (lnn.parser.descriptors.lines[lnn.parser.descriptors.line_count].startsWith('@type')) lnn.parser.descriptors.line_count++
+    if (lnn.parser.descriptors.lines[lnn.parser.descriptors.line_count] === ""){
+        lnn.parser.descriptors.line_count++
+    }
+
+    let descriptor = {}
+    let startLine = lnn.parser.descriptors.line_count
+
+    if(lnn.parser.descriptors.flavor == 'unflavored') {
+        descriptor = lnn.parser.descriptors.consume_router(descriptor)
+        descriptor = lnn.parser.descriptors.try_consume_identity_ed25519(descriptor)
+    } else {
+        descriptor = lnn.parser.descriptors.consume_onion_key(descriptor)
+    }
+
+    let line = lnn.parser.descriptors.lines[lnn.parser.descriptors.line_count]
+    
+
+    while (true) {
+        if(lnn.parser.descriptors.flavor == 'unflavored') {
+            if(line.startsWith("router-signature")) 
+                break
+        } else{
+            if(lnn.parser.descriptors.line_count == lnn.parser.descriptors.total_lines
+                || line.startsWith('@type') || line.startsWith('onion-key'))
+                break
+        }
+
+
+        let index_sp = line.indexOf(" ")
+        let first_word = (index_sp === -1) ? line : line.substring(0, index_sp)
+        switch (first_word) {
+            case "master-key-ed25519":
+                descriptor = lnn.parser.descriptors.consume_master_key_ed25519(descriptor)
+                break
+            case "platform":
+                descriptor = lnn.parser.descriptors.consume_platform(descriptor)
+                break
+            case "published":
+                descriptor = lnn.parser.descriptors.consume_published(descriptor)
+                break
+            case "bandwidth":
+                descriptor = lnn.parser.descriptors.consume_bandwidth(descriptor)
+                break
+            case "fingerprint":
+                descriptor = lnn.parser.descriptors.consume_fingerprint(descriptor)
+                break
+            case "hibernating":
+                descriptor = lnn.parser.descriptors.consume_hibernating(descriptor)
+                break
+            case "uptime":
+                descriptor = lnn.parser.descriptors.consume_uptime(descriptor)
+                break
+            case "extra-info-digest":
+                descriptor = lnn.parser.descriptors.consume_extra_info_digest(descriptor)
+                break
+            case "caches-extra-info":
+                descriptor = lnn.parser.descriptors.consume_single_word_line("caches-extra-info", descriptor)
+                break
+            case "onion-key":
+                descriptor = lnn.parser.descriptors.consume_onion_key(descriptor)
+                break
+            case "onion-key-crosscert":
+                descriptor = lnn.parser.descriptors.consume_onion_key_crosscert(descriptor)
+                break
+            case "ntor-onion-key":
+                descriptor = lnn.parser.descriptors.consume_base64_digest('ntor-onion-key', descriptor)
+                break
+            case "ntor-onion-key-crosscert":
+                descriptor = lnn.parser.descriptors.consume_ntor_onion_key_crosscert(descriptor)
+                break
+            case "accept":
+                descriptor = lnn.parser.descriptors.consume_exit_policy("accept", descriptor)
+                break
+            case "reject":
+                descriptor = lnn.parser.descriptors.consume_exit_policy("reject", descriptor)
+                break
+            case "signing-key":
+                descriptor = lnn.parser.descriptors.consume_signing_key(descriptor)
+                break
+            case "ipv6-policy":
+                descriptor = lnn.parser.consume_exit_policy('ipv6-policy', lnn.parser.descriptors.lines, lnn.parser.descriptors.line_count++, descriptor)
+                break
+            case "router-sig-ed25519":
+                descriptor = lnn.parser.descriptors.consume_router_sig_ed25519(descriptor)
+                break
+            case "contact":
+                descriptor = lnn.parser.consume_contact(lnn.parser.descriptors.lines, lnn.parser.descriptors.line_count++, descriptor)
+                break
+            case "bridge-distribution":
+                descriptor = lnn.parser.descriptors.consume_bridge_distribution(descriptor)
+                break
+            case "family":
+                descriptor = lnn.parser.descriptors.consume_family(descriptor)
+                break
+            case "read-history":
+                descriptor = lnn.parser.descriptors.consume_history("read", descriptor)
+                break
+            case "write-history":
+                descriptor = lnn.parser.descriptors.consume_history("write", descriptor)
+                break
+            case "eventdns":
+                descriptor = lnn.parser.descriptors.consume_eventdns(descriptor)
+                break
+            case "hidden-service-dir":
+                descriptor = lnn.parser.descriptors.consume_single_word_line("hidden-service-dir", descriptor)
+                break
+            case "allow-single-hop-exits":
+                descriptor = lnn.parser.descriptors.consume_single_word_line("allow-single-hop-exits", descriptor)
+                break
+            case "tunnelled-dir-server":
+                descriptor = lnn.parser.descriptors.consume_single_word_line("tunnelled-dir-server", descriptor)
+                break
+            case "proto":
+                descriptor = lnn.parser.consume_proto("proto", lnn.parser.descriptors.lines, lnn.parser.descriptors.line_count++, descriptor)
+                break
+            case "p":
+                descriptor = lnn.parser.consume_exit_policy('p', lnn.parser.descriptors.lines, lnn.parser.descriptors.line_count++, descriptor)
+                break
+            case "p6":
+                descriptor = lnn.parser.consume_exit_policy('p6', lnn.parser.descriptors.lines, lnn.parser.descriptors.line_count++, descriptor)
+                break
+            case "id":
+                descriptor = lnn.parser.descriptors.consume_id(descriptor)
+                break
+            default:
+                ++lnn.parser.descriptors.line_count
+                break
+        }
+        line = lnn.parser.descriptors.lines[lnn.parser.descriptors.line_count]
+
+    }
+
+
+    if(descriptor['ipv6-policy'] === undefined) descriptor['ipv6-policy'] = {
+        "type": "reject",
+        "PortList":[[1,65535]]
+    }
+    if(descriptor['policy'] === undefined) {
+        descriptor['policy'] = {
+            "type": "reject",
+            "PortList":[[1,65535]]
+        }
+    }
+
+
+    let fields = lnn.parser.descriptors.exactly_once_mic
+    let endLine = lnn.parser.descriptors.line_count //include  till router-signature
+
+    if(lnn.parser.descriptors.flavor == 'unflavored') {
+        endLine+=1 //include  till router-signature
+        descriptor = lnn.parser.descriptors.consume_router_signature(descriptor)
+        fields = lnn.parser.descriptors.exactly_once
+    }
+    if (!lnn.parser.descriptors.check_exactly_once(descriptor,fields)) throw "Invalid descriptor: some mandatory fields are not present"
+
+    let fullDesc = ""
+    for(i = startLine; i < endLine; i++) {
+        if(lnn.parser.descriptors.lines[i] == "")
+            continue
+        fullDesc += (lnn.parser.descriptors.lines[i] + '\n')
+    }
+
+    if(lnn.parser.descriptors.flavor == 'unflavored') {
+        let digest = sjcl.hash.sha1.hash(fullDesc)
+        digest = lnn.enc.base64(lnn.dec.bits(digest))
+
+
+        while(digest.length > 0 && digest[digest.length - 1] == '=')
+            digest = digest.slice(0,-1)
+        descriptor['digest'] = digest
+    }
+    else {
+        let mdigest = sjcl.hash.sha256.hash(fullDesc)
+        mdigest = lnn.dec.bits(mdigest)
+        mdigest = lnn.enc.base64(mdigest)
+        
+        while(mdigest.length > 0 && mdigest[mdigest.length - 1] == '=')
+            mdigest = mdigest.slice(0,-1)
+        descriptor['micro-digest'] = mdigest
+    }
+    return descriptor
+}
+ 
+/**
+ * Checks that all mandatory fields of the descriptor were parsed
+ */
+lnn.parser.descriptors.check_exactly_once = function (descriptor,fields) {
+    
+    if(descriptor['ipv6-policy'] === undefined) descriptor
+    
+    let parsed = true
+    if(descriptor['identity-ed25519'] !== undefined){
+        parsed = descriptor["ntor-onion-key-crosscert"] !== undefined && descriptor["onion-key-crosscert"] !== undefined && descriptor["router-sig-ed25519"] !== undefined
+    }else{
+        parsed = descriptor["router-sig-ed25519"] === undefined
+    }
+
+    return parsed && fields.every(field => descriptor[field] !== undefined)
+}
+
+/**
+ * Consume the field router of the descriptor
+ * @param {object} descriptor the currently being built decriptors object
+ * @returns {Object} the updated descriptor
+ */
+lnn.parser.descriptors.consume_router = function (descriptor) {
+    let words = lnn.parser.descriptors.lines[lnn.parser.descriptors.line_count].split(' ')
+    lnn.parser.check_format(6, 'router', words)
+
+    if (!lnn.parser.is_valid_nickname(words[1])) throw `Invalid nickname: ${words[1]} contains non-alphanumeric characters`
+    if (!lnn.parser.is_valid_ipv4(words[2])) throw `Invalid address: ${words[2]} is not a valid iPv4 address`
+    if (!lnn.parser.is_valid_port(words[3])) throw `Invalid port: ${words[3]} is not a valid port (0 to 65535)`
+    if (!lnn.parser.is_valid_port(words[4])) throw `Invalid port: ${words[4]} is not a valid port (0 to 65535)`
+    if (!lnn.parser.is_valid_port(words[5])) throw `Invalid port: ${words[5]} is not a valid port (0 to 65535)`
+
+    descriptor['router'] = {
+        "nickname": words[1],
+        "address": words[2],
+        "orport": Number(words[3]),
+        "socksport": Number(words[4]),
+        "dirport": Number(words[5])
+    }
+
+    ++lnn.parser.descriptors.line_count
+
+    return descriptor
+}
+/**
+ * Consume try to consume the identity ed25519 certificate and its master key
+ * @param {object} descriptor the currently being built decriptors object
+ * @returns {Object} the updated descriptor
+ */
+lnn.parser.descriptors.try_consume_identity_ed25519 = function (descriptor) {
+    let words = lnn.parser.descriptors.lines[lnn.parser.descriptors.line_count].split(' ')
+    if (words[0] === 'identity-ed25519') {
+        lnn.parser.check_format(1, 'identity-ed25519', words)
+        ++lnn.parser.descriptors.line_count
+
+        let [offset, certificate] = lnn.parser.consume_pem(lnn.parser.descriptors.lines, lnn.parser.descriptors.line_count)
+        lnn.parser.descriptors.line_count += offset + 1
+        descriptor['identity'] = {
+            "type": "ed25519",
+            "cert": certificate
+        }
+
+        return descriptor
+    }
+
+    return descriptor
+}
+
+lnn.parser.descriptors.consume_id = function (descriptor) {
+    let words = lnn.parser.descriptors.lines[lnn.parser.descriptors.line_count].split(' ')
+
+    lnn.parser.check_format(3, 'id', words)
+    let type = words[1]
+
+    if(type != 'rsa1024' && type != 'ed25519') 
+        throw `Unexpected identity type  ${type}`
+
+    lnn.parser.check_reused('identity', descriptor)
+    if (!lnn.parser.is_valid_base64(lnn.parser.add_ending(words[2]))) 
+        throw `Invalid master key: the master key ${words[2]} must be in base64`
+
+    descriptor['identity'] = {
+        "type": type,
+        "master-key": words[2]
+    }
+
+    ++lnn.parser.descriptors.line_count
+    return descriptor
+}
+
+/**
+ * Parse the master-key-ed25519
+ * @param {object} descriptor the currently being built decriptors object
+ * @returns {Object} the updated descriptor
+ */
+lnn.parser.descriptors.consume_master_key_ed25519 = function (descriptor) {
+
+    let words = lnn.parser.descriptors.lines[lnn.parser.descriptors.line_count].split(' ')
+    lnn.parser.check_format(2, 'master-key-ed25519', words)
+    lnn.parser.check_reused('master-key-ed25519', descriptor)
+    let key = words[1]
+    if (!lnn.parser.is_valid_base64(lnn.parser.add_ending(key))) throw `Invalid master key: the master key ${words[1]} must be in base64`
+    descriptor['identity']['master-key'] = key
+    lnn.parser.descriptors.line_count++
+
+    return descriptor
+}
+
+/**
+ * Consume the line if it starts with platform
+ * @param {object} descriptor the currently being built decriptors object
+ * @returns {Object} the updated descriptor
+ */
+lnn.parser.descriptors.consume_platform = function (descriptor) {
+    lnn.parser.check_reused("platform", descriptor)
+    let line = lnn.parser.descriptors.lines[lnn.parser.descriptors.line_count]
+    let platform = line.substring("platform".length + 1)
+    descriptor['platform'] = platform
+    lnn.parser.descriptors.line_count++
+    return descriptor
+}
+
+/**
+ * Consume the time of the published field
+ * @param {object} descriptor the currently being built decriptors object
+ * @returns {Object} the updated descriptor
+ */
+lnn.parser.descriptors.consume_published = function (descriptor) {
+    lnn.parser.check_reused('published', descriptor)
+    descriptor['published'] = lnn.parser.consume_date('published', lnn.parser.descriptors.lines[lnn.parser.descriptors.line_count])
+    ++lnn.parser.descriptors.line_count
+    return descriptor
+}
+
+/**
+ * Consume the bandwidth fields 
+ * @param {object} descriptor the currently being built decriptors object
+ * @returns {Object} the updated descriptor
+ */
+lnn.parser.descriptors.consume_bandwidth = function (descriptor) {
+    lnn.parser.check_reused('bandwidth', descriptor)
+    let words = lnn.parser.descriptors.lines[lnn.parser.descriptors.line_count++].split(" ")
+    lnn.parser.check_format(4, 'bandwidth', words)
+
+    let avg = Number(words[1])
+    let burst = Number(words[2])
+    let obs = Number(words[3])
+
+    if (avg < 0 || burst < 0 || obs < 0) throw `Invalid bandwidth: must be non-negative`
+
+    descriptor['bandwidth'] = {
+        "avg": avg,
+        "burst": burst,
+        "observed": obs
+    }
+
+    return descriptor
+}
+
+/**
+ * Consume the fingerprint field
+ * @param {object} descriptor the currently being built decriptors object
+ * @returns {Object} the updated descriptor
+ */
+lnn.parser.descriptors.consume_fingerprint = function (descriptor) {
+    lnn.parser.check_reused('fingerprint', descriptor)
+    let line = lnn.parser.descriptors.lines[lnn.parser.descriptors.line_count++]
+    let index_sp = line.indexOf(" ")
+    let fingerprint = line.substring(index_sp + 1)
+    
+    let bytes = fingerprint.split(" ")
+    let join_bytes = bytes.join("")
+    if (bytes.length != 10) throw `Invalid fingerprint: wrong size`
+    if (!lnn.parser.is_valid_hex(join_bytes)) throw `Invalid fingerprint: not a hex string`
+
+    let identity = sjcl.codec.hex.toBits(join_bytes)
+    identity = sjcl.codec.base64.fromBits(identity).replace("=", "")
+
+    descriptor['fingerprint'] = fingerprint
+    descriptor['router']['identity'] = identity
+
+    return descriptor
+}
+
+/**
+ * Consume the hibernating field
+ * @param {object} descriptor the currently being built decriptors object
+ * @returns {Object} the updated descriptor
+ */
+lnn.parser.descriptors.consume_hibernating = function (descriptor) {
+    lnn.parser.check_reused('hibernating', descriptor)
+    let words = lnn.parser.descriptors.lines[lnn.parser.descriptors.line_count++].split(" ")
+    lnn.parser.check_format(2, 'hibernating', words)
+
+    let b = Number(words[1])
+    if (b !== 0 && b !== 1) throw `Invalid boolean`
+    descriptor['hibernating'] = b
+    return descriptor
+}
+
+/**
+ * Consume the uptime field
+ * @param {object} descriptor the currently being built decriptors object
+ * @returns {Object} the updated descriptor
+ */
+lnn.parser.descriptors.consume_uptime = function (descriptor) {
+    lnn.parser.check_reused('uptime', descriptor)
+    let words = lnn.parser.descriptors.lines[lnn.parser.descriptors.line_count++].split(" ")
+    lnn.parser.check_format(2, 'uptime', words)
+
+    let uptime = Number(words[1])
+
+    if (uptime < 0) throw `Invalid uptime: uptime must be non-negative`
+
+    descriptor['uptime'] = uptime
+
+    return descriptor
+}
+
+/**
+ * Consume the onion key
+ * @param {object} descriptor the currently being built decriptors object
+ * @returns {Object} the updated descriptor
+ */
+lnn.parser.descriptors.consume_onion_key = function (descriptor) {
+    let words = lnn.parser.descriptors.lines[lnn.parser.descriptors.line_count].split(" ")
+    lnn.parser.check_reused('onion-key', descriptor)
+    lnn.parser.check_format(1,'onion-key',words)
+    return lnn.parser.descriptors.consume_key('onion-key', descriptor)
+}
+
+/**
+ * Consume the extra info digest
+ * @param {object} descriptor the currently being built decriptors object
+ * @returns {Object} the updated descriptor
+ */
+lnn.parser.descriptors.consume_extra_info_digest = function (descriptor) {
+    lnn.parser.check_reused('extra-info-digest', descriptor)
+    let words = lnn.parser.descriptors.lines[lnn.parser.descriptors.line_count++].split(" ")
+    if (words.length != 2 && words.length != 3) throw `Invalid format: 1 or 2 fields are expected`
+
+    let sha1 = words[1]
+    if (!lnn.parser.is_valid_hex(sha1)) throw `Invalid encoding: the sha1 digest must be in hexadecimal`
+    descriptor["extra-info-digest"] = {
+        "sha1": sha1
+    }
+
+    if (words.length === 3) {
+        let sha256 = words[2]
+        if (!lnn.parser.is_valid_base64(lnn.parser.add_ending(sha256))) throw `Invalid encoding: the sha256 digest must base 64`
+        descriptor['extra-info-digest']['sha256'] = sha256
+    }
+
+    return descriptor
+}
+
+/**
+ * Consume the single word line
+ * @param {string} type the field
+ * @param {object} descriptor the currently being built decriptors object
+ * @returns {Object} the updated descriptor
+ */
+lnn.parser.descriptors.consume_single_word_line = function (type, descriptor) {
+    lnn.parser.check_reused(type, descriptor)
+    descriptor[type] = 'true'
+    ++lnn.parser.descriptors.line_count
+
+    return descriptor
+}
+
+/**
+ * Consume the RSA signature generated using the onion-key
+ * @param {object} descriptor the currently being built decriptors object
+ * @returns {Object} the updated descriptor
+ */
+lnn.parser.descriptors.consume_onion_key_crosscert = function (descriptor) {
+    lnn.parser.check_reused('onion-key-crosscert', descriptor)
+    return lnn.parser.descriptors.consume_key('onion-key-crosscert', descriptor)
+}
+
+/**
+ * Consume the ntor onion key  of the descriptor
+ * @param {object} descriptor the currently being built decriptors object
+ * @returns {Object} the updated descriptor
+ */
+lnn.parser.descriptors.consume_ntor_onion_key_crosscert = function (descriptor) {
+
+    lnn.parser.check_reused('ntor-onion-key-crosscert', descriptor)
+    let words = lnn.parser.descriptors.lines[lnn.parser.descriptors.line_count].split(" ")
+    lnn.parser.check_format(2, 'ntor-onion-key-crosscert', words)
+
+    let bit = Number(words[1])
+    if (bit != 0 && bit != 1) throw "Invalid bit for ntor-onion-key-crosscert"
+
+    let [offset, cert] = lnn.parser.consume_pem(lnn.parser.descriptors.lines, ++lnn.parser.descriptors.line_count)
+    lnn.parser.descriptors.line_count += offset + 1
+
+    descriptor['ntor-onion-key-crosscert'] = {
+        "bit": bit,
+        "cert": cert
+    }
+
+    return descriptor
+
+}
+
+/**
+ * Consume the ED25519 signature
+ * @param {object} descriptor the currently being built decriptors object
+ * @returns {Object} the updated descriptor
+ */
+lnn.parser.descriptors.consume_router_sig_ed25519 = function (descriptor) {
+    let words = lnn.parser.descriptors.lines[lnn.parser.descriptors.line_count++].split(" ")
+    lnn.parser.check_format(2, "router-sig-ed25519", words)
+    lnn.parser.check_reused("router-signatures", descriptor)
+
+    let signature = words[1]
+
+    if (!lnn.parser.is_valid_base64(lnn.parser.add_ending(signature))) throw "Invalid digest: must be a base 64 string"
+
+    descriptor["router-signatures"] = {
+        "ed25519": signature,
+    }
+
+    return descriptor
+}
+
+/**
+ * Consume the PKCS1 padded signature of the descriptor
+ * @param {object} descriptor the currently being built decriptors object
+ * @returns {Object} the updated descriptor
+ */
+lnn.parser.descriptors.consume_router_signature = function (descriptor) {
+    let words = lnn.parser.descriptors.lines[lnn.parser.descriptors.line_count].split(' ')
+    if (words[0] === 'router-signature') {
+        lnn.parser.check_format(1, 'router-signature', words)
+        ++lnn.parser.descriptors.line_count
+
+        let [offset, signature] = lnn.parser.consume_pem(lnn.parser.descriptors.lines, lnn.parser.descriptors.line_count)
+        lnn.parser.descriptors.line_count += offset + 1
+
+        if (descriptor["router-signatures"] === undefined) {
+            descriptor["router-signatures"] = {}
+        }
+
+        descriptor["router-signatures"]["rsa"] = signature
+
+        return descriptor
+    }
+}
+
+/**
+ * Consume the field bridge-distribution
+ * @param {object} descriptor the currently being built decriptors object
+ * @returns {Object} the updated descriptor
+ */
+lnn.parser.descriptors.consume_bridge_distribution = function (descriptor) {
+    lnn.parser.check_reused('bridge-distribution', descriptor)
+    let words = lnn.parser.descriptors.lines[lnn.parser.descriptors.line_count++].split(" ")
+    lnn.parser.check_format(2, 'bridge-distribution', words)
+    let dist = words[1]
+    if (!lnn.parser.descriptors.valid_bridge_distribution.includes(dist)) dist = "none"
+
+    descriptor['bridge-distribution'] = dist
+
+    return descriptor
+
+}
+
+/**
+ * Consume the field family
+ * @param {object} descriptor the currently being built decriptors object
+ * @returns {Object} the updated descriptor
+ */
+lnn.parser.descriptors.consume_family = function (descriptor) {
+    lnn.parser.check_reused("family", descriptor)
+
+    let words = lnn.parser.descriptors.lines[lnn.parser.descriptors.line_count++].split(" ")
+    let family = words.splice(1)
+
+    descriptor['family'] = family
+
+    return descriptor
+}
+/**
+ * Consume the history fields
+ * @param {string} type the type of history
+ * @param {object} descriptor the currently being built decriptors object
+ * @returns {Object} the updated descriptor
+ */
+lnn.parser.descriptors.consume_history = function (type, descriptor) {
+    let field = type + "-history"
+    lnn.parser.check_reused(field, descriptor)
+    let words = lnn.parser.descriptors.lines[lnn.parser.descriptors.line_count++].split(" ")
+    lnn.parser.check_format(6, type + "-history", words)
+
+    let date = words[1]
+    if (!lnn.parser.is_valid_date(date)) throw "Invalid date"
+
+    let time = words[2]
+    if (!lnn.parser.is_valid_time(time)) throw "Invalid time"
+
+    let interval = Number(words[3].substring(1))
+    let bytes = words[5].split(",").map(x => Number(x))
+
+    descriptor[field] = {
+        "date": date,
+        "time": time,
+        "interval": interval,
+        "bytes": bytes
+    }
+
+    return descriptor
+}
+
+/**
+ * Consume the field eventdns
+ * @param {object} descriptor the currently being built decriptors object
+ * @returns {Object} the updated descriptor
+ */
+lnn.parser.descriptors.consume_eventdns = function (descriptor) {
+    lnn.parser.check_reused("eventdns", descriptor)
+    let words = lnn.parser.descriptors.lines[lnn.parser.descriptors.line_count++].split(" ")
+    lnn.parser.check_format(2, "eventdns", words)
+
+    let bool = Number(words[1])
+
+    if (bool != 0 && bool != 1) throw "Invalid boolean"
+
+    decriptor["eventdns"] = bool
+    return descriptor
+}
+
+/**
+ * Consume field with a base 64 digest
+ * @param {String} field the field we want to parse
+ * @param {object} descriptor the currently being built decriptors object
+ * @returns {Object} the updated descriptor
+ */
+lnn.parser.descriptors.consume_base64_digest = function (field, descriptor) {
+    let words = lnn.parser.descriptors.lines[lnn.parser.descriptors.line_count++].split(" ")
+    lnn.parser.check_format(2, field, words)
+    lnn.parser.check_reused(field, descriptor)
+
+    let key = words[1]
+
+    if (!lnn.parser.is_valid_base64(lnn.parser.add_ending(key))) throw "Invalid digest: must be a base 64 string"
+
+    descriptor[field] = key
+
+    return descriptor
+}
+
+/**
+ * Consume the signing keys
+ * @param {object} descriptor the currently being built decriptors object
+ * @returns {Object} the updated descriptor
+ */
+lnn.parser.descriptors.consume_signing_key = function (descriptor) {
+    lnn.parser.check_reused('signing-key', descriptor)
+    return lnn.parser.descriptors.consume_key('signing-key', descriptor)
+}
+
+/**
+ * Parse the accept and reject exit policies and their exitpattern
+ * @param {string} type either reject or accept
+ * @param {object} descriptor the currently being built decriptors object
+ * @returns {Object} the updated descriptor
+ */
+lnn.parser.descriptors.consume_exit_policy = function (type, descriptor) {
+    let words = lnn.parser.descriptors.lines[lnn.parser.descriptors.line_count++].split(" ")
+    lnn.parser.check_format(2, type, words)
+
+    if (descriptor['policy'] === undefined) {
+        descriptor['policy'] = {
+            "type": "exitpattern",
+            "rules": []
+        }
+    }
+
+    let rule = {
+        "type": type,
+        "pattern": words[1]
+    }
+
+    descriptor['policy']["rules"].push(rule)
+
+    return descriptor
+}
+
+/**
+ * Consume the key of the given field and update the descriptor
+ * @param {string} field the field of the descriptor
+ * @param {object} descriptor the currently being built decriptors object
+ * @returns {Object} the updated descriptor
+ */
+lnn.parser.descriptors.consume_key = function (field, descriptor) {
+    [offset, key] = lnn.parser.consume_pem(lnn.parser.descriptors.lines, ++lnn.parser.descriptors.line_count)
+    lnn.parser.descriptors.line_count += offset + 1
+    descriptor[field] = key
+    return descriptor
+}
+
+/**
+* Checks if words has the expected size and that the first word of the line is equal to a given word
+* @param {number} expected_length the expected length of the line
+* @param {string} expected_word the expected word
+* @param {Array} words the line splitted into words
+*/
+lnn.parser.check_format = function (expected_length, expected_word, words) {
+    if (words.length != expected_length) {
+        throw `wrong_format_exception: ${expected_length} fields are expected`
+    } else if (words[0] !== expected_word) {
+        throw `not_equal_exception: ${expected_word} is not equal to ${words[0]}`
+    }
+}
+
+/**
+* Check if the IP is an IPv4 address
+* @param {string} IP 
+*/
+lnn.parser.is_valid_ipv4 = function (IP) {
+    let regex = /^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/
+    return regex.test(IP)
+}
+
+/**
+ * Check if the given port is valid
+ * @param {number} port
+ */
+lnn.parser.is_valid_port = function (port) {
+    if (isNaN(port)) return false
+    return port >= 0 && port <= 65535
+}
+
+/**
+ * Check if the given nickname is valid
+ * @param {string} nickname the nickname we want to verify
+ * @returns {boolean} the validity of the nickname 
+ */
+lnn.parser.is_valid_nickname = function (nickname) {
+    let regex = /^[a-z0-9]+$/i
+    return regex.test(nickname)
+}
+
+/**
+* Check if the given string is in base 64
+* @param {string} str 
+*/
+lnn.parser.is_valid_base64 = function (str) {
+    let regex = /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/
+    return regex.test(str)
+}
+/**
+ * Check if the given string is in hexadecimal
+ * @param {string} str 
+ */
+lnn.parser.is_valid_hex = function (str) {
+    let regex = /^[a-fA-F0-9]+$/
+    return regex.test(str)
+}
+
+/**
+ * Consume a PEM format field
+ * @param {Array} lines the splitted textfield
+ * @param {Number} start where the pem starts
+ * @param {function} base_function optional function to verifiy the base
+ * @returns {Array} tuple containing the parsed pem and the offset
+ */
+lnn.parser.consume_pem = function (lines, start) {
+    let offset = 0;
+    let content = ''
+    if (!lines[start].startsWith('-----BEGIN')) throw `Invalid signature, certificate or key: must begin with "-----BEGIN"`
+    offset++
+    while (!lines[start + offset].startsWith("-----END")) {
+        content += lines[start + offset]
+        offset++
+    }
+
+    if (!lnn.parser.is_valid_base64(content)) throw "Invalid PEM: must be in base 64"
+
+    return [offset, content]
+}
+
+/**
+ * Parse ranges
+ * @param {string} ranges format: Keyword=Values...
+ * @returns {object} the parsed ranges
+ */
+lnn.parser.parse_range = function (ranges) {
+    let content = {}
+    for (let pair of ranges) {
+        if (pair.includes("=")) {
+            let tmp = pair.split("=")
+            content[tmp[0]] = lnn.parser.parse_range_once(tmp[1])
+        }
+    }
+    return content
+}
+
+/**
+ * This function parses ranges with the format nbr,nbr,.. where nbr is either an integer or 2 integers separated by a comma
+ * @param {string} value the sting we want to parse
+ * @returns {Array} a list containing the ranges 
+ */
+lnn.parser.parse_range_once = function (value) {
+    value = value.split(',')
+    let subvalues = []
+
+    for (let subvalue of value) {
+        if (subvalue.includes('-')) {
+            let lowHigh = subvalue.split('-')
+            let low = Number(lowHigh[0])
+            let high = Number(lowHigh[1])
+
+            subvalues.push([low, high])
+        } else {
+            subvalues.push([Number(subvalue)])
+        }
+    }
+    return subvalues
+}
+
+/**
+ * This function parses the exit policies formatted as: field (accept/reject) PortList
+ * @param {string} field the field we want to parse
+ * @param {Array} lines the raw file split by '\n'
+ * @param {Number} index the index of the line
+ * @param {object} node the node we want to update
+ * @returns the updated node
+ */
+lnn.parser.consume_exit_policy = function (field, lines, index, node) {
+    lnn.parser.check_reused(field, node)
+    let words = lines[index].split(" ")
+    lnn.parser.check_format(3, field, words)
+
+    let policy = words[1]
+    if (policy !== 'accept' && policy !== 'reject') throw "Invalid policy: policy must either be accept or reject"
+
+    let ranges = lnn.parser.parse_range_once(words[2])
+    
+    if(field  == 'p') field = 'policy'
+    if(field == 'p6') field = 'ipv6-policy'
+
+    node[field] = {
+        'type': policy,
+        'PortList': ranges
+    }
+
+    return node
+}
+
+/**
+ * This function parses the contacts
+ * @param {string} field the field we want to parse
+ * @param {Array} lines the raw file split by '\n'
+ * @param {Number} index the index of the line
+ * @param {object} node the node we want to update
+ * @returns the updated node
+ */
+lnn.parser.consume_contact = function (lines, index, node) {
+    lnn.parser.check_reused("contact", node)
+    let contact = lines[index].substring("contact".length + 1)
+    node["contact"] = contact
+
+    return node
+}
+
+
+/**
+* Check if the string in date has the format YYYY-MM-DD
+* @param {string} time String representing the date
+*/
+lnn.parser.is_valid_date = function (date) {
+    if (typeof date !== 'string') return false
+    let regex = /^\d{4}[-](0[1-9]|1[012])[-](0[1-9]|[12][0-9]|3[01])$/
+    return regex.test(date)
+}
+
+/**Check if the string time has the format HH:MM:SS
+ * @param {string} time String representing the time
+ */
+lnn.parser.is_valid_time = function (time) {
+    if (typeof time !== 'string') return false
+    let regex = /^(0[0-9]|1[0-9]|2[0-3])[:][0-5][0-9][:][0-5][0-9]$/
+    return regex.test(time)
+}
+
+/**
+ * Consume the line containing a date with the format field YYYY-MM-DD HH:MM:SS
+ * @param {string} field the field we are consuming
+ * @param {string} line the line we are consuming
+ * @returns {object} object containing both the date and the time 
+ */
+lnn.parser.consume_date = function (field, line) {
+    let words = line.split(" ")
+    lnn.parser.check_format(3, field, words)
+
+    if (!lnn.parser.is_valid_date(words[1])) throw `Invalid date: ${words[1]} is not a valid date`
+    if (!lnn.parser.is_valid_time(words[2])) throw `Invalid time: ${words[2]} is not a valid time`
+
+    return {
+        "date": words[1],
+        "time": words[2]
+    }
+}
+
+/**
+* Consume the lines of protocols composed by ranges
+* @param {string} type either protocols or proto
+* @param {Array} lines the raw file split by '\n'
+* @param {Number} index the index of the line
+* @param {object} node the node we want to update
+* @returns the updated node
+*/
+lnn.parser.consume_proto = function (type, lines, index, node) {
+    lnn.parser.check_reused(type, node)
+    let ranges = lines[index].split(" ").splice(1)
+    node[type] = lnn.parser.parse_range(ranges)
+    return node
+}
+
+/**
+ * Check if the field has already been parsed for the descriptor
+ * @param {string} field the field we want to verify
+ * @param {object} node the node for which we don't want a repetition of field
+ */
+lnn.parser.check_reused = function (field, node) {
+    if (node[field] !== undefined) throw `The field ${field} appears more than once`
+}
+
+/**
+ * Add the ending = for a base64 string
+ * @param {string} str the string we want to modify
+ * @returns {string} base 64 string with correct ending = 
+ */
+lnn.parser.add_ending = function (str) {
+    if (str.length % 4 !== 0) {
+        let rem = str.length % 4
+        for (let i = 0; i < 4 - rem; i++) str += '='
+    }
+    return str
+}
+
+
+
+
+
+
+lnn.path = {}
+
+/**
+ * This function selects a lnn.path from the parsed consensus and parsed descriptors
+ * Flavor is 'unflavored'
+ * 
+ * @param {Object} consensus a parsed consensus
+ * @param {Object} descriptors parsed descriptors of the routers in the consensus
+ * @param {Bool} isChutney boolean used to indicate if the lnn.path selection is done with routers from chutney
+ */
+lnn.path.select = function (consensus, descriptors, isChutney) {
+    if(isChutney === undefined){
+        lnn.path["isChutney"] = false
+    }else{
+        lnn.path["isChutney"] = isChutney
+    }
+
+    //build a hashmap of descriptor where the keys are the identity
+    lnn.path["descriptorsMap"] = {}
+
+    for (let descriptor of descriptors) {
+        let identity = descriptor['router'].identity
+        lnn.path.descriptorsMap[identity] = descriptor
+    }
+
+    //pre-process consensus by filering the routers that do not obey
+    //the minimal constraints
+    lnn.path["consensus"] = consensus['routers'].filter(r => lnn.path.obeyMinimalConstraints(r))
+    
+    //lnn.path selection
+    lnn.path["exit"] = lnn.path.chooseGoodExit(consensus)
+    lnn.path["guard"] = lnn.path.chooseGoodGuard(consensus)
+    lnn.path["middle"] = lnn.path.chooseGoodMiddle(consensus)
+
+    //TODO: it should create/return a new lnn.path and not the descriptors
+    return [lnn.path.guard, lnn.path.middle, lnn.path.exit]
+}
+
+//assumes microdesc flavor.
+lnn.path.select_end_path = function (consensus, descriptors,guard, isChutney, tcp_ports) {
+    if(isChutney === undefined){
+        lnn.path["isChutney"] = false
+    }else{
+        lnn.path["isChutney"] = isChutney
+    }
+
+    //build a hashmap of descriptor where the keys are the identity
+    let consMap = {}
+    for(let router of consensus['routers']) {
+        consMap[router['micro-digest']] = router
+    }
+
+    lnn.path["descriptorsMap"] = {}
+
+    for (let descriptor of descriptors) {
+        descriptor['router'] = consMap[descriptor['micro-digest']]
+        descriptor['bandwidth'] = {}
+        descriptor['bandwidth']['avg'] = descriptor['router']['w']['Bandwidth']
+
+        let identity = descriptor['router'].identity
+        lnn.path.descriptorsMap[identity] = descriptor
+    }
+
+    //pre-process consensus by filering the routers that do not obey
+    //the minimal constraints
+    console.log(consensus['routers'].length)
+    console.log(descriptors.length)
+    lnn.path["consensus"] = consensus['routers'].filter(r => lnn.path.obeyMinimalConstraints(r))
+    console.log(lnn.path["consensus"].length)
+
+    //lnn.path selection
+    lnn.path["guard"] = guard
+    lnn.path["exit"] = lnn.path.chooseGoodExitGivenGuard(tcp_ports)
+    lnn.path["middle"] = lnn.path.chooseGoodMiddle()
+
+    //TODO: it should create/return a new lnn.path and not the descriptors
+    return [lnn.path.middle, lnn.path.exit]
+}
+
+/**
+ * This function checks if the given router obeys the minimal constraints needed for a router to be selected
+ * 
+ * @param {Object} router the router subpart of one of the nodes of the parsed consensus
+ */
+lnn.path.obeyMinimalConstraints = function (router) {
+    let des = lnn.path.descriptorsMap[router['identity']]
+    let flags = router['flags']
+    
+    if(des === undefined) return false
+    if (!flags.includes("Valid")) return false
+    if (!flags.includes("Running")) return false
+    if (!router['version'].startsWith("Tor 0.3.")) return false
+
+    if (des['identity']['type'] !== 'ed25519') return false
+
+    return true
+}
+
+/**
+ * This function takes candidates and choose one at random weighted by its bandwidth average
+ * 
+ * @param {Array} candidates the list of candidates
+ */
+
+lnn.path.weightedRandomChoice = function (candidates) {
+    let total = 0
+    
+    for(let candidate of candidates){
+        let des =lnn.path.descriptorsMap[candidate['identity']]
+        if(des !== undefined){
+            total += des['bandwidth']['avg']
+        }
+    }
+    
+    let r = Math.random() * total
+    let upto = 0
+
+    for (let router of candidates) {
+        let des = lnn.path.descriptorsMap[router['identity']]
+
+        if(des !== undefined){
+            let bandwidth = des['bandwidth']['avg']
+
+            if (upto + bandwidth >= r) return des
+            else upto += bandwidth
+        }
+        
+    }
+
+    throw "No candidate has been chosen"
+}
+
+/**
+ * This function checks if 2 routers are part of the same 16-subnet
+ * 
+ * @param {Object} des1 the descriptor of the first router
+ * @param {Object} des2 the descriptor of the second router
+ * 
+ */
+lnn.path.inSame16Subnet = function (des1, des2) {
+
+    if(lnn.path.isChutney){
+        return false
+    }
+
+    let addr1 = des1['router']['address'].split(".")
+    let addr2 = des2['router']['address'].split(".")
+
+    return addr1[0] === addr2[0] && addr1[1] === addr2[1]
+}
+
+/**
+ * This function checks if 2 routers are part of the same family
+ * 
+ * @param {Object} des1 the descriptor of the first router
+ * @param {Object} des2 the descriptor of the second router
+ */
+lnn.path.inSameFamily = function (des1, des2) {
+    if (des1['family'] != undefined && des2['family'] != undefined) {
+        for (let fam of des1['family']) {
+            if (des2['family'].includes(fam)) return true
+        }
+    }
+
+    return false
+}
+
+/**
+ * This function choose a good exit given the TOR lnn.path selection rules
+ */
+lnn.path.chooseGoodExit = function () {
+    let candidates = lnn.path.consensus.filter(lnn.path.isGoodExit)
+    return lnn.path.weightedRandomChoice(candidates)
+}
+
+lnn.path.chooseGoodExitGivenGuard = function (tcp_ports) {
+    let candidates = lnn.path.consensus.filter(r => lnn.path.isGoodExitGivenGuard(r,tcp_ports))
+    console.log("Exit candidates: " + candidates.length)
+    return lnn.path.weightedRandomChoice(candidates)
+}
+
+/**
+ * This function checks if the given router is a suitable candidate to become an exit
+ * 
+ * @param {Object} router the router subpart of one of the nodes of the parsed consensus
+ */
+lnn.path.isGoodExit = function (router) {
+    let flags = router['flags']
+    if (!flags.includes('Exit') || flags.includes('BadExit')) return false
+
+    if(router['exit-policy'] === undefined ) 
+        router['exit-policy'] = lnn.path.descriptorsMap[router.identity]['policy']
+    if (router['exit-policy']['type'] !== 'accept') return false
+
+    return true
+
+}
+
+lnn.path.isGoodExitGivenGuard = function (router, tcp_ports) {
+    let flags = router['flags']
+    if (!flags.includes('Exit') || flags.includes('BadExit')) return false
+    let des = lnn.path.descriptorsMap[router.identity]
+    
+
+    if(router['exit-policy'] === undefined ) 
+        router['exit-policy'] = des['policy']
+
+    let port_arr = router['exit-policy']['PortList']
+    for(i = 0; i < tcp_ports.length; i++) {
+        let found = false
+        let cur_port = tcp_ports[i]
+
+        for(j = 0; j < port_arr.length; j++) {
+            if(port_arr[j][0] == cur_port) {
+                found = true
+                break
+            }
+            else if(port_arr[j].length == 2){
+                if(port_arr[j][0] <= cur_port && cur_port <= port_arr[j][1]) {
+                    found = true
+                    break
+                }
+            }
+        }
+
+        if(router['exit-policy']['type'] == 'accept') {
+            if(!found) return false
+        } 
+        else {
+            if(found) return false
+        }
+    }
+
+    if(des === undefined){
+        return false
+    }
+
+    if(des["router"]["identity"] === lnn.path.guard["router"]["identity"]){
+        return false
+    }
+
+    if (lnn.path.inSame16Subnet(des, lnn.path.guard)) return false
+    if (lnn.path.inSameFamily(des, lnn.path.guard)) return false
+
+    return true
+}
+
+/**
+ * This function choose a good guard given the TOR lnn.path selection rules.
+ * 
+ * Note:    this implements a lightweight version of the TOR lnn.path selection, where the selection based on the different
+ *          sets is put aside
+ * 
+ */
+lnn.path.chooseGoodGuard = function () {
+    let candidates = lnn.path.consensus.filter(r => lnn.path.isGoodGuard(r))
+    return lnn.path.weightedRandomChoice(candidates)
+}
+
+/**
+ * This function checks if the given router is a suitable candidate to become a guard
+ * 
+ * @param {Object} router the router subpart of one of the nodes of the parsed consensus
+ */
+lnn.path.isGoodGuard = function (router) {
+    let flags = router['flags']
+    let des = lnn.path.descriptorsMap[router.identity]
+
+    if(des === undefined){
+        return false
+    }
+
+    if(des["router"]["identity"] === lnn.path.exit["router"]["identity"]){
+        return false
+    }
+
+    if (!flags.includes('Guard')) return false
+    if (!flags.includes('Stable')) return false
+    if (!flags.includes('V2Dir')) return false
+    if (lnn.path.inSame16Subnet(des, lnn.path.exit)) return false
+    if (lnn.path.inSameFamily(des, lnn.path.exit)) return false
+
+    return true
+}
+
+/**
+ * This function choose a good middle given the TOR lnn.path selection rules
+ */
+lnn.path.chooseGoodMiddle = function () {
+    let candidates = lnn.path.consensus.filter(r => lnn.path.isGoodMiddle(r))
+    return lnn.path.weightedRandomChoice(candidates)
+}
+
+/**
+ * This function checks if the given router is a suitable candidate to become a middle node
+ * 
+ * @param {Object} router the router subpart of one of the nodes of the parsed consensus
+ */
+lnn.path.isGoodMiddle = function (router) {
+    let des = lnn.path.descriptorsMap[router.identity]
+
+    if(des === undefined){
+        return false
+    }
+
+    if(des["router"]["identity"] === lnn.path.exit["router"]["identity"] ||des["router"]["identity"] === lnn.path.guard["router"]["identity"]){
+        return false
+    }
+
+    if (lnn.path.inSame16Subnet(des, lnn.path.guard)) return false
+    if (lnn.path.inSame16Subnet(des, lnn.path.exit)) return false
+    if (lnn.path.inSameFamily(des, lnn.path.guard)) return false
+    if (lnn.path.inSameFamily(des, lnn.path.exit)) return false
+
+    return true
+}
+
+window['lnn'] = lnn
