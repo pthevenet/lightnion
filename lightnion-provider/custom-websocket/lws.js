@@ -10,7 +10,6 @@ export default class LWS extends CustomWebSocket {
         // TODO: 
         //  - secure websockets
 
-
         let urlP = new URL(url); // TODO: parse ?
 
         let port = urlP.port;
@@ -20,6 +19,7 @@ export default class LWS extends CustomWebSocket {
 
         super(urlP, protocols);
 
+        // user defined handlers
         this.onmessage = (payload) => { };
         this.onopen = (payload) => { };
         this.onclose = (event) => { };
@@ -31,19 +31,28 @@ export default class LWS extends CustomWebSocket {
             return ltcpOpen(lnnEndpoint, urlP.hostname, port);
         }).then(ltcp => {
             console.log("[LTCP]: connected")
-            // start websocket protocol
+
+            // start websocket handshake protocol
             this.doOpen(ltcp);
 
-
-            this._onmessage = (payload) => {
-                // TODO: maybe do lnn.enc.utf8 here ?
-                this.onmessage(payload);
+            // install handlers
+            this._onmessage = (event) => {
+                console.log("[LWS] received message");
+                this.onmessage(event);
+            }
+            this._onopen = (event) => {
+                console.log("[LWS] opened");
+                this.onopen(event);
+            }
+            this._onclose = (event) => {
+                console.log("[LWS] closed");
+                this.onclose(event);
+            }
+            this._onerror = (event) => {
+                console.log("[LWS] error");
+                this.onerror(event);
             }
 
-            this.onopen = () => {
-                console.log("OPENED !");
-                // this.send(lnn.dec.utf8("HELLO"));
-            }
         });
     }
 }

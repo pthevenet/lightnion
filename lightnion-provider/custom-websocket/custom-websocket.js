@@ -110,7 +110,20 @@ export default class CustomWebSocket {
 
             // data frame
             if (wsHeader["Payload data"]) {
-                this._onmessage(wsHeader["Payload data"]); // user defined handler
+                let payload = wsHeader["Payload data"];
+
+                // wrap to event
+                let event = new MessageEvent(
+                    "message",
+                    {
+                        data: lnn.enc.utf8(payload),
+                        origin: this.url.href,
+                        lastEventId: "", // TODO ?
+                        source: null, // TODO ?
+                        ports: [], // TODO ?
+                    }
+                )
+                this._onmessage(event); // user defined handler
             }
         }
 
