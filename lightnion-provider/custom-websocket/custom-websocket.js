@@ -67,7 +67,7 @@ export default class CustomWebSocket {
             const wsHeader = wspackets.parse(frame);
             console.log("WS INC>");
             console.log(wsHeader);
-            if ((wsHeader["opcode"] & 16) === 16) {
+            if ((wsHeader["opcode"] & 8) === 8) {
                 // control frame
                 // first bit of opcode == 1 for control frames
                 const opcode = wsHeader["opcode"];
@@ -97,7 +97,7 @@ export default class CustomWebSocket {
                     case wspackets.opcodes.ping:
                         // send back a pong frame, with received payload if any
                         const payload = "Payload data" in wsHeader ? wsHeader["Payload data"] : new Uint8Array(0);
-                        this.socket.send(wspackets.encapsulate(payload, "0000", wspackets.opcodes.pong));
+                        this.socket.send(wspackets.encapsulate(payload, "1000", wspackets.opcodes.pong));
                         break;
                     case wspackets.opcodes.pong:
                         break;
