@@ -24,7 +24,6 @@
 
         // problem: lightnion.bundle.js must use websocket
     </script>
-
 </head>
 
 <body onload="focus()">
@@ -54,14 +53,14 @@
         }
     </script>
     <script defer type="module">
+        // import LWS from "../custom-websocket/lws.js"
 
         // create websocket as normal
-        let url = new URL("ws://demos.kaazing.com/echo");
+        let url = new URL("ws://echo.websocket.org");
         let ws = new WebSocket(url);
 
         ws.onMessage = (data) => {
             let text = lnn.enc.utf8(data);
-            console.log("REKRKERE")
             appendMessage(text);
         }
 

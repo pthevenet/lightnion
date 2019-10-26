@@ -62,7 +62,7 @@ export function verifySecWebSocketAccept(key, resp) {
  * @param {string} flags the first 4 bits of the packet, FIN/RSV1/RSV2/RSV3 in bitstring format
  * @param {int} opcode the integer opcode 
  */
-export function encapsulate(payload, flags = "0000", opcode = 1) {
+export function encapsulate(payload, flags = "1000", opcode = 1) {
     // TODO:
     // - fragmentation
     // - optimizations

@@ -60,11 +60,13 @@ export default class CustomWebSocket {
             //  - defragmentation
             //  - filter out control frames
             //  - unmask if needed
-            const frame = request.data;
+            const frame = request.recv();
             if (!frame) {
                 return;
             }
             const wsHeader = wspackets.parse(frame);
+            console.log("WS INC>");
+            console.log(wsHeader);
             if ((wsHeader["opcode"] & 16) === 16) {
                 // control frame
                 // first bit of opcode == 1 for control frames
@@ -86,7 +88,7 @@ export default class CustomWebSocket {
                         if (!this.closing) {
                             // send back a close frame
                             this.state = WebSocket.CLOSING;
-                            this.socket.send(wspackets.encapsulate(new ArrayBuffer(status), "1000"));
+                            this.socket.send(wspackets.encapsulate(new ArrayBuffer(status), "1000", wspackets.opcodes.close));
                         } else {
                             // end of the closing handshake
                             this.state = WebSocket.CLOSED;
@@ -201,6 +203,8 @@ export default class CustomWebSocket {
      */
     send(data) {
         const frame = wspackets.encapsulate(data);
+        console.log("WS OUT>");
+        console.log(wspackets.parse(frame));
         this.socket.send(frame);
     }
 
