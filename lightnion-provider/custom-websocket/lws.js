@@ -20,7 +20,10 @@ export default class LWS extends CustomWebSocket {
 
         super(urlP, protocols);
 
-        this.onMessage = (payload) => { };
+        this.onmessage = (payload) => { };
+        this.onopen = (payload) => { };
+        this.onclose = (event) => { };
+        this.onerror = (event) => { };
 
         // schedule the handshake to start when the underlying socket is ready
         lnnOpen(lightnionHost, lightnionPort).then(lnnEndpoint => {
@@ -32,9 +35,9 @@ export default class LWS extends CustomWebSocket {
             this.doOpen(ltcp);
 
 
-            this.onmessage = (payload) => {
+            this._onmessage = (payload) => {
                 // TODO: maybe do lnn.enc.utf8 here ?
-                this.onMessage(payload);
+                this.onmessage(payload);
             }
 
             this.onopen = () => {

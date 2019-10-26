@@ -37,10 +37,10 @@ export default class CustomWebSocket {
         this.protocol = undefined;
 
         // event handlers
-        this.onclose = (event) => { }; // TODO
-        this.onerror = (event) => { }; // TODO
-        this.onmessage = (event) => { };
-        this.onopen = () => { };
+        this._onclose = (event) => { }; // TODO
+        this._onerror = (event) => { }; // TODO
+        this._onmessage = (event) => { };
+        this._onopen = () => { };
 
         // state
         this.state = WebSocket.CONNECTING;
@@ -110,7 +110,7 @@ export default class CustomWebSocket {
 
             // data frame
             if (wsHeader["Payload data"]) {
-                this.onmessage(wsHeader["Payload data"]); // user defined handler
+                this._onmessage(wsHeader["Payload data"]); // user defined handler
             }
         }
 
@@ -152,7 +152,7 @@ export default class CustomWebSocket {
         this.openingHandshake(host, port, ressourceName, secure).then(_ => {
             this.state = WebSocket.OPEN;
             this.socket.onmessage = this.onOpenMessage;
-            this.onopen();
+            this._onopen();
         }).catch(err => {
             this.state = WebSocket.CLOSED;
         });

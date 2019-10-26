@@ -67,7 +67,7 @@
         let url = new URL("ws://echo.websocket.org");
         let ws = new WebSocket(url);
 
-        ws.onMessage = (data) => {
+        ws.onmessage = (data) => {
             let text = lnn.enc.utf8(data);
             appendMessage(text);
         }
