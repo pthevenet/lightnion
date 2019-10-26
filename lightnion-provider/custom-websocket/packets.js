@@ -14,7 +14,7 @@ export function clientHandshake(host, port, resourceName, protocols = []) {
     const nonce = nacl.randomBytes(16);
     const nonceB64 = lnn.enc.base64(nonce);
 
-    // creat the http packet
+    // create the http packet
     const pkt = [
         ["GET", `${resourceName}`, "HTTP/1.1"],
         ["Host:", `${host}:${port}`],

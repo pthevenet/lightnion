@@ -9,21 +9,20 @@
     <script src="../jquery.min.js"></script>
     <script src="../forge.all.js"></script>
 
+    <!-- lightnion client -->
     <script>
+        // keeping websocket accessible for lightnion client code
         window._WebSocket = WebSocket;
     </script>
-    <!-- lightnion client -->
     <script src='../lightnion.bundle.js'></script>
 
     <script type="module">
-        import LWS from "../custom-websocket/lws.js"
-        console.log("overriding websockets");
         // redefining websockets
+        import LWS from "../custom-websocket/lws.js"
         window._WebSocket = WebSocket;
         WebSocket = LWS;
-
-        // problem: lightnion.bundle.js must use websocket
     </script>
+
 </head>
 
 <body onload="focus()">
@@ -51,6 +50,15 @@
             li.appendChild(document.createTextNode(msg));
             ul.appendChild(li);
         }
+
+        // send with enter key
+        document.getElementById("echo-form").addEventListener("keyup", function (event) {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                document.getElementById("echo-button").click();
+            }
+        });
+
     </script>
     <script defer type="module">
         // import LWS from "../custom-websocket/lws.js"
@@ -65,7 +73,6 @@
         }
 
         window.ws = ws;
-
     </script>
 
 </body>
