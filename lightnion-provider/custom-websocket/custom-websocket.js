@@ -6,21 +6,46 @@ import * as wspackets from "./packets.js";
  */
 
 // TODO: verify https://www.w3.org/TR/websockets/#the-websocket-interface
+// TODO:
+// - bufferedAmount
+// - event handlers (see: https://html.spec.whatwg.org/multipage/webappapis.html#event-handlers)
+// - extensions
+// - protocols  
 
-export default class CustomWebSocket {
-    // TODO: refactor public/private fiels
+export default class CustomWebSocket extends EventTarget {
+    // TODO: refactor public/private fields
     // onclose;
     // onerror;
     // onmessage;
     // onopen;
 
+    // Constants
+    // static getters are used to implement static constants
+    static get CONNECTING() { return 0 };
+    static get OPEN() { return 1 };
+    static get CLOSING() { return 2 };
+    static get CLOSED() { return 3 };
+
+    get binaryType() { return this._binaryType };
+    set binaryType(binaryType) {
+        if (binaryType === "blob" || binaryType === "arraybuffer") {
+            this._binaryType = binaryType;
+        } else {
+            throw new SyntaxError(`websocket binaryType cannot be set to ${binaryType}, allowed values are 'blob' and 'arraybuffer'`);
+        }
+    }
+
+    get readyState() {
+        return this.state;
+    }
+
     /**
-     * 
+     * Constructor
      * @param {URL} url 
-     * @param {list} protocols 
-     * @param socket should have an 'onmessage' callback method, and a 'send' method
+     * @param {string[]|string} [protocols] 
      */
-    constructor(url, protocols) {
+    constructor(url, protocols = []) {
+        super();
         this.url = new URL(url);
         this.protocols = []
         if (Array.isArray(protocols)) {
@@ -30,13 +55,17 @@ export default class CustomWebSocket {
             this.protocols = [protocols];
         }
 
-        // TODO
-        this.binaryType = undefined;
-        this.bufferedAmmount = undefined;
+        this._binaryType = "blob"; // either "blob" or "arraybuffer", default "blob"
+
+        // TODO: see https://www.w3.org/TR/websockets/#dom-websocket-bufferedamount
+        // probably need to use the underlying socket buffered amount if any, otherwise ?
+        this.bufferedAmmount = 0; // FIXME: set to 0 for compatibility 
         this.extensions = undefined;
         this.protocol = undefined;
 
         // event handlers
+        // these are the handlers called by the underlying socket
+        // each of them will call the user-defined handler (e.g. this.onmessage) after some processing
         this._onclose = (event) => { }; // TODO
         this._onerror = (event) => { }; // TODO
         this._onmessage = (event) => { };
@@ -64,13 +93,23 @@ export default class CustomWebSocket {
             if (!frame) {
                 return;
             }
+
+            if (this.binaryType == "arraybuffer") {
+                // TODO
+                throw `Error: arraybuffer binary type not implemented`;
+            } else {
+                // should be "blob", assume "blob"
+            }
+
             const wsHeader = wspackets.parse(frame);
+
             console.log("WS INC>");
             console.log(wsHeader);
-            if ((wsHeader["opcode"] & 8) === 8) {
+
+            const opcode = wsHeader["opcode"];
+
+            if (wspackets.isControlFrame(opcode)) {
                 // control frame
-                // first bit of opcode == 1 for control frames
-                const opcode = wsHeader["opcode"];
 
                 switch (opcode) {
                     case wspackets.opcodes.close:
@@ -108,9 +147,24 @@ export default class CustomWebSocket {
                 return;
             }
 
+
+            // TODO
             // data frame
+            let payload = wsHeader["Payload data"];
+            switch (opcode) {
+                case wspackets.opcodes.continuation:
+                    throw `websocket fragmentation not implemented`;
+                    break;
+                case wspackets.text:
+                    break;
+                case wspackets.binary:
+                    break;
+                default:
+                    // not implemented or invalid
+                    break;
+            }
+
             if (wsHeader["Payload data"]) {
-                let payload = wsHeader["Payload data"];
 
                 // wrap to event
                 let event = new MessageEvent(
@@ -147,6 +201,110 @@ export default class CustomWebSocket {
         origin = origin.href;
     }
 
+    // TASKS
+
+    /**
+     * Task to run when "the WebSocket connection is established"
+     */
+    _established() {
+        // 1. change the readyState attribute's value to OPEN
+        this.state = CustomWebSocket.OPEN;
+
+        // 2. TODO: change the extensions attribute's value to the extensions in use, if is not the null value
+        // this.extensions = 
+
+        // 3. TODO: change the protocol attribute's value to the subprotocol in use, if is not the null value
+        // this.protocols = 
+
+        // 4. TODO: act as if the user agent had received a set-cookie-string consisting of the cookies 
+        //          set during the server's opening handshake, for the URL url given to the WebSocket() constructor
+        // document.cookie = 
+
+        // 5. fire a simple event named open at the WebSocket object
+        this.dispatchEvent(new Event("open"));
+    }
+
+    /**
+     * Task to run when "a WebSocket message has been received"
+     */
+    _received(data, opcode) {
+
+        // 1. If the readyState attribute's value is not OPEN (1), then abort these steps
+        if (this.state !== CustomWebSocket.OPEN) {
+            return;
+        }
+
+        // 2. let event be an event that uses the MessageEvent interface,
+        //    with the event type message, which does not bubble, is not cancelable, 
+        //    and has no default action.
+        // 3. initialize event's origin attribute to the Unicode serialization of the origin of the URL
+        //    that was passed to the WebSocket object's constructor.
+
+        let event = new MessageEvent("message", {
+            origin: this.url.href, // FIXME?
+        });
+
+        // 4. - if type indicates that the data is Text, then initialize event's data attribute to data
+        //    - if type indicates that the data is Binary, and binaryType is set to "blob", 
+        //      then initialize event's data attribute to a new Blob object that represents data as its raw data
+        //    - if type indicates that the data is Binary, and binaryType is set to "arraybuffer",
+        //      then initialize event's data attribute to a new read-only ArrayBuffer object whose contents are data
+
+        if (opcode === wspackets.opcodes.text) {
+            event.data = data;
+        } else if (opcode === wspackets.opcodes.binary) {
+            throw `Binary websocket data not implemented`;
+            // TODO: depends on the type of data!
+            // if (this.binaryType === "blob") {
+            //     // binary blob
+            //     // event.data = new Blob([data]);
+            // } else {
+            //     // binary arraybuffer
+            //     // event.data = ... // probably works with `data.buffer` since Uint8Array is a ArrayBuffer ?
+            // }
+        }
+
+        // 5. dispatch event at the WebSocket object.
+        this.dispatchEvent(event);
+    }
+
+    /**
+     * Task to run when "the WebSocket closing handshake is started"
+     */
+    _closing() {
+        // change the readyState attribute to CLOSING (2)
+        this.state = CustomWebSocket.CLOSING;
+    }
+
+    /**
+     * Task to run when "the WebSocket connection is closed"
+     */
+    _closed(wasClean, code = 1005, reason = "") {
+        // 1. change the readyState attribute's value to CLOSED (3)
+        this.state = CustomWebSocket.CLOSED;
+
+        // 2. if the user agent was required to fail the WebSocket connection 
+        //    or the WebSocket connection is closed with prejudice, 
+        //    fire a simple event named error at the WebSocket object
+
+        // TODO
+
+        // 3. Create an event that uses the CloseEvent interface,
+        //    with the event type close, which does not bubble, is not cancelable, has no default action,
+        //    whose wasClean attribute is initialized to true if the connection closed cleanly and false otherwise,
+        //    whose code attribute is initialized to the WebSocket connection close code,
+        //    and whose reason attribute is initialized to the WebSocket connection close reason decoded as UTF-8,
+        //    with error handling, and dispatch the event at the WebSocket object
+
+        const event = new CloseEvent("close", {
+            wasClean: wasClean,
+            code: code,
+            reason: reason,
+        })
+
+        this.dispatchEvent(event);
+    }
+
     /**
      * Perform the opening websocket handshake.
      * 
@@ -169,10 +327,6 @@ export default class CustomWebSocket {
         }).catch(err => {
             this.state = WebSocket.CLOSED;
         });
-    }
-
-    get readyState() {
-        return this.state;
     }
 
     close(code, reason) {
@@ -212,10 +366,35 @@ export default class CustomWebSocket {
 
     /**
      * Send to the websocket endpoint.
-     * @param {Uint8Array} data the payload to send 
+     * @param {string|Blob|ArrayBuffer|ArrayBufferView} data the payload to send 
      */
     send(data) {
-        const frame = wspackets.encapsulate(data);
+        // FIXME: bufferedAmount, closing handshake started
+        // TODO: test
+
+        if (this.state === CustomWebSocket.CONNECTING) {
+            // TODO: proper errors
+            throw `InvalidStateError: cannot send data while websocket is in CONNECTING state`;
+        }
+
+        let frame;
+        if (typeof data === "string") {
+            // convert data to a sequence of Unicode characters
+            const payload = lnn.enc.utf8(data);
+            if (this.state === CustomWebSocket.CONNECTED) {
+                frame = wspackets.encapsulate(payload, "1000", wspackets.opcodes.text);
+            }
+        } else if (data instanceof Blob) {
+            frame = wspackets.encapsulate(data, "1000", wspackets.opcodes.binary);
+        } else if (data instanceof ArrayBuffer) {
+            frame = wspackets.encapsulate(data, "1000", wspackets.opcodes.binary);
+            // } else if (data instanceof ArrayBufferView) {
+        } else {
+            // assume ArrayBufferView
+            // send data stored in the section of the buffer described by the ArrayBuffer object that the ArrayBufferView object references
+            frame = wspackets.encapsulate(data, "1000", wspackets.opcodes.binary);
+        }
+
         console.log("WS OUT>");
         console.log(wspackets.parse(frame));
         this.socket.send(frame);

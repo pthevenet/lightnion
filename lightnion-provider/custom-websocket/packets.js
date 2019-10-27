@@ -182,8 +182,17 @@ export function parse(frame) {
     return parsed;
 }
 
+export let isControlFrame = (opcode) => (opcode & 8) === 8;
+
 export let opcodes = {
+    continuation: 0,
+    text: 1,
+    binary: 2,
+    // x3-7 reserved for further non-control frames
     close: 8,
     ping: 9,
     pong: 10,
+    // xB-F reserved for further control frames
 }
+
+// TODO: close codes
