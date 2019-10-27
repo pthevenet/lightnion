@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Websocket Redirection</title>
+    <link rel="stylesheet" href="../ws_style.css">
+    <script>
+        // keeping websocket accessible for lightnion client code
+        window._WebSocket = WebSocket;
+    </script>
+
+</head>
+
+<body onload="focus()">
+    <h1>Websocket Redirection</h1>
+
+    <ul id="messages"></ul>
+    <form id="echo-form" action="javascript:void(0);">
+        <input id="echo-input" autocomplete="off" />
+        <button type="button" id="echo-button" onclick="sendMessage()">Send</button>
+    </form>
+
+    <script>
+        // send message in input through websocket
+        function sendMessage() {
+            let msg = document.getElementById("echo-input").value;
+            document.getElementById("echo-input").value = "";
+            appendMessage(msg);
+            window.ws.send(msg);
+        }
+
+        // add a message to the frontend
+        function appendMessage(msg) {
+            var ul = document.getElementById("messages");
+            var li = document.createElement("li");
+            li.appendChild(document.createTextNode(msg));
+            ul.appendChild(li);
+        }
+
+        // send with enter key
+        document.getElementById("echo-form").addEventListener("keyup", function (event) {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                document.getElementById("echo-button").click();
+            }
+        });
+
+    </script>
+    <script defer type="module">
+
+        // create websocket as normal
+        let url = new URL("ws://echo.websocket.org");
+        let ws = new WebSocket(url);
+
+        ws.onmessage = (data) => {
+            let text = data;
+            appendMessage(text);
+            console.log(data);
+        }
+
+        window.ws = ws;
+    </script>
+
+</body>
+
+</html>
