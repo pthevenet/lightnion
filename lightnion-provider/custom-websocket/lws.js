@@ -6,11 +6,9 @@ import { lnnOpen, ltcpOpen } from "../lightnion-helpers.js";
  */
 export default class LWS extends CustomWebSocket {
 
-    constructor(url, protocols, lightnionHost = "192.168.122.180", lightnionPort = 4990) {
-        // TODO: 
-        //  - secure websockets
+    constructor(url, protocols = [], lightnionHost = "192.168.122.180", lightnionPort = 4990) {
 
-        let urlP = new URL(url); // TODO: parse ?
+        let urlP = new URL(url);
 
         let port = urlP.port;
         if (!port) {
@@ -20,8 +18,8 @@ export default class LWS extends CustomWebSocket {
         super(urlP, protocols);
 
         // user defined handlers
-        this.onmessage = (payload) => { };
-        this.onopen = (payload) => { };
+        this.onmessage = (event) => { };
+        this.onopen = (event) => { };
         this.onclose = (event) => { };
         this.onerror = (event) => { };
 
@@ -36,20 +34,20 @@ export default class LWS extends CustomWebSocket {
             this.doOpen(ltcp);
 
             // install handlers
-            this._onmessage = (event) => {
-                console.log("[LWS] received message");
+            this.__onmessage = (event) => {
+                console.log("[LWS] message event");
                 this.onmessage(event);
             }
-            this._onopen = (event) => {
-                console.log("[LWS] opened");
+            this.__onopen = (event) => {
+                console.log("[LWS] open event");
                 this.onopen(event);
             }
-            this._onclose = (event) => {
-                console.log("[LWS] closed");
+            this.__onclose = (event) => {
+                console.log("[LWS] close event");
                 this.onclose(event);
             }
-            this._onerror = (event) => {
-                console.log("[LWS] error");
+            this.__onerror = (event) => {
+                console.log("[LWS] error event");
                 this.onerror(event);
             }
 

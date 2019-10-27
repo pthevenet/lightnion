@@ -54,6 +54,21 @@ export function verifySecWebSocketAccept(key, resp) {
     return resp === expected;
 }
 
+/**
+ * Construct a pong frame.
+ * @param {Uint8Array} payload the pong payload, usually the application data of the received ping
+ */
+export function pongFrame(payload) {
+    return encapsulate(payload, "1000", opcodes.pong);
+}
+
+/**
+ * Construct a ping frame.
+ * @param {Uint8Array} payload the ping application data
+ */
+export function pingFrame(payload) {
+    return encapsulate(payload, "1000", opcodes.ping);
+}
 
 /**
  * Encapsulate given data into a WebSocket packet.

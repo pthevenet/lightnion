@@ -1,6 +1,11 @@
 import { parseHTTPHeaders, parseURL } from "./parsing.js";
 import * as wspackets from "./packets.js";
 
+let binaryTypes = {
+    blob: "blob",
+    arraybuffer: "arraybuffer",
+}
+
 /**
  * CustomWebSocket is a WebSocket aimed to replace standard WebSocket with user-defined behavior.
  */
@@ -11,33 +16,18 @@ import * as wspackets from "./packets.js";
 // - event handlers (see: https://html.spec.whatwg.org/multipage/webappapis.html#event-handlers)
 // - extensions
 // - protocols  
+// - garbage collection
+// - proper errors
+// - public/private fields
 
 export default class CustomWebSocket extends EventTarget {
-    // TODO: refactor public/private fields
-    // onclose;
-    // onerror;
-    // onmessage;
-    // onopen;
 
-    // Constants
+    // CONSTANTS
     // static getters are used to implement static constants
     static get CONNECTING() { return 0 };
     static get OPEN() { return 1 };
     static get CLOSING() { return 2 };
     static get CLOSED() { return 3 };
-
-    get binaryType() { return this._binaryType };
-    set binaryType(binaryType) {
-        if (binaryType === "blob" || binaryType === "arraybuffer") {
-            this._binaryType = binaryType;
-        } else {
-            throw new SyntaxError(`websocket binaryType cannot be set to ${binaryType}, allowed values are 'blob' and 'arraybuffer'`);
-        }
-    }
-
-    get readyState() {
-        return this.state;
-    }
 
     /**
      * Constructor
@@ -46,43 +36,46 @@ export default class CustomWebSocket extends EventTarget {
      */
     constructor(url, protocols = []) {
         super();
-        this.url = new URL(url);
-        this.protocols = []
-        if (Array.isArray(protocols)) {
-            this.protocols = protocols;
-        }
-        else if (typeof protocols === 'string' || protocols instanceof String) {
-            this.protocols = [protocols];
-        }
-
-        this._binaryType = "blob"; // either "blob" or "arraybuffer", default "blob"
-
-        // TODO: see https://www.w3.org/TR/websockets/#dom-websocket-bufferedamount
-        // probably need to use the underlying socket buffered amount if any, otherwise ?
-        this.bufferedAmmount = 0; // FIXME: set to 0 for compatibility 
-        this.extensions = undefined;
-        this.protocol = undefined;
-
-        // event handlers
-        // these are the handlers called by the underlying socket
-        // each of them will call the user-defined handler (e.g. this.onmessage) after some processing
-        this._onclose = (event) => { }; // TODO
-        this._onerror = (event) => { }; // TODO
-        this._onmessage = (event) => { };
-        this._onopen = () => { };
-
-        // state
-        this.state = WebSocket.CONNECTING;
 
         // transport level socket connection
         // will be set when the handshake is requested
-        this.socket = undefined;
+        this._socket = undefined;
+
+        // url
+        this._url = new URL(url);
+
+        // TODO: see https://www.w3.org/TR/websockets/#dom-websocket-bufferedamount
+        // probably need to use the underlying socket buffered amount if any, otherwise ?
+        this._bufferedAmount = 0;
+
+        this._extensions = "";
+        this._protocol = "";
+        this._readyState = WebSocket.CONNECTING;
+        this._binaryType = binaryTypes.blob;
+
+
+        // 'private' event handlers
+        // these are the handlers called by the underlying socket
+        // each of them will call the user-defined handler (e.g. this.onmessage) after some processing
+        // TODO: can they be implemented here ? it depends on the underlying socket...
+        this.__onclose = (event) => { };
+        this.__onerror = (event) => { };
+        this.__onmessage = (event) => { };
+        this.__onopen = (event) => { };
+
+        // 'public' event handlers
+        this._onclose = (event) => { };
+        this._onerror = (event) => { };
+        this._onmessage = (event) => { };
+        this._onopen = (event) => { };
 
         // true if the closing handshake has been initiated
-        this.closing = false;
+        // TODO: refactor
+        this._closing = false;
 
         /**
          * On message handler, when the state is OPEN.
+         * TODO: refactor as method
          */
         this.onOpenMessage = (request) => {
             // TODO:
@@ -124,19 +117,19 @@ export default class CustomWebSocket extends EventTarget {
                             }
                         }
 
-                        if (!this.closing) {
+                        if (!this._closing) {
                             // send back a close frame
-                            this.state = WebSocket.CLOSING;
-                            this.socket.send(wspackets.encapsulate(new ArrayBuffer(status), "1000", wspackets.opcodes.close));
+                            this._readyState = WebSocket.CLOSING;
+                            this._socket.send(wspackets.encapsulate(new ArrayBuffer(status), "1000", wspackets.opcodes.close));
                         } else {
                             // end of the closing handshake
-                            this.state = WebSocket.CLOSED;
+                            this._readyState = WebSocket.CLOSED;
                         }
                         break;
                     case wspackets.opcodes.ping:
                         // send back a pong frame, with received payload if any
                         const payload = "Payload data" in wsHeader ? wsHeader["Payload data"] : new Uint8Array(0);
-                        this.socket.send(wspackets.encapsulate(payload, "1000", wspackets.opcodes.pong));
+                        this._socket.send(wspackets.pongFrame(payload));
                         break;
                     case wspackets.opcodes.pong:
                         break;
@@ -171,35 +164,181 @@ export default class CustomWebSocket extends EventTarget {
                     "message",
                     {
                         data: lnn.enc.utf8(payload),
-                        origin: this.url.href,
+                        origin: this._url.href,
                         lastEventId: "", // TODO ?
                         source: null, // TODO ?
                         ports: [], // TODO ?
                     }
                 )
-                this._onmessage(event); // user defined handler
+                this.__onmessage(event); // user defined handler
             }
         }
 
         // check if duplicates in protocols
-        if (new Set(this.protocols).size != this.protocols.length) {
-            throw SyntaxError(`duplicates in protocols: ${this.protocols}`);
-        }
+        // TODO
+        // if (new Set(this.protocols).size != this.protocols.length) {
+        //     throw SyntaxError(`duplicates in protocols: ${this.protocols}`);
+        // }
 
         let origin = new URL(window.location.href);
         // parse url
         try {
-            var [_, _, _, secure] = parseURL(this.url);
+            var [_, _, _, secure] = parseURL(this._url);
         } catch (err) {
             throw SyntaxError(`could not parse url: ${err}`);
         }
 
         if (secure && origin.protocol !== "https") {
+            // TODO: verify
             throw Error(`SecurityError: cannot open non-secure websocket from a secure origin`);
         }
+    };
 
-        origin = origin.href;
+    // PROPERTIES
+
+    // url: read-only DOMString
+    get url() {
+        return this._url.href;
+    };
+
+    // readyState: read-only unsigned short
+    get readyState() {
+        return this._readyState;
+    };
+
+    // bufferedAmount: read-only unsigned long
+    get bufferedAmount() {
+        return this._bufferedAmount;
+    };
+
+    // extensions: read-only DOMString
+    get extensions() {
+        return this._extensions;
+    };
+
+    // protocol: read-only DOMString
+    get protocol() {
+        return this._protocol;
+    };
+
+    // binaryType: DOMString
+    get binaryType() { return this._binaryType; };
+    set binaryType(binaryType) {
+        switch (binaryType) {
+            case "blob":
+                this._binaryType = binaryTypes.blob;
+                break;
+            case "arraybuffer":
+                this._binaryType = binaryTypes.arraybuffer;
+                break;
+            default:
+                throw new SyntaxError(`websocket binaryType cannot be set to ${binaryType}, allowed values are 'blob' and 'arraybuffer'`);
+        }
+    };
+
+    // EVENT HANDLERS
+
+    get onopen() {
+        return this._onopen;
     }
+    set onopen(onopen) {
+        this._onopen = onopen;
+    };
+
+    get onmessage() {
+        return this._onmessage;
+    }
+    set onmessage(onmessage) {
+        this._onmessage = onmessage;
+    };
+
+    get onerror() {
+        return this._onerror;
+    }
+    set onerror(onerror) {
+        this._onerror = onerror;
+    };
+
+    get onclose() {
+        return this._onclose;
+    }
+    set onclose(onclose) {
+        this._onclose = onclose;
+    };
+
+    // INTERFACE METHODS
+
+    /**
+     * Close the WebSocket connection.
+     * @param {int} code 
+     * @param {DOMString} reason 
+     */
+    close(code, reason) {
+        // check code
+        if (code && (code !== 1000 || (code >= 3000 && code <= 4999))) {
+            throw Error(`InvalidAccessError: code must be 1000 or in the range 3000-4999`);
+        }
+
+        if (reason) {
+            const unicodeReason = lnn.enc.utf8(reason);
+            if (unicodeReason.byteLength > 123) {
+                throw SyntaxError(`reason is too long: ${reason}`);
+            }
+        }
+
+
+        if (this._readyState === WebSocket.CLOSED || this._readyState === WebSocket.CLOSING) {
+            // do nothing
+            return;
+        } else if (this._readyState !== WebSocket.OPEN) {
+            // connection not yet established
+            // fail the connection
+            this._readyState = WebSocket.CLOSING;
+            this.fail();
+        } else if (!this._closing) {
+            // the closing handshake has not yet been started
+
+        } else {
+            this._readyState = WebSocket.CLOSING;
+        }
+    }
+
+    /**
+     * Send to the websocket endpoint.
+     * @param {string|Blob|ArrayBuffer|ArrayBufferView} data the payload to send 
+     */
+    send(data) {
+        // FIXME: bufferedAmount, closing handshake started
+        // TODO: test
+
+        if (this._readyState === CustomWebSocket.CONNECTING) {
+            // TODO: proper errors
+            throw `InvalidStateError: cannot send data while websocket is in CONNECTING state`;
+        }
+
+        let frame;
+        if (typeof data === "string") {
+            // convert data to a sequence of Unicode characters
+            const payload = lnn.enc.utf8(data);
+            if (this._readyState === CustomWebSocket.CONNECTED) {
+                frame = wspackets.encapsulate(payload, "1000", wspackets.opcodes.text);
+            }
+        } else if (data instanceof Blob) {
+            frame = wspackets.encapsulate(data, "1000", wspackets.opcodes.binary);
+        } else if (data instanceof ArrayBuffer) {
+            frame = wspackets.encapsulate(data, "1000", wspackets.opcodes.binary);
+            // } else if (data instanceof ArrayBufferView) {
+        } else {
+            // assume ArrayBufferView
+            // send data stored in the section of the buffer described by the ArrayBuffer object that the ArrayBufferView object references
+            frame = wspackets.encapsulate(data, "1000", wspackets.opcodes.binary);
+        }
+
+        console.log("WS OUT>");
+        console.log(wspackets.parse(frame));
+        this._socket.send(frame);
+    }
+
 
     // TASKS
 
@@ -208,13 +347,13 @@ export default class CustomWebSocket extends EventTarget {
      */
     _established() {
         // 1. change the readyState attribute's value to OPEN
-        this.state = CustomWebSocket.OPEN;
+        this._readyState = CustomWebSocket.OPEN;
 
         // 2. TODO: change the extensions attribute's value to the extensions in use, if is not the null value
-        // this.extensions = 
+        // this._extensions = 
 
         // 3. TODO: change the protocol attribute's value to the subprotocol in use, if is not the null value
-        // this.protocols = 
+        // this._protocol = 
 
         // 4. TODO: act as if the user agent had received a set-cookie-string consisting of the cookies 
         //          set during the server's opening handshake, for the URL url given to the WebSocket() constructor
@@ -230,7 +369,7 @@ export default class CustomWebSocket extends EventTarget {
     _received(data, opcode) {
 
         // 1. If the readyState attribute's value is not OPEN (1), then abort these steps
-        if (this.state !== CustomWebSocket.OPEN) {
+        if (this._readyState !== CustomWebSocket.OPEN) {
             return;
         }
 
@@ -241,7 +380,7 @@ export default class CustomWebSocket extends EventTarget {
         //    that was passed to the WebSocket object's constructor.
 
         let event = new MessageEvent("message", {
-            origin: this.url.href, // FIXME?
+            origin: this._url.href, // FIXME?
         });
 
         // 4. - if type indicates that the data is Text, then initialize event's data attribute to data
@@ -273,7 +412,7 @@ export default class CustomWebSocket extends EventTarget {
      */
     _closing() {
         // change the readyState attribute to CLOSING (2)
-        this.state = CustomWebSocket.CLOSING;
+        this._readyState = CustomWebSocket.CLOSING;
     }
 
     /**
@@ -281,7 +420,7 @@ export default class CustomWebSocket extends EventTarget {
      */
     _closed(wasClean, code = 1005, reason = "") {
         // 1. change the readyState attribute's value to CLOSED (3)
-        this.state = CustomWebSocket.CLOSED;
+        this._readyState = CustomWebSocket.CLOSED;
 
         // 2. if the user agent was required to fail the WebSocket connection 
         //    or the WebSocket connection is closed with prejudice, 
@@ -305,99 +444,35 @@ export default class CustomWebSocket extends EventTarget {
         this.dispatchEvent(event);
     }
 
+    // HELPER METHODS
+
     /**
      * Perform the opening websocket handshake.
      * 
      * @param socket underlying socket
      */
     doOpen(socket) {
-        this.socket = socket;
+        this._socket = socket;
         // parse url
         try {
-            var [host, port, ressourceName, secure] = parseURL(this.url);
+            var [host, port, ressourceName, secure] = parseURL(this._url);
         } catch (err) {
             throw SyntaxError(`could not parse url: ${err}`);
         }
 
         // perform handshake
         this.openingHandshake(host, port, ressourceName, secure).then(_ => {
-            this.state = WebSocket.OPEN;
-            this.socket.onmessage = this.onOpenMessage;
-            this._onopen();
+            this._readyState = WebSocket.OPEN;
+            this._socket.onmessage = this.onOpenMessage;
+            this.__onopen();
         }).catch(err => {
-            this.state = WebSocket.CLOSED;
+            this._readyState = WebSocket.CLOSED;
         });
-    }
-
-    close(code, reason) {
-        // check code
-        if (code && (code !== 1000 || (code >= 3000 && code <= 4999))) {
-            throw Error(`InvalidAccessError: code must be 1000 or in the range 3000-4999`);
-        }
-
-        if (reason) {
-            const unicodeReason = lnn.enc.utf8(reason);
-            if (unicodeReason.byteLength > 123) {
-                throw SyntaxError(`reason is too long: ${reason}`);
-            }
-        }
-
-
-        if (this.state === WebSocket.CLOSED || this.state === WebSocket.CLOSING) {
-            // do nothing
-            return;
-        } else if (this.state !== WebSocket.OPEN) {
-            // connection not yet established
-            // fail the connection
-            this.state = WebSocket.CLOSING;
-            this.fail();
-        } else if (!this.closing) {
-            // the closing handshake has not yet been started
-
-        } else {
-            this.state = WebSocket.CLOSING;
-        }
     }
 
     fail(code, reason) {
         // TODO
-        this.closingHandshake(code, reason);
-    }
-
-    /**
-     * Send to the websocket endpoint.
-     * @param {string|Blob|ArrayBuffer|ArrayBufferView} data the payload to send 
-     */
-    send(data) {
-        // FIXME: bufferedAmount, closing handshake started
-        // TODO: test
-
-        if (this.state === CustomWebSocket.CONNECTING) {
-            // TODO: proper errors
-            throw `InvalidStateError: cannot send data while websocket is in CONNECTING state`;
-        }
-
-        let frame;
-        if (typeof data === "string") {
-            // convert data to a sequence of Unicode characters
-            const payload = lnn.enc.utf8(data);
-            if (this.state === CustomWebSocket.CONNECTED) {
-                frame = wspackets.encapsulate(payload, "1000", wspackets.opcodes.text);
-            }
-        } else if (data instanceof Blob) {
-            frame = wspackets.encapsulate(data, "1000", wspackets.opcodes.binary);
-        } else if (data instanceof ArrayBuffer) {
-            frame = wspackets.encapsulate(data, "1000", wspackets.opcodes.binary);
-            // } else if (data instanceof ArrayBufferView) {
-        } else {
-            // assume ArrayBufferView
-            // send data stored in the section of the buffer described by the ArrayBuffer object that the ArrayBufferView object references
-            frame = wspackets.encapsulate(data, "1000", wspackets.opcodes.binary);
-        }
-
-        console.log("WS OUT>");
-        console.log(wspackets.parse(frame));
-        this.socket.send(frame);
+        this._closingHandshake(code, reason);
     }
 
     /**
@@ -406,11 +481,11 @@ export default class CustomWebSocket extends EventTarget {
      * @param {string} reason 
      */
     closingHandshake(code, reason) {
-        if (this.state = WebSocket.CLOSED || this.closing) {
+        if (this._readyState = WebSocket.CLOSED || this._closing) {
             return;
         }
-        this.state = WebSocket.CLOSING;
-        this.socket.send(wspackets.encapsulate(new ArrayBuffer(code).concat(lnn.dec.utf8(reason)), "1000"));
+        this._readyState = WebSocket.CLOSING;
+        this._socket.send(wspackets.encapsulate(new ArrayBuffer(code).concat(lnn.dec.utf8(reason)), "1000"));
     }
 
     /**
@@ -427,7 +502,7 @@ export default class CustomWebSocket extends EventTarget {
             const [clientHS, secWebSocketKey] = wspackets.clientHandshake(host, port, ressourceName);
 
             // change onmessage of underlying socket
-            this.socket.onmessage = (request) => {  // TODO: refactor to avoid request ?
+            this._socket.onmessage = (request) => {  // TODO: refactor to avoid request ?
                 let payload = lnn.enc.utf8(request.recv());
 
                 // parse received packet as a HTTP websocket connection response
@@ -513,7 +588,7 @@ export default class CustomWebSocket extends EventTarget {
                     resolve();
                 }
             }
-            this.socket.send(lnn.dec.utf8(clientHS));
+            this._socket.send(lnn.dec.utf8(clientHS));
         })
 
     }
