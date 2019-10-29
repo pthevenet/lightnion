@@ -107,20 +107,25 @@ export default class CustomWebSocket extends EventTarget {
                 switch (opcode) {
                     case wspackets.opcodes.close:
                         // TODO: could read reason
-                        let status;
+                        let status = 1005;
+                        let reason = "";
                         if ("Payload data" in wsHeader) {
                             const payload = wsHeader["Payload data"];
-                            if (payload.length < 2) {
-                                status = 1005;
-                            } else {
+                            if (payload.length >= 2) {
                                 status = payload[0] << 8 + payload[1];
+                                let reasonBytes = payload.slice(2);
+                                if (reasonBytes.length > 0) {
+                                    // read reason
+                                    reason = lnn.enc.utf8(reasonBytes);
+                                }
                             }
                         }
 
                         if (!this._closing) {
                             // send back a close frame
                             this._readyState = WebSocket.CLOSING;
-                            this._socket.send(wspackets.encapsulate(new ArrayBuffer(status), "1000", wspackets.opcodes.close));
+                            const payload = wsHeader["Payload data"]
+                            this._socket.send(wspackets.encapsulate(payload, "1000", wspackets.opcodes.close));
                         } else {
                             // end of the closing handshake
                             this._readyState = WebSocket.CLOSED;
@@ -334,11 +339,15 @@ export default class CustomWebSocket extends EventTarget {
             frame = wspackets.encapsulate(data, "1000", wspackets.opcodes.binary);
         }
 
-        console.log("WS OUT>");
-        console.log(wspackets.parse(frame));
-        this._socket.send(frame);
+        if (frame) {
+            console.log("WS OUT>");
+            console.log(wspackets.parse(frame));
+            this._socket.send(frame);
+        } else {
+            // not connected or closing, ...
+            return
+        }
     }
-
 
     // TASKS
 
