@@ -316,6 +316,10 @@ export default class CustomWebSocket extends EventTarget {
         // FIXME: bufferedAmount, closing handshake started
         // TODO: test
 
+        if (!(this._socket)) {
+            throw `Socket not initialized`;
+        }
+
         if (this._readyState === CustomWebSocket.CONNECTING) {
             // TODO: proper errors
             throw `InvalidStateError: cannot send data while websocket is in CONNECTING state`;
@@ -325,14 +329,13 @@ export default class CustomWebSocket extends EventTarget {
         if (typeof data === "string") {
             // convert data to a sequence of Unicode characters
             const payload = lnn.enc.utf8(data);
-            if (this._readyState === CustomWebSocket.CONNECTED) {
+            if (this._readyState === CustomWebSocket.OPEN) {
                 frame = wspackets.encapsulate(payload, "1000", wspackets.opcodes.text);
             }
         } else if (data instanceof Blob) {
             frame = wspackets.encapsulate(data, "1000", wspackets.opcodes.binary);
         } else if (data instanceof ArrayBuffer) {
             frame = wspackets.encapsulate(data, "1000", wspackets.opcodes.binary);
-            // } else if (data instanceof ArrayBufferView) {
         } else {
             // assume ArrayBufferView
             // send data stored in the section of the buffer described by the ArrayBuffer object that the ArrayBufferView object references
@@ -471,7 +474,7 @@ export default class CustomWebSocket extends EventTarget {
 
         // perform handshake
         this.openingHandshake(host, port, ressourceName, secure).then(_ => {
-            this._readyState = WebSocket.OPEN;
+            this._established();
             this._socket.onmessage = this.onOpenMessage;
             this.__onopen();
         }).catch(err => {
