@@ -328,7 +328,7 @@ export default class CustomWebSocket extends EventTarget {
         let frame;
         if (typeof data === "string") {
             // convert data to a sequence of Unicode characters
-            const payload = lnn.enc.utf8(data);
+            const payload = lnn.dec.utf8(data);
             if (this._readyState === CustomWebSocket.OPEN) {
                 frame = wspackets.encapsulate(payload, "1000", wspackets.opcodes.text);
             }

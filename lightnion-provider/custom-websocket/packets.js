@@ -81,7 +81,6 @@ export function encapsulate(payload, flags = "1000", opcode = 1) {
     // TODO:
     // - fragmentation
     // - optimizations
-
     const opcodeBits = opcode.toString(2).padStart(4, '0');
 
     if (payload.length >= 126) {
@@ -104,8 +103,6 @@ export function encapsulate(payload, flags = "1000", opcode = 1) {
     // let maskingKey = nacl.randomBytes(4);
     let maskingKey = new Uint8Array(4);
     let maskedPayload = maskWithKey(payload, maskingKey);
-    console.log(payload)
-    console.log(maskedPayload)
 
     function bitstringToUint8Array(bitstring) {
         let len = Math.ceil(bitstring.length / 8);
