@@ -3,7 +3,7 @@
 var sharedb = require('sharedb/lib/client');
 
 // Open WebSocket connection to ShareDB server
-var socket = new WebSocket('ws://' + window.location.host);
+var socket = new WebSocket('ws://' + "51.91.103.228:8080");
 var connection = new sharedb.Connection(socket);
 
 // Create local Doc instance mapped to 'examples' collection document with id 'counter'

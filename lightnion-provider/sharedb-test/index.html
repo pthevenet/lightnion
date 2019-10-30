@@ -1,25 +1,28 @@
 <!DOCTYPE html>
-<meta charset="utf-8">
-<title>ShareDB Counter</title>
 
-<!-- lightnion client -->
-<script src='../lightnion.bundle.js'></script>
-<script src='../lightnion-helpers.js'></script>
+<head>
+  <meta charset="utf-8">
+  <title>ShareDB Counter</title>
 
-<script src="parsing.js"></script>
-<script src="packets.js"></script>
+  <!-- TLS/HTTP library -->
+  <script src="../jquery.min.js"></script>
+  <script src="../forge.all.js"></script>
 
-<!-- TLS/HTTP library -->
-<script src="../jquery.min.js"></script>
-<script src="../forge.all.js"></script>
+  <!-- lightnion client -->
+  <script>
+    // keeping websocket accessible for lightnion client code
+    window._WebSocket = WebSocket;
+  </script>
+  <script src='../lightnion.bundle.js'></script>
 
-<script src="custom-websocket.js"></script>
-<script src="lws.js"></script>
+  <script type="module">
+    // redefining websockets
+    import LWS from "../custom-websocket/lws.js"
+    window._WebSocket = WebSocket;
+    WebSocket = LWS;
+  </script>
 
-<script>
-  _WebSocket = WebSocket;
-  WebSocket = LWS; I
-</script>
+</head>
 
 
 <div style="font-family: Helvetica Neue, Helvetica, Arial, sans-serif; font-size: 36px;">
@@ -27,4 +30,4 @@
   <button style="font-size: 36px;" onclick="increment()">+1</button>
 </div>
 
-<script src="bundle.js"></script>
+<script defer type="module" src="bundle.js"></script>
