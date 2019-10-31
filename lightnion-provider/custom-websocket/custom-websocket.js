@@ -71,11 +71,11 @@ export default class CustomWebSocket extends EventTarget {
 
         // true if the closing handshake has been initiated
         // TODO: refactor
-        this._closing = false;
+        this._the_websocket_closing_handshake_is_started = false;
 
         /**
          * On message handler, when the state is OPEN.
-         * TODO: refactor as method
+         * TODO: refactor
          */
         this.onOpenMessage = (request) => {
             // TODO:
@@ -106,7 +106,8 @@ export default class CustomWebSocket extends EventTarget {
 
                 switch (opcode) {
                     case wspackets.opcodes.close:
-                        // TODO: could read reason
+                        // status and reason are parsed but not needed for now
+                        // the whole payload is echoed back
                         let status = 1005;
                         let reason = "";
                         if ("Payload data" in wsHeader) {
@@ -121,14 +122,16 @@ export default class CustomWebSocket extends EventTarget {
                             }
                         }
 
-                        if (!this._closing) {
+                        if (!this._the_websocket_closing_handshake_is_started) {
                             // send back a close frame
                             this._readyState = WebSocket.CLOSING;
-                            const payload = wsHeader["Payload data"]
+                            const payload = wsHeader["Payload data"] // echo back status and reason
                             this._socket.send(wspackets.encapsulate(payload, "1000", wspackets.opcodes.close));
+                            // end of the closing handshake
+                            this._close_the_websocket_connection();
                         } else {
                             // end of the closing handshake
-                            this._readyState = WebSocket.CLOSED;
+                            this._close_the_websocket_connection();
                         }
                         break;
                     case wspackets.opcodes.ping:
@@ -291,18 +294,19 @@ export default class CustomWebSocket extends EventTarget {
             }
         }
 
-
         if (this._readyState === WebSocket.CLOSED || this._readyState === WebSocket.CLOSING) {
             // do nothing
             return;
         } else if (this._readyState !== WebSocket.OPEN) {
             // connection not yet established
-            // fail the connection
+            // fail the websocket connection and set the readyState attribute's value to CLOSING
             this._readyState = WebSocket.CLOSING;
-            this.fail();
-        } else if (!this._closing) {
+            this._fail_the_websocket_connection();
+        } else if (!this._the_websocket_closing_handshake_is_started) {
             // the closing handshake has not yet been started
-
+            // start the closing handshake and set the readyState attribute's value to CLOSING
+            this._readyState = WebSocket.CLOSING;
+            this._start_the_websocket_closing_handshake(code, reason);
         } else {
             this._readyState = WebSocket.CLOSING;
         }
@@ -314,7 +318,6 @@ export default class CustomWebSocket extends EventTarget {
      */
     send(data) {
         // FIXME: bufferedAmount, closing handshake started
-        // TODO: test
 
         if (!(this._socket)) {
             throw `Socket not initialized`;
@@ -350,6 +353,38 @@ export default class CustomWebSocket extends EventTarget {
             // not connected or closing, ...
             return
         }
+    }
+
+    // CLOSING THE CONNECTION
+    // https://tools.ietf.org/html/rfc6455#section-7
+
+    /**
+     * Close the WebSocket Connection
+     */
+    _close_the_websocket_connection() {
+        // cleanly close the TLS & TCP connection
+        self._socket.close()
+        this._readyState = CustomWebSocket.CLOSED;
+    }
+
+    /**
+     * Start the WebSocket Closing Handshake
+     * @param {int} code status code for closing the connection
+     * @param {reason} string reason for closing the connection
+     */
+    _start_the_websocket_closing_handshake(code, reason = undefined) {
+        this._the_websocket_closing_handshake_is_started = true;
+        this._socket.send(wspackets.encapsulate(new ArrayBuffer(code).concat(lnn.dec.utf8(reason)), "1000"));
+        // wait for the close control frame from the endpoint
+        // and _close_the_websocket_connection
+        // this is done in the onmessage callback
+    }
+
+    /**
+     * Fail the WebSocket Connection.
+     */
+    _fail_the_websocket_connection() {
+        this._close_the_websocket_connection();
     }
 
     // TASKS
@@ -479,25 +514,8 @@ export default class CustomWebSocket extends EventTarget {
             this.__onopen();
         }).catch(err => {
             this._readyState = WebSocket.CLOSED;
+            this._fail_the_websocket_connection();
         });
-    }
-
-    fail(code, reason) {
-        // TODO
-        this._closingHandshake(code, reason);
-    }
-
-    /**
-     * Perform the WebSocket closing handshake.
-     * @param code 
-     * @param {string} reason 
-     */
-    closingHandshake(code, reason) {
-        if (this._readyState = WebSocket.CLOSED || this._closing) {
-            return;
-        }
-        this._readyState = WebSocket.CLOSING;
-        this._socket.send(wspackets.encapsulate(new ArrayBuffer(code).concat(lnn.dec.utf8(reason)), "1000"));
     }
 
     /**
