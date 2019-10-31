@@ -1341,7 +1341,12 @@ lnn.io.socket = function(endpoint, handler, success, error)
         },
         start: function() { }
     }
-    var socket = new window._WebSocket(endpoint.urls.socket + "/" + endpoint.id)
+    var socket;
+    try {
+        socket = new window._WebSocket(endpoint.urls.socket + "/" + endpoint.id)
+    } catch (err) {
+        socket = new WebSocket(endpoint.urls.socket + "/" + endpoint.id)
+    }
 
     socket.binaryType = "arraybuffer"
     socket.onopen = function(event)
