@@ -73,6 +73,10 @@ export default class CustomWebSocket extends EventTarget {
         // TODO: refactor
         this._the_websocket_closing_handshake_is_started = false;
 
+
+        // for reception of fragmented message
+        this._current_fragments = undefined;
+
         /**
          * On message handler, when the state is OPEN.
          * TODO: refactor
@@ -151,6 +155,41 @@ export default class CustomWebSocket extends EventTarget {
 
             // TODO
             // data frame
+
+            // unfragmented message: FIN bit set and opcode different than 0
+            // fragmented message:
+            //  - a single frame FIN bit clear  and opcode different than 0
+            //  - followed by zero or more frames with the FIN bit clear and the opcode set to 0
+            //  - terminated by the fin bit set and an opcode of 0
+
+            if (wsHeader["FIN"] && opcode !== wspackets.opcodes.continuation) {
+                // unfragmented
+            } else if (!wsHeader["FIN"] && opcode !== wspackets.opcodes.continuation) {
+                // first fragmented frame
+
+                if (this._current_fragments !== undefined) {
+                    throw `Error: expected end reception of fragmented message, got fragment from another message`;
+                }
+
+                this._current_fragments = wsHeader;
+                return;
+            } else if (!wsHeader["FIN"] && opcode === wspackets.opcodes.continuation) {
+                // continuation frames
+                // append the paylaod to the current fragments
+                this._current_fragments["Payload data"] += wsHeader["Payload data"];
+                return;
+            } else if (wsHeader["FIN"] && opcode === wspackets.opcodes.continuation) {
+                // last fragmented frame
+                // append the paylaod to the current fragments
+                this._current_fragments["Payload data"] += wsHeader["Payload data"];
+                // message complete, continue as if received non-fragmented message
+
+                wsHeader = this._current_fragments;
+
+                // clear current fragments to prepare for the next fragmented message
+                this._current_fragments = undefined;
+            }
+
             let payload = wsHeader["Payload data"];
             switch (opcode) {
                 case wspackets.opcodes.continuation:
