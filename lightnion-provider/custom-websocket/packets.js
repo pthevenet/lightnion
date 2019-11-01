@@ -83,11 +83,31 @@ export function encapsulate(payload, flags = "1000", opcode = 1) {
     // - optimizations
     const opcodeBits = opcode.toString(2).padStart(4, '0');
 
+    let payloadLen;
     if (payload.length >= 126) {
         // TODO
-        throw 'payload too long, not implemented';
+        // throw 'payload too long, not implemented';
+
+        // TODO: check boundaries...
+        if (payload.length <= 65536) {
+            // use next two bytes
+            let code = 126;
+            payloadLen = code.toString(2).padStart(7, '0');
+            payloadLen += payload.length.toString(2).padStart(16, '0');
+
+        } else {
+            if (payload.length > 2 ^ (8 * 8)) {
+                // TODO
+                throw `Error: payload too large for the websocket protocol`
+            }
+            // use next height bytes
+            let code = 127;
+            payloadLen = code.toString(2).padStart(7, '0');
+            payloadLen += payload.length.toString(2).padStart(64, '0');
+        }
+    } else {
+        payloadLen = payload.length.toString(2).padStart(7, '0');
     }
-    let payloadLen = payload.length.toString(2).padStart(7, '0');
 
     // mask input x with key
     // x must be a Uint8Array, and key a 4-bytes Uint8Array
