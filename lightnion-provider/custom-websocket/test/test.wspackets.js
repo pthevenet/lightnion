@@ -104,3 +104,61 @@ describe("clientHandshake", function () {
     });
 
 })
+
+describe("ws packet encapsulation", function () {
+    it("import", function () {
+        assert.ok(wspackets.encapsulate);
+    });
+
+    it("encapsulates small packets", function () {
+        let payload = "small";
+        // TODO: proper assertions...
+        // with proper payload length as well...
+        assert.ok(wspackets.encapsulate(payload))
+    });
+
+    it("encapsulates medium packets", function () {
+        let payload = "this should be a payload of at least 126 bytes and less than 65536 bytes";
+        // TODO: proper assertions...
+        // with proper payload length as well...
+        assert.ok(wspackets.encapsulate(payload))
+    });
+
+    it("encapsulates small packets", function () {
+        let payload = "----------------------------------------------------------------------------------"; "----------------------------------------------------------------------------------"; "----------------------------------------------------------------------------------"; "----------------------------------------------------------------------------------"; "----------------------------------------------------------------------------------"; "----------------------------------------------------------------------------------"; "----------------------------------------------------------------------------------"; "----------------------------------------------------------------------------------";
+        // TODO: proper assertions...
+        // with proper payload length as well...
+        assert.ok(wspackets.encapsulate(payload))
+    });
+
+    if ("should compute the masked payload correctly", function () {
+        // TODO - refactor code, put the function outside of encapsulate()
+    });
+
+    if ("should craft a correct ping frame", function () {
+        // TODO
+    });
+
+    if ("should craft a correct pong frame", function () {
+        // TODO
+    });
+
+});
+
+describe("isControlFrame", function () {
+
+    it("should be correct for expected opcodes", function () {
+        assert.equal(wspackets.isControlFrame(wspackets.opcodes.continuation), false);
+        assert.equal(wspackets.isControlFrame(wspackets.opcodes.text), false);
+        assert.equal(wspackets.isControlFrame(wspackets.opcodes.binary), false);
+        assert.equal(wspackets.isControlFrame(wspackets.opcodes.close), true);
+        assert.equal(wspackets.isControlFrame(wspackets.opcodes.ping), true);
+        assert.equal(wspackets.isControlFrame(wspackets.opcodes.pong), true);
+    });
+
+    // TODO
+});
+
+describe("verifySecWebSocketAccept", function () {
+    // TODO
+});

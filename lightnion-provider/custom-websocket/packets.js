@@ -214,6 +214,10 @@ export function parse(frame) {
     return parsed;
 }
 
+/**
+ * Returns true if the given opcode signifies a control frame
+ * @param {int} opcode the frame opcode
+ */
 export let isControlFrame = (opcode) => (opcode & 8) === 8;
 
 export let opcodes = {
