@@ -1,0 +1,21 @@
+{
+  "name": "lightnion-javascript-client",
+  "version": "1.0.0",
+  "description": "The lightnion javascript client.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "parcel ./src/index.html",
+    "build": "parcel build ./src/index.js -o ./dist/lnn.bundle.js",
+    "tests": "parcel help"
+  },
+  "author": "Pierre Thévenet",
+  "license": "BSD-3-Clause",
+  "dependencies": {
+    "sjcl": "^1.0.8",
+    "tweetnacl-util": "^0.15.0"
+  },
+  "devDependencies": {
+    "parcel-bundler": "^1.12.4"
+  }
+}
