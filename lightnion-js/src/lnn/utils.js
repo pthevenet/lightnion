@@ -3,9 +3,7 @@
  * Utility functions used in the lightnion-js-client module.
  */
 
-// var sjcl = require("../../vendor/sjcl.js");
 import * as sjcl from "../../vendor/sjcl.js";
-// import * as sjcl from "sjcl";
 import * as naclutil from "tweetnacl-util";
 
 /**
