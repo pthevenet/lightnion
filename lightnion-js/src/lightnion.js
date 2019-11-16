@@ -104,5 +104,11 @@ lnn.dec.utf8 = utils.dec.utf8;
 lnn.dec.base64 = utils.dec.base64;
 lnn.dec.bin = utils.dec.bin;
 
+console.log("WINDOW BEFORE:")
+console.log(window);
 
-export { lnn }
+window.lnn = lnn;
+console.log("WINDOW AFTER:")
+console.log(window);
+
+export { lnn };

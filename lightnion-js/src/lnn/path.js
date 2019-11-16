@@ -210,11 +210,11 @@ path.isGoodExitGivenGuard = function (router, tcp_ports) {
         router['exit-policy'] = des['policy']
 
     let port_arr = router['exit-policy']['PortList']
-    for (i = 0; i < tcp_ports.length; i++) {
+    for (let i = 0; i < tcp_ports.length; i++) {
         let found = false
         let cur_port = tcp_ports[i]
 
-        for (j = 0; j < port_arr.length; j++) {
+        for (let j = 0; j < port_arr.length; j++) {
             if (port_arr[j][0] == cur_port) {
                 found = true
                 break

@@ -2,7 +2,7 @@
  * @module signature
  */
 
-import { bigInt } from "big-integer";
+import bigInt from "big-integer";
 import * as sjcl from "../../vendor/sjcl.js";
 
 /**
@@ -12,8 +12,6 @@ import * as sjcl from "../../vendor/sjcl.js";
 *           The padding of the data that must be signed is done following the reference (see subsection 8.1 of the
 *           RFC 2313 for more details), however the digest is not wrapped into the data structure described in the
 *           subsection 10.1.2. This is the reason why RSA is performed manually.
-* 
-*   Note 2: <script src="http://peterolson.github.com/BigInteger.js/BigInteger.min.js"></script> must be included in the HTML file using this function.
 * 
 * @param {String} raw_cons the consensus we want to verify
 * @param {Object} keys object mapping the authorities' fingerprint to their key with the following format:
@@ -49,14 +47,15 @@ export function verify(raw_cons, keys, minimal, flavor = 'microdesc') {
         total++
 
         let key = keys[fingerprint]
+        console.log(bigInt)
         let e = bigInt(key["exponent"])
         let n = bigInt(key["modulus"])
         let key_digest = sig_and_keys_digests[fingerprint]["signing-key-digest"]
 
         if (key === undefined || !verify_key(key["pem"], key_digest)) continue
 
-        let signature = sig_and_keys_digests[fingerprint]["signature"]
-        let sig_big_int = get_signature_big_int(signature)
+        let sig = sig_and_keys_digests[fingerprint]["signature"]
+        let sig_big_int = get_signature_big_int(sig)
         let padded_hash = get_hash(sig_big_int, e, n)
         let recovered_hash = get_hash_from_rsa_cipher(padded_hash)
 
@@ -69,13 +68,13 @@ export function verify(raw_cons, keys, minimal, flavor = 'microdesc') {
 /**
  * This function get the digest encrypted by the RSA corresponding to given the exponent and modulus
  *
- * @param {BigInteger} signature the encrypted signature
+ * @param {BigInteger} sig the encrypted signature
  * @param {BigInteger} exponent the exponent of the key
  * @param {BigInteger} modulus the modulus of the key
  * @returns {String} the padded hash 
  */
-export function get_hash(signature, exponent, modulus) {
-    let padded_hash = signature.modPow(exponent, modulus).toString(16)
+export function get_hash(sig, exponent, modulus) {
+    let padded_hash = sig.modPow(exponent, modulus).toString(16)
     let size = modulus.toString(16).length
     let offset = size - padded_hash.length
     for (let i = 0; i < offset; i++) {

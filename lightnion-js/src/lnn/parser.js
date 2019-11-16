@@ -42,19 +42,19 @@ parser.descriptors = {
     validate: function (descriptors, consensus, flavor = 'microdesc', fail_on_missing = false) {
         let digest_name = (flavor == 'unflavored') ? 'digest' : 'micro-digest'
         let digests = []
-        for (idx = 0; idx < consensus['routers'].length; idx++) {
+        for (let idx = 0; idx < consensus['routers'].length; idx++) {
             let router = consensus['routers'][idx]
             digests.push(router[digest_name])
         }
 
         let obtained = []
-        for (idx = 0; idx < descriptors.length; idx++) {
+        for (let idx = 0; idx < descriptors.length; idx++) {
             obtained.push(descriptors[idx][digest_name])
         }
 
         let invalid = []
         console.log(obtained.length)
-        for (idx = 0; idx < digests.length; idx++) {
+        for (let idx = 0; idx < digests.length; idx++) {
             let digest = digests[idx]
             if (obtained.includes(digest)) {
                 obtained.splice(obtained.indexOf(digest), 1);
@@ -237,7 +237,7 @@ parser.descriptors.consume_one_node = function () {
     if (!parser.descriptors.check_exactly_once(descriptor, fields)) throw "Invalid descriptor: some mandatory fields are not present"
 
     let fullDesc = ""
-    for (i = startLine; i < endLine; i++) {
+    for (let i = startLine; i < endLine; i++) {
         if (parser.descriptors.lines[i] == "")
             continue
         fullDesc += (parser.descriptors.lines[i] + '\n')
@@ -761,7 +761,7 @@ parser.descriptors.consume_exit_policy = function (type, descriptor) {
  * @returns {Object} the updated descriptor
  */
 parser.descriptors.consume_key = function (field, descriptor) {
-    [offset, key] = parser.consume_pem(parser.descriptors.lines, ++parser.descriptors.line_count)
+    let [offset, key] = parser.consume_pem(parser.descriptors.lines, ++parser.descriptors.line_count)
     parser.descriptors.line_count += offset + 1
     descriptor[field] = key
     return descriptor

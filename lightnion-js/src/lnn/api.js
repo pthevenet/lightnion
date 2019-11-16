@@ -3,8 +3,8 @@
  */
 
 import * as utils from "./utils.js";
-import * as endpoint from "./endpoint.js";
-import * as io from "./io.js";
+import * as lnnEndpoint from "./endpoint.js";
+import * as lnnIO from "./io.js";
 import * as post from "./post.js";
 import * as get from "./get.js";
 import * as signature from "./signature.js";
@@ -39,9 +39,9 @@ export function auth(host, port, suffix, success, error, io, select_path) {
 }
 
 export function open(host, port, success, error, io, fast, auth, select_path, tcp_ports) {
-    var endpoint = endpoint.endpoint(host, port)
+    var endpoint = lnnEndpoint.endpoint(host, port)
     if (io === undefined)
-        io = io.socket
+        io = lnnIO.socket
     if (fast === undefined)
         fast = false
     if (error === undefined)

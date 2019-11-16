@@ -6,13 +6,14 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "parcel ./src/index.html",
-    "build": "parcel build ./src/lightnion.js -o ./dist/lightnion.bundle.js --global lnn",
-    "build-dev": "parcel build ./src/lightnion.js -o ./dist/lightnion.bundle.js --no-minify --global lnn",
+    "build": "parcel build ./src/lightnion.js -o ./dist/lightnion.bundle.js",
+    "build-dev": "parcel build ./src/lightnion.js -o ./dist/lightnion.bundle.js --no-minify",
     "tests": "parcel help"
   },
   "author": "Pierre Thévenet",
   "license": "BSD-3-Clause",
   "dependencies": {
+    "big-integer": "^1.6.48",
     "sjcl": "^1.0.8",
     "tweetnacl-util": "^0.15.0"
   },
