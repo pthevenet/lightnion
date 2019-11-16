@@ -5,6 +5,9 @@ build:
 
 all: install build
 
+build-dev: # build unminified javascript
+	@npm run build-dev
+
 install:
 	@npm install
 

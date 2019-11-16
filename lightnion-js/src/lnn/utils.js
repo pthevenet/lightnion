@@ -8,8 +8,6 @@ import * as sjcl from "../../vendor/sjcl.js";
 // import * as sjcl from "sjcl";
 import * as naclutil from "tweetnacl-util";
 
-console.log(sjcl)
-
 /**
  * Encoding functions.
  */

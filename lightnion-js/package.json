@@ -1,12 +1,13 @@
 {
   "name": "lightnion-javascript-client",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "The lightnion javascript client.",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "parcel ./src/index.html",
-    "build": "parcel build ./src/index.js -o ./dist/lnn.bundle.js",
+    "build": "parcel build ./src/lightnion.js -o ./dist/lightnion.bundle.js --global lnn",
+    "build-dev": "parcel build ./src/lightnion.js -o ./dist/lightnion.bundle.js --no-minify --global lnn",
     "tests": "parcel help"
   },
   "author": "Pierre Thévenet",
