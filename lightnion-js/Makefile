@@ -1,7 +1,9 @@
 .PHONY: clean build
 
-build: install
+build:
 	@npm run build
+
+all: install build
 
 install:
 	@npm install
