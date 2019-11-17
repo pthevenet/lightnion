@@ -78,7 +78,7 @@ export function socket(endpoint, handler, success, error) {
         },
         start: function () { }
     }
-    var socket = new WebSocket(endpoint.urls.socket + "/" + endpoint.id)
+    var socket = new _WebSocket(endpoint.urls.socket + "/" + endpoint.id)
 
     socket.binaryType = "arraybuffer"
     socket.onopen = function (event) {

@@ -104,7 +104,7 @@ relay.extend = function (handshake, host, port, identity, eidentity) {
 }
 
 relay.begin = function (host, port) {
-    valid = false
+    let valid = false
     if (host.match("(\\d\+\\.){3}\\d\+"))
         valid = true
     if (host.match("^\\[[\\d:]*\\]$"))

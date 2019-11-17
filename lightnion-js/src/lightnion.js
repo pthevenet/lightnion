@@ -2,6 +2,9 @@
  * @module lightnion
  */
 
+// saving websocket default 
+window._WebSocket = WebSocket;
+
 import * as header from "./lnn/header.js";
 import * as endpoint from "./lnn/endpoint.js";
 import * as api from "./lnn/api.js";
@@ -104,11 +107,6 @@ lnn.dec.utf8 = utils.dec.utf8;
 lnn.dec.base64 = utils.dec.base64;
 lnn.dec.bin = utils.dec.bin;
 
-console.log("WINDOW BEFORE:")
-console.log(window);
-
 window.lnn = lnn;
-console.log("WINDOW AFTER:")
-console.log(window);
 
 export { lnn };

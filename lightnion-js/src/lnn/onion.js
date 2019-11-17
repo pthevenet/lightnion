@@ -204,7 +204,7 @@ export function peel(endpoint, cell) {
     var id = new DataView(cell.slice(8, 10).buffer).getUint16(0, false)
     var cmd = relay.cmd[cell.slice(5, 6)[0]]
     var data = cell.slice(16, 16 + length)
-    var relay = { cmd: cmd, stream_id: id, data: data }
+    var relay_ = { cmd: cmd, stream_id: id, data: data }
 
-    return relay
+    return relay_
 }
