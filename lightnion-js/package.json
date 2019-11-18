@@ -1,8 +1,8 @@
 {
-  "name": "lightnion-javascript-client",
+  "name": "lightnion-js",
   "version": "1.0.1",
   "description": "The lightnion javascript client.",
-  "main": "src/index.js",
+  "main": "src/lightnion.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "parcel ./src/index.html",
