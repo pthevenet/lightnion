@@ -15,4 +15,8 @@ dev:
 	@npm run dev
 
 clean:
-	@rm dist/*
+	@rm -f dist/*
+
+mr_proper: clean
+	@rm -rf node_modules
+	@rm -rf .cache
