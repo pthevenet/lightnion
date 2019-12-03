@@ -2,8 +2,12 @@
  * @module lightnion
  */
 
-// saving websocket default 
-window._WebSocket = WebSocket;
+import { isNode } from 'browser-or-node';
+
+if (!isNode) {
+    // saving websocket default 
+    window._WebSocket = WebSocket;
+}
 
 import * as header from "./lnn/header.js";
 import * as endpoint from "./lnn/endpoint.js";

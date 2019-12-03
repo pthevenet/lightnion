@@ -14,6 +14,7 @@
   "license": "BSD-3-Clause",
   "dependencies": {
     "big-integer": "^1.6.48",
+    "browser-or-node": "^1.2.1",
     "sjcl": "^1.0.8",
     "tweetnacl": "^1.0.1",
     "tweetnacl-util": "^0.15.0"
