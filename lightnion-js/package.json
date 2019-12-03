@@ -10,7 +10,7 @@
     "build-dev": "parcel build ./src/lightnion.js -o ./dist/lightnion.bundle.js --no-minify",
     "tests": "parcel help"
   },
-  "author": "Pierre Thévenet",
+  "author": "SPRING",
   "license": "BSD-3-Clause",
   "dependencies": {
     "big-integer": "^1.6.48",
