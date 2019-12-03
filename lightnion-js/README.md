@@ -6,6 +6,10 @@ The Lightnion Javascript client, using ES6 modules and npm dependencies.
 
 Requires:
     - sjcl `./vendor/sjlc.js` built with `./configure --with-codecBytes --with-sha1`, as explained [here](https://github.com/bitwiseshiftleft/sjcl/blob/master/README/INSTALL) (sjcl does not ship with all codecs enabled). Could be pushed as a npm module and imported as such if needed.
+    Add this line to the end of `./vendor/sjcl.js`:
+    
+        ```export { sjcl };```
+
 
 ### Building
 

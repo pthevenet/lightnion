@@ -10,7 +10,7 @@ import * as get from "./get.js";
 import * as signature from "./signature.js";
 import { stream } from "./stream.js";
 import { lnn } from "./header.js";
-import * as nacl from "tweetnacl";
+import nacl from "tweetnacl";
 
 export function fast(host, port, success, error, io, select_path) {
     if (select_path === undefined)

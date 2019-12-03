@@ -3,8 +3,8 @@
  * Utility functions used in the lightnion-js-client module.
  */
 
-import * as sjcl from "../../vendor/sjcl.js";
-import * as naclutil from "tweetnacl-util";
+import { sjcl } from "../../vendor/sjcl.js";
+import naclutil from "tweetnacl-util";
 
 /**
  * Encoding functions.

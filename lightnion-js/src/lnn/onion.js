@@ -4,7 +4,7 @@
 
 import { enc, dec } from "./utils.js";
 import { relay } from "./relay.js";
-import * as sjcl from "../../vendor/sjcl.js";
+import { sjcl } from "../../vendor/sjcl.js";
 
 export function ctr(key) {
     var key = enc.bits(key)

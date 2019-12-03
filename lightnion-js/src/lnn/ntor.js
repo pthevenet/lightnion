@@ -3,8 +3,8 @@
  */
 
 import { enc, dec } from "./utils.js";
-import * as sjcl from "../../vendor/sjcl.js";
-import * as nacl from "tweetnacl";
+import { sjcl } from "../../vendor/sjcl.js";
+import nacl from "tweetnacl";
 
 /**
  * Cryptographic operations related to ntor handshakes.

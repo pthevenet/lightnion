@@ -3,7 +3,7 @@
  */
 
 import bigInt from "big-integer";
-import * as sjcl from "../../vendor/sjcl.js";
+import { sjcl } from "../../vendor/sjcl.js";
 
 /**
 *  This function verifies the given raw consensus

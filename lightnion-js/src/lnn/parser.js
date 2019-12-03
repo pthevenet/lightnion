@@ -3,7 +3,7 @@
  */
 
 import { enc, dec } from "./utils.js";
-import * as sjcl from "../../vendor/sjcl.js";
+import { sjcl } from "../../vendor/sjcl.js";
 
 let parser = {}
 
