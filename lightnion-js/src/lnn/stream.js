@@ -6,7 +6,6 @@ import { lnn } from "./header.js";
 import * as onion from "./onion.js";
 import { enc, dec } from "./utils.js";
 import { relay } from "./relay.js";
-import * as api from "./api.js";
 
 let stream = {};
 stream.entrancy = 0;
@@ -35,7 +34,7 @@ class Backend {
         this.sendme = 0;
         this.handles = { 0: { callback: sendMe } };
         this.packagewindow = 1000; // circuit-level receiving window
-        this.deliverywindow = 1000;// circuit level sending window
+        this.deliverywindow = 1000; // circuit level sending window
     }
 
     register(handle) {
@@ -193,7 +192,7 @@ class Dir {
 class TCP {
     constructor(endPoint, host, port, handler) {
         this.id = null;
-        this.data = new Uint8Array(0);
+        this.receivedBuffer = [];
         this.cell = null;
         this.cache = [];
 
@@ -307,10 +306,14 @@ class TCP {
             }
         }
         if (cell.cmd == "data") {
-            const data = this.data;
-            this.data = new Uint8Array(data.length + cell.data.length);
-            this.data.set(data, 0);
-            this.data.set(cell.data, data.length);
+            // add to the end of the receivedBuffer array
+            let data = new Uint8Array(cell.data.length);
+            data.set(cell.data, 0);
+            this.receivedBuffer.push(data);
+            // const data = this.data;
+            // this.data = new Uint8Array(data.length + cell.data.length);
+            // this.data.set(data, 0);
+            // this.data.set(cell.data, data.length);
         }
         if (cell.cmd == "sendme") {
 
@@ -329,8 +332,7 @@ class TCP {
     }
 
     recv() {
-        const data = this.data;
-        this.data = new Uint8Array(0);
+        const data = this.receivedBuffer.shift();
         return data;
     }
 

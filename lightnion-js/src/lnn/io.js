@@ -5,36 +5,41 @@
 import * as post from "./post.js";
 import { enc, dec } from "./utils.js";
 
-export function polling(endpoint, handler, success, error) {
-    var io = {
-        incominendpointg: [],
-        outcoming: [],
-        pending: 0,
-        handler: handler,
-        success: success,
-        error: error,
-        cell: null,
-        poll: function () {
-            setTimeout(function () {
-                post.channel(endpoint, io.poll)
-            }, 100)
-        },
-        send: function (cell) {
-            io.outcoming.push(enc.base64(cell))
-        },
-        recv: function () {
-            if (io.incoming.length < 1)
-                return undefined
+class Polling {
+    constructor(endpoint, handler, success, error) {
+        this.incominendpointg = [];
+        this.outcoming = [];
+        this.pending = 0;
+        this.handler = handler;
+        this.success = success;
+        this.error = error;
+        this.cell = null;
 
-            io.cell = io.incoming.shift()
-            return dec.base64(io.cell)
-        },
-        start: function () {
-            post.channel(endpoint, io.poll)
-        }
+        this.endpoint = endpoint;
+
+        endpoint.io = this;
     }
-    endpoint.io = io
-    return io
+
+    poll() {
+        setTimeout(function () {
+            post.channel(this.endpoint, this.poll);
+        }, 100);
+    }
+
+    send(cell) {
+        this.outcoming.push(enc.base64(cell));
+    }
+
+    recv() {
+        if (this.incoming.length < 1) { return undefined; }
+
+        this.cell = this.incoming.shift();
+        return dec.base64(this.cell);
+    }
+
+    start() {
+        post.channel(this.endpoint, this.poll);
+    }
 }
 
 export function socket(endpoint, handler, success, error) {
@@ -124,3 +129,5 @@ export function socket(endpoint, handler, success, error) {
     endpoint.io.socket = socket
     return io
 }
+
+export const polling = (endpoint, handler, success, error) => new Polling(endpoint, handler, success, error);
