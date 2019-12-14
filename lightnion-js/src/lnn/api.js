@@ -66,7 +66,7 @@ export function open(host, port, success, error, io, fast, auth, select_path, tc
             post.circuit_info(endpoint, cb.startWebSocket, error, select_path, tcp_ports)
         },
         startWebSocket: function (endpoint, info) {
-            console.log('called startWebSocket cb')
+            // console.log('called startWebSocket cb')
             endpoint.stream = stream.backend(error)
             io(endpoint, stream.handler, function (endpoint) {
                 var state = endpoint.state
@@ -80,21 +80,21 @@ export function open(host, port, success, error, io, fast, auth, select_path, tc
             post.handshake(endpoint, info, cb.create, error)
         },
         create: function (endpoint) {
-            console.log('called create cb')
+            // console.log('called create cb')
             endpoint.state = lnn.state.created
 
 
             post.extend(endpoint, endpoint.path[0], cb.extend, error)
         },
         extend: function (endpoint) {
-            console.log('called extend cb')
+            // console.log('called extend cb')
             endpoint.state = lnn.state.extpath
 
 
             post.extend(endpoint, endpoint.path[1], cb.success, error)
         },
         success: function (endpoint) {
-            console.log('called success cb')
+            // console.log('called success cb')
             endpoint.state = lnn.state.success
             success(endpoint)
             endpoint.io.success = function () { }
@@ -110,7 +110,7 @@ export function open(host, port, success, error, io, fast, auth, select_path, tc
                 if (!signature.verify(endpoint.consensus_raw, endpoint.signing_keys, 0.5)) {
                     throw "signature verification failed."
                 }
-                console.log("signature verification success")
+                // console.log("signature verification success")
                 get.descriptors_raw(endpoint, function () {
                     if (endpoint.fast)
                         post.circuit_info(endpoint, cb.startWebSocket, error, select_path, tcp_ports)
@@ -213,7 +213,7 @@ export function send_req(endpoint, url, method, data, data_type, success, error)
             return
 
         request.close()
-        console.log("Stream closed")
+        // console.log("Stream closed")
 
         success({
             headers: headers,
@@ -280,7 +280,7 @@ export function send_req(endpoint, url, method, data, data_type, success, error)
     }
 
 
-    console.log(payload)
+    // console.log(payload)
 
     host = host.split(':')[0]
     stream.tcp(endpoint, host, port, handler).send(payload)
@@ -307,14 +307,18 @@ export function http_request(url, method, data, data_type, success, error, tor_h
             send_req(endpoint, url, method, data, data_type, function (request) {
                 //close circuit here.
                 if (!closed) {
-                    endpoint.close(function (success_msg) { console.log(success_msg) })
+                    endpoint.close(function (success_msg) {
+                        // console.log(success_msg)
+                    })
                     closed = true
                 }
                 success(request)
             }, function (message) {
                 //close circuit here
                 if (!closed) {
-                    endpoint.close(function (success_msg) { console.log(success_msg) })
+                    endpoint.close(function (success_msg) { 
+                        // console.log(success_msg) 
+                    })
                     closed = true
                 }
                 error(message)

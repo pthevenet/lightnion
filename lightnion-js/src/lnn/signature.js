@@ -47,7 +47,7 @@ export function verify(raw_cons, keys, minimal, flavor = 'microdesc') {
         total++
 
         let key = keys[fingerprint]
-        console.log(bigInt)
+        // console.log(bigInt)
         let e = bigInt(key["exponent"])
         let n = bigInt(key["modulus"])
         let key_digest = sig_and_keys_digests[fingerprint]["signing-key-digest"]

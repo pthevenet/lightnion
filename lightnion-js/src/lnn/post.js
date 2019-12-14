@@ -96,8 +96,8 @@ export function circuit_info(endpoint, success, error, select_path, tcp_ports) {
 
 
                 endpoint.path = path.select_end_path(endpoint.consensus, endpoint.descriptors, endpoint.guard, true, tcp_ports)
-                console.log(endpoint.guard)
-                console.log(endpoint.path)
+                // console.log(endpoint.guard)
+                // console.log(endpoint.path)
             }
 
             if (success !== undefined)

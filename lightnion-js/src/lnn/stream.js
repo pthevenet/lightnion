@@ -267,7 +267,7 @@ class TCP {
 
 
     callback(cell) {
-        console.log(cell.cmd);
+        // console.log(cell.cmd);
         if (cell.cmd == "connected") {
             this.state = lnn.state.created;
             this.retries = 0;
@@ -417,7 +417,7 @@ stream.handler = function (endpoint, cell) {
     if (cell.cmd == "data") {
         endpoint.stream.packagewindow -= 1;
     }
-    console.log('Update window: ', endpoint.stream.packagewindow);
+    // console.log('Update window: ', endpoint.stream.packagewindow);
     if (endpoint.stream.packagewindow < 900) {
         // console.log("Circuit window is ", endpoint.stream.packagewindow)
         // console.log("Sending circuit level sendme cell now ", endpoint.io.counter)

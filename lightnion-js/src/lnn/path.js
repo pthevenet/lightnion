@@ -67,10 +67,10 @@ path.select_end_path = function (consensus, descriptors, guard, isChutney, tcp_p
 
     //pre-process consensus by filering the routers that do not obey
     //the minimal constraints
-    console.log(consensus['routers'].length)
-    console.log(descriptors.length)
+    // console.log(consensus['routers'].length)
+    // console.log(descriptors.length)
     path["consensus"] = consensus['routers'].filter(r => path.obeyMinimalConstraints(r))
-    console.log(path["consensus"].length)
+    // console.log(path["consensus"].length)
 
     //path selection
     path["guard"] = guard
@@ -179,7 +179,7 @@ path.chooseGoodExit = function () {
 
 path.chooseGoodExitGivenGuard = function (tcp_ports) {
     let candidates = path.consensus.filter(r => path.isGoodExitGivenGuard(r, tcp_ports))
-    console.log("Exit candidates: " + candidates.length)
+    // console.log("Exit candidates: " + candidates.length)
     return path.weightedRandomChoice(candidates)
 }
 

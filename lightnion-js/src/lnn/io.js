@@ -77,7 +77,7 @@ export function socket(endpoint, handler, success, error) {
 
             io.cell_recv += 1
             var cell_repr = Array.from(io.cell.slice(0, 20)).map(function (x) { return x.toString(16).padStart(2, '0') }).join('')
-            console.log("cell recv by wbskt ", cell_repr)
+            // console.log("cell recv by wbskt ", cell_repr)
 
             return io.cell
         },
@@ -113,7 +113,7 @@ export function socket(endpoint, handler, success, error) {
         var data = new Uint8Array(event.data)
 
         var cell_repr = Array.from(data.slice(0, 20)).map(function (x) { return x.toString(16).padStart(2, '0') }).join('')
-        console.log("cell recv by wbskt ", cell_repr)
+        // console.log("cell recv by wbskt ", cell_repr)
 
         // io.incoming.push(data)
         io.cell = data

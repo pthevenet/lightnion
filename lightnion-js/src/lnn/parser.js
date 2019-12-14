@@ -53,7 +53,7 @@ parser.descriptors = {
         }
 
         let invalid = []
-        console.log(obtained.length)
+        // console.log(obtained.length)
         for (let idx = 0; idx < digests.length; idx++) {
             let digest = digests[idx]
             if (obtained.includes(digest)) {
@@ -62,7 +62,7 @@ parser.descriptors = {
             else
                 invalid.push(digest)
         }
-        console.log(obtained.length)
+        // console.log(obtained.length)
 
         if (obtained.length) {
             throw `Invalid descriptors found`
