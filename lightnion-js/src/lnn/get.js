@@ -122,18 +122,6 @@ export function descriptors_raw(endpoint, success, error, flavor = 'microdesc') 
             error(endpoint, response.status)
         }
     })
-
-    var rq = new XMLHttpRequest()
-    rq.onreadystatechange = function () {
-        if (rq.readyState == 4 && rq.status == 200) {
-            endpoint.descriptors_raw = rq.responseText
-
-            if (success !== undefined) success(endpoint)
-        }
-        else if (rq.readyState == 4 && error !== undefined) {
-            error(endpoint, rq.status)
-        }
-    }
 }
 
 export function signing_keys(endpoint, success, error) {
