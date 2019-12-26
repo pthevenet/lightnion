@@ -321,6 +321,12 @@ async def delete_channel(uid):
 
     return quart.jsonify({}), 202 # Deleted
 
+@app.route('/<path:path>')
+def get_static(path):
+    logging.exception(f">> GOT REQUEST for {path}")
+    print(">> GOT REQUEST FOR " + path)
+    return quart.send_from_directory('lightnion-provider', path)
+
 
 def main(port, slave_node, control_port, dir_port, purge_cache, static_files=None, auth_dir=None):
     """

@@ -89,7 +89,6 @@ if __name__ == '__main__':
     _, argv.c = _validate_host('{}:{}'.format(argv.s[0], argv.c))
 
     argv.d = _validate_port(argv.d)
-
     lightnion.proxy.forward.main(
         port=argv.p,
         slave_node=argv.s,
