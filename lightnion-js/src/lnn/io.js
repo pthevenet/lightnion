@@ -83,7 +83,22 @@ export function socket(endpoint, handler, success, error) {
         },
         start: function () { }
     }
-    var socket = new _WebSocket(endpoint.urls.socket + "/" + endpoint.id)
+    
+
+    var socket;
+    try {
+        // Use stored default WebSocket
+        socket = new _WebSocket(endpoint.urls.socket + "/" + endpoint.id)
+    } catch (err) {
+        if (err instanceof ReferenceError) {
+            // fallback to default name
+            // scripts should not have replaced the WebSocket global name
+            socket = new WebSocket(endpoint.urls.socket + "/" + endpoint.id)
+        } else {
+            throw err
+        }
+    }
+
 
     socket.binaryType = "arraybuffer"
     socket.onopen = function (event) {
