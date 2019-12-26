@@ -22,19 +22,19 @@
 * // (can also have error callback: function (endpoint, xhttp_status) { })
 */
 export function guard(endpoint, success, error) {
-    var rq = new XMLHttpRequest()
-    rq.onreadystatechange = function () {
-        if (rq.readyState == 4 && rq.status == 200) {
-            endpoint.guard = JSON.parse(rq.responseText)
-            if (success !== undefined)
-                success(endpoint)
+    fetch(endpoint.urls.guard, {
+        method: 'GET'
+    }).then(response => {
+        if (response.status == 200) {
+            response.json().then(data => {
+                endpoint.guard = data
+                if (success !== undefined)
+                    success(endpoint)
+            })
+        } else if (error !== undefined) {
+            error(endpoint, response.status)
         }
-        else if (rq.readyState == 4 && error !== undefined) {
-            error(endpoint, rq.status)
-        }
-    }
-    rq.open("GET", endpoint.urls.guard, true)
-    rq.send()
+    })
 }
 
 /**
@@ -55,61 +55,74 @@ export function guard(endpoint, success, error) {
  * @see lnn.get.guard
  */
 export function consensus(endpoint, success, error) {
-    var rq = new XMLHttpRequest()
-    rq.onreadystatechange = function () {
-        if (rq.readyState == 4 && rq.status == 200) {
-            endpoint.consensus = JSON.parse(rq.responseText)
-            if (success !== undefined)
-                success(endpoint)
+    fetch(endpoint.urls.consensus, {
+        method: 'GET'
+    }).then(response => {
+        if (response.status == 200) {
+            response.json().then(data => {
+                endpoint.consensus = data
+                if (success !== undefined)
+                    success(endpoint)
+                })
+        } else if (error !== undefined) {
+            error(endpoint, response.status)
         }
-        else if (rq.readyState == 4 && error !== undefined) {
-            error(endpoint, rq.status)
-        }
-    }
-    rq.open("GET", endpoint.urls.consensus, true)
-    rq.send()
+    })
 }
 
 /**
  * Perform GET /descriptors 
  */
 export function descriptors(endpoint, success, error) {
-    var rq = new XMLHttpRequest()
-    rq.onreadystatechange = function () {
-        if (rq.readyState == 4 && rq.status == 200) {
-            endpoint.descriptors = JSON.parse(rq.responseText)
-
-            if (success !== undefined) success(endpoint)
+    fetch(endpoint.urls.descriptors, {
+        method: 'GET'
+    }).then(response => {
+        if (response.status == 200) {
+            response.json().then(data => {
+                endpoint.descriptors = data
+            
+                if(success !== undefined) success(endpoint)    
+            })
+        } else if (error !== undefined) {
+            error(endpoint, response.status)
         }
-        else if (rq.readyState == 4 && error !== undefined) {
-            error(endpoint, rq.status)
-        }
-    }
-
-    rq.open("GET", endpoint.urls.descriptors, true)
-    rq.send()
+    })
 }
 
 export function consensus_raw(endpoint, success, error, flavor = 'microdesc') {
-    var rq = new XMLHttpRequest()
-    rq.onreadystatechange = function () {
-        if (rq.readyState == 4 && rq.status == 200) {
-            endpoint.consensus_raw = rq.responseText
-            if (success !== undefined)
-                success(endpoint)
+    fetch(endpoint.urls.consensus+ "-raw/" + flavor, {
+        method: 'GET'
+    }).then(response => {
+        if (response.status == 200) {
+            response.text().then(data => {
+                endpoint.consensus_raw =  data
+                if (success !== undefined)
+                    success(endpoint)
+                })
+        } else if (error !== undefined) {
+            error(endpoint, response.status)
         }
-        else if (rq.readyState == 4 && error !== undefined) {
-            error(endpoint, rq.status)
-        }
-    }
-    rq.open("GET", endpoint.urls.consensus + "-raw/" + flavor, true)
-    rq.send()
+    })
 }
 
 /**
  * Perform GET /descriptors 
  */
 export function descriptors_raw(endpoint, success, error, flavor = 'microdesc') {
+    fetch(endpoint.urls.descriptors+ "-raw/" + flavor, {
+        method: 'GET'
+    }).then(response => {
+        if (response.status == 200) {
+            response.text().then(data => {
+                endpoint.descriptors_raw = data
+            
+                if(success !== undefined) success(endpoint)
+            })
+        } else if (error !== undefined) {
+            error(endpoint, response.status)
+        }
+    })
+
     var rq = new XMLHttpRequest()
     rq.onreadystatechange = function () {
         if (rq.readyState == 4 && rq.status == 200) {
@@ -121,25 +134,21 @@ export function descriptors_raw(endpoint, success, error, flavor = 'microdesc') 
             error(endpoint, rq.status)
         }
     }
-
-    rq.open("GET", endpoint.urls.descriptors + "-raw/" + flavor, true)
-    rq.send()
 }
 
 export function signing_keys(endpoint, success, error) {
-    var rq = new XMLHttpRequest()
-    rq.onreadystatechange = function () {
-        if (rq.readyState == 4 && rq.status == 200) {
-            endpoint.signing_keys = JSON.parse(rq.responseText)
-
-            if (success !== undefined) success(endpoint)
+    fetch(endpoint.urls.signing_keys, {
+        method: 'GET'
+    }).then(response => {
+        if (response.status == 200) {
+            response.json().then(data => {
+                endpoint.signing_keys = data
+            
+                if(success !== undefined) success(endpoint)
+            })
+        } else if (error !== undefined) {
+            error(endpoint, response.status)
         }
-        else if (rq.readyState == 4 && error !== undefined) {
-            error(endpoint, rq.status)
-        }
-    }
-
-    rq.open("GET", endpoint.urls.signing_keys, true)
-    rq.send()
+    })
 }
 
