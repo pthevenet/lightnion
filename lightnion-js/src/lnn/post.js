@@ -33,7 +33,7 @@ export function create(endpoint, success, error) {
 
                 var info = data
                 if (endpoint.auth != null) {
-                    info = lnn.ntor.auth(endpoint, info["auth"], info["data"])
+                    info = ntor.auth(endpoint, info["auth"], info["data"])
                 }
                 endpoint.id = info["id"]
                 endpoint.url = endpoint.urls.channels + "/" + info["id"]
@@ -41,21 +41,21 @@ export function create(endpoint, success, error) {
 
                 if (endpoint.fast) {
                     endpoint.guard = info["guard"]
-                    endpoint.material.identity = lnn.dec.base64(
+                    endpoint.material.identity = dec.base64(
                         info["guard"].router.identity + "=")
-                    endpoint.material.onionkey = lnn.dec.base64(
+                    endpoint.material.onionkey = dec.base64(
                         info["guard"]["ntor-onion-key"])
                 }
 
-                var material = lnn.ntor.shake(endpoint, info["ntor"])
+                var material = ntor.shake(endpoint, info["ntor"])
                 if (material == null)
                     throw "Invalid guard handshake."
 
-                material = lnn.ntor.slice(material)
+                material = ntor.slice(material)
                 endpoint.material = material
 
-                endpoint.forward = lnn.onion.forward(endpoint)
-                endpoint.backward = lnn.onion.backward(endpoint)
+                endpoint.forward = onion.forward(endpoint)
+                endpoint.backward = onion.backward(endpoint)
                 if (success !== undefined)
                     success(endpoint)
 
@@ -96,7 +96,7 @@ export function circuit_info(endpoint, success, error, select_path, tcp_ports) {
             response.json().then(data => {
                 var info = data
                 if (endpoint.auth != null) {
-                    info = lnn.ntor.auth(endpoint, info["auth"], info["data"])
+                    info = ntor.auth(endpoint, info["auth"], info["data"])
                 }
 
                 endpoint.id = info["id"]
@@ -110,12 +110,12 @@ export function circuit_info(endpoint, success, error, select_path, tcp_ports) {
                 if (!select_path)
                     endpoint.path = info["path"]
                 else {
-                    endpoint.consensus = lnn.consensusParser.parse(endpoint.consensus_raw)
-                    endpoint.descriptors = lnn.parser.descriptors.parse(endpoint.descriptors_raw)
-                    lnn.parser.descriptors.validate(endpoint.descriptors, endpoint.consensus)
+                    endpoint.consensus = consensusParser.parse(endpoint.consensus_raw)
+                    endpoint.descriptors = parser.descriptors.parse(endpoint.descriptors_raw)
+                    parser.descriptors.validate(endpoint.descriptors, endpoint.consensus)
 
 
-                    endpoint.path = lnn.path.select_end_path(endpoint.consensus, endpoint.descriptors, endpoint.guard, true, tcp_ports)
+                    endpoint.path = path.select_end_path(endpoint.consensus, endpoint.descriptors, endpoint.guard, true, tcp_ports)
                     console.log(endpoint.guard)
                     console.log(endpoint.path)
                 }
